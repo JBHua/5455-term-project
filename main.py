@@ -6,7 +6,6 @@ from collections import defaultdict
 import matplotlib.pyplot as plt
 import os
 from speechbrain.pretrained import EncoderClassifier
-from IPython.display import Audio
 from dataclasses import dataclass
 from typing import Any, Dict, List, Union
 import soundfile as sf
@@ -61,7 +60,6 @@ class TTSDataCollatorWithPadding:
     processor: Any
 
     def __call__(self, features: List[Dict[str, Union[List[int], torch.Tensor]]]) -> Dict[str, torch.Tensor]:
-
         input_ids = [{"input_ids": feature["input_ids"]} for feature in features]
         label_features = [{"input_values": feature["labels"]} for feature in features]
         speaker_features = [feature["speaker_embeddings"] for feature in features]
@@ -112,12 +110,12 @@ tokenizer = processor.tokenizer
 print("Loading Dataset...")
 dataset = load_dataset(
     # "facebook/voxpopuli", "en_accented", split="test"
-    "facebook/voxpopuli", "en", split="train[:0.1%]"
+    "facebook/voxpopuli", "en", split="train", streaming=True
 )
 print("Finish Loading Dataset")
 
 dataset = dataset.cast_column("audio", Audio(sampling_rate=16000))
-print("Length of dataset: " + str(len(dataset)))
+# print("Length of dataset: " + str(len(dataset)))
 # vocabs = dataset.map(
 #     extract_all_chars, 
 #     batched=True, 
@@ -252,6 +250,7 @@ plt.show()
 with torch.no_grad():
     speech = vocoder(spectrogram)
 
+from IPython.display import Audio
 Audio(speech.numpy(), rate=16000)
 
 sf.write("output.wav", speech.numpy(), samplerate=16000)
