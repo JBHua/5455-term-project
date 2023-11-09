@@ -9,6 +9,7 @@ from speechbrain.pretrained import EncoderClassifier
 from IPython.display import Audio
 from dataclasses import dataclass
 from typing import Any, Dict, List, Union
+import soundfile as sf
 
 ###############################################################################
 # Helper Functions
@@ -111,7 +112,7 @@ tokenizer = processor.tokenizer
 print("Loading Dataset...")
 dataset = load_dataset(
     # "facebook/voxpopuli", "en_accented", split="test"
-    "facebook/voxpopuli", "en", split="validation[:0.1%]"
+    "facebook/voxpopuli", "en", split="train[:0.1%]"
 )
 print("Finish Loading Dataset")
 
@@ -238,7 +239,8 @@ model = SpeechT5ForTextToSpeech.from_pretrained("Matthijs/speecht5_tts")
 
 example = dataset["test"][304]
 speaker_embeddings = torch.tensor(example["speaker_embeddings"]).unsqueeze(0)
-speaker_embeddings.shape
+print("speaker_embeddings.shape")
+print(speaker_embeddings.shape)
 
 text = "hello, this is pytorch!"
 inputs = processor(text=text, return_tensors="pt")
@@ -247,3 +249,9 @@ plt.figure()
 plt.imshow(spectrogram.T)
 plt.show()
 
+with torch.no_grad():
+    speech = vocoder(spectrogram)
+
+Audio(speech.numpy(), rate=16000)
+
+sf.write("output.wav", speech.numpy(), samplerate=16000)
