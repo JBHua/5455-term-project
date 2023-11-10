@@ -2,8 +2,8 @@ import socket
 import time
 
 # Training Related
-train = False
-load_local_data_set = True
+train_model = False # if False, load saved model/checkpoints
+download_and_process_dataset = False # if False, load local dataset
 load_checkpoint = ''
 
 # Model Related
@@ -17,3 +17,5 @@ data_path = DATA_BASE_PATH
 
 # Others
 huggingface_token = "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"
+log_file_path = './log/' + socket.gethostname() + '.log'
+log_file = open(log_file_path, 'a')
