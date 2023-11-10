@@ -1,8 +1,9 @@
-from transformers import SpeechT5Processor, SpeechT5ForTextToSpeech, SpeechT5HifiGan, Seq2SeqTrainer, Seq2SeqTrainingArguments
+from transformers import SpeechT5Processor, SpeechT5ForTextToSpeech, SpeechT5HifiGan, Seq2SeqTrainer, Seq2SeqTrainingArguments, SpeechT5Tokenizer
 from datasets import DatasetDict, Dataset, IterableDatasetDict, IterableDataset
 import torch
 import matplotlib.pyplot as plt
 import os
+import sys
 from speechbrain.pretrained import EncoderClassifier
 from dataclasses import dataclass
 from typing import Any, Dict, List, Union
@@ -14,13 +15,38 @@ from datasets import load_dataset
 ###############################################################################
 # Helper Functions
 ###############################################################################
-def log_msg(message, outf=constants.log_file):
-    msg = time.strftime("%H:%M:%S", time.localtime()) + '\t' + message
+def log_msg(message, outf=constants.log_file, include_time=True):
+    msg = time.strftime("%H:%M:%S", time.localtime()) + '\t' + message if include_time else message
     print(msg)
     if not outf is None:
         outf.write(msg)
         outf.write("\n")
         outf.flush()
+
+
+def error_recording_hook(exctype, value, traceback):
+    if exctype == KeyboardInterrupt:
+        log_msg("KeyboardInterrupt detected. Exiting...")
+    else:
+        log_msg(f"Exception: {exctype}. {value}. Traceback: {traceback}")
+        sys.__excepthook__(exctype, value, traceback)
+
+
+def init_global_variables() -> tuple[SpeechT5Processor, SpeechT5Tokenizer, EncoderClassifier]:
+    log_msg("Initing processor, tokenizer, and speaker_model")
+    # model = SpeechT5ForTextToSpeech.from_pretrained("microsoft/speecht5_tts")
+    
+    processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_tts")
+
+    tokenizer = processor.tokenizer
+    
+    speaker_model = EncoderClassifier.from_hparams(
+        source=constants.spk_model_name,
+        run_opts={"device": device},
+        savedir=os.path.join("/tmp", constants.spk_model_name)
+    )
+
+    return processor, tokenizer, speaker_model
 
 
 def select_speaker(speaker_id):
@@ -107,14 +133,48 @@ class TTSDataCollatorWithPadding:
 
         return batch
 
+
+@dataclass
+class DatasetPrepper:
+    """DatasetPrepper is used to solve multi-processing bug. See README.md trubleshotting section for detail"""
+    processor: SpeechT5Processor
+
+    def __call__(self, example):
+        """prepare_dataset takes a single entry; tokenize input text; load audio into a log-mel spectrogram; and add speaker embeddings"""
+        # load the audio data; if necessary, this resamples the audio to 16kHz
+        audio = example["audio"]
+
+        # feature extraction and tokenization
+        example = processor(
+            text=example["normalized_text"],
+            audio_target=audio["array"], 
+            sampling_rate=audio["sampling_rate"],
+            return_attention_mask=False,
+        )
+
+        # strip off the batch dimension
+        example["labels"] = example["labels"][0]
+
+        # use SpeechBrain to obtain x-vector
+        example["speaker_embeddings"] = create_speaker_embedding(audio["array"])
+
+        return example
+    
 ###############################################################################
 # Setup
 ###############################################################################
+sys.excepthook = error_recording_hook
+
 device = "cuda" if torch.cuda.is_available() else "cpu"
 cpu_count = len(os.sched_getaffinity(0))
 torch.set_num_threads(cpu_count)
 
-log_msg(f'Start -- {time.strftime("%b %e %H:%M:%S", time.localtime())} -- pytorch={torch.version.__version__}, device={device}, cpu_count={cpu_count}')
+log_msg(f'\nStart -- {time.strftime("%b %e %H:%M:%S", time.localtime())} -- pytorch={torch.version.__version__}, device={device}, cpu_count={cpu_count}', include_time=False)
+
+###############################################################################
+# Global Variables
+###############################################################################
+processor, tokenizer, speaker_model = init_global_variables()
 
 ###############################################################################
 # Load Datasets
@@ -126,7 +186,7 @@ def load_remote_dataset(name="facebook/voxpopuli", subset = "en_accented") -> Da
         download_mode="reuse_cache_if_exists",
         keep_in_memory=True, num_proc=cpu_count
     )
-    log_msg("Finish Loading Remote Dataset. Length of dataset:" + str(len(dataset)))
+    log_msg("Finish Loading Remote Dataset. Length of dataset: " + str(len(dataset)))
 
     log_msg("Start Setting Sampling Rate to 16 kHz...")
     from datasets import Audio
@@ -138,7 +198,12 @@ def load_remote_dataset(name="facebook/voxpopuli", subset = "en_accented") -> Da
 
 def load_local_dataset() -> DatasetDict | Dataset | IterableDatasetDict | IterableDataset:
     log_msg("Using Locally Processed Dataset. Skip Processing...")
-    dataset = load_dataset(constants.data_path)
+    
+    try:
+        dataset = load_dataset(constants.data_path)
+    except:
+        log_msg("Failed to load local dataset. Please double check file exists and path is correct")
+        sys.exit()
 
     return dataset
 
@@ -210,20 +275,20 @@ speaker_counts = defaultdict(int)
 ## print(type(dataset))
 ## print(dataset)
 
-def filter_and_prepare_dataset(dataset):
+def filter_and_prepare_dataset(dataset) -> DatasetDict | Dataset | IterableDatasetDict | IterableDataset:
+    log_msg("Start Filtering Short Data")
     dataset = dataset.filter(is_not_too_short, input_columns=["normalized_text"])
-    print("How many examples left after filtering is_not_too_short?")
-    print(len(dataset)) # How many examples left?
+    log_msg(f"{len(dataset)} data entries left after filtering")
+    
+    log_msg("Start Preparing Dataset")
+    dataset = dataset.map(prepare_dataset, remove_columns=dataset.column_names, num_proc=1)
+    # dataset = dataset.map(DatasetPrepper(processor), remove_columns=dataset.column_names, num_proc=cpu_count)
+    log_msg("Preparing dataset finished succesfully")
 
-    dataset = dataset.map(
-        prepare_dataset, remove_columns=dataset.column_names,
-    )
-
-    print("Preparing dataset finished succesfully")
-    print(dataset)
+    log_msg("Start Filtering Long Data") # TODO: why can't we do it beforehand?
     dataset = dataset.filter(is_not_too_long, input_columns=["input_ids"])
-    print("How many examples left after filtering not_too_long?")
-    print(len(dataset)) # How many examples left?
+    log_msg(f"{len(dataset)} data entries left after filtering")
+
     return dataset
 
 def split_dataset(dataset, test_size=5, train_size=15):
@@ -322,13 +387,17 @@ def split_dataset(dataset, test_size=5, train_size=15):
 if __name__ == "__main__":
     # Step 1: Download & Split datasets
     dataset = None
-    if constants.download_and_process_dataset:
+    if constants.download_remote_dataset:
         dataset = load_remote_dataset()
     else:
         dataset = load_local_dataset()
 
-    # Step 2: Load Pre-trained Models
-    processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_tts")
-    model = SpeechT5ForTextToSpeech.from_pretrained("microsoft/speecht5_tts")
-    tokenizer = processor.tokenizer
-    
+    # Step 2A: Process & Preparing Dataset
+    dataset = filter_and_prepare_dataset()
+
+    # Step 2B: Process & Preparing Dataset
+    if constants.save_processed_dataset:
+        log_msg(f"save_processed_dataset is True. Saving processed dataset to dir: {constants.data_path}")
+        dataset.save_to_disk(constants.data_path)
+
+    log_msg('', include_time=False)

@@ -3,7 +3,8 @@ import time
 
 # Training Related
 train_model = False # if False, load saved model/checkpoints
-download_and_process_dataset = False # if False, load local dataset
+download_remote_dataset = True # if False, load local dataset
+save_processed_dataset = True # if True, save the processed (prepare_dataset) dataset to disk.
 load_checkpoint = ''
 
 # Model Related
@@ -17,5 +18,7 @@ data_path = DATA_BASE_PATH
 
 # Others
 huggingface_token = "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"
+spk_model_name = "speechbrain/spkrec-xvect-voxceleb"
 log_file_path = './log/' + socket.gethostname() + '.log'
 log_file = open(log_file_path, 'a')
+

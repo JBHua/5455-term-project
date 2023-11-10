@@ -31,3 +31,6 @@ https://huggingface.co/datasets/facebook/voxpopuli/tree/main/data/en_accented
 # Troubleshoot
 1. Manully download dataset using voxpopuli repo
 https://github.com/facebookresearch/voxpopuli/issues/43#
+
+2. If you're using Windows/WSL and dataset.map is stucked while using multi-processing
+https://discuss.huggingface.co/t/map-multiprocessing-issue/4085/25

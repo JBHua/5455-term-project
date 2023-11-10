@@ -1,18 +1,110 @@
+Start -- Nov 10 14:21:53 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
+14:21:53	Using Locally Processed Dataset. Skip Processing...
+Start -- Nov 10 14:22:41 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
+14:22:41	Using Locally Processed Dataset. Skip Processing...
 
-Start -- 11/10/2311:40:00 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
-Using Locally Processed Dataset. Skip Processing...
+Start -- Nov 10 14:22:57 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
+14:22:57	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+14:23:25	Finish Loading Remote Dataset. Length of dataset:8387
+14:23:25	Start Setting Sampling Rate to 16 kHz...
+14:23:25	Setting Sampling Rate Successfully
 
-Start -- Nov10 11:40:56 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
-Using Locally Processed Dataset. Skip Processing...
-Start -- Nov 10 11:41:30 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
-Using Locally Processed Dataset. Skip Processing...
+Start -- Nov 10 14:27:16 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
+14:27:16	Using Locally Processed Dataset. Skip Processing...
+Start -- Nov 10 14:28:45 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
+14:28:45	Using Locally Processed Dataset. Skip Processing...
+14:28:45	Failed to load local dataset. Please double check file exists and path is correct
+Start -- Nov 10 14:29:04 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
+14:29:04	Using Locally Processed Dataset. Skip Processing...
+14:29:04	Failed to load local dataset. Please double check file exists and path is correct
+Start -- Nov 10 14:29:37 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
+14:29:37	Using Locally Processed Dataset. Skip Processing...
+14:29:37	Failed to load local dataset. Please double check file exists and path is correct
+Start -- Nov 10 14:29:46 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
+14:29:46	Using Locally Processed Dataset. Skip Processing...
+14:29:46	Failed to load local dataset. Please double check file exists and path is correct
+Start -- Nov 10 14:33:38 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
+14:33:38	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+14:34:06	Finish Loading Remote Dataset. Length of dataset:8387
+14:34:06	Start Setting Sampling Rate to 16 kHz...
+14:34:06	Setting Sampling Rate Successfully
+Start -- Nov 10 14:37:12 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
+14:37:12	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+14:37:39	Finish Loading Remote Dataset. Length of dataset: 8387
+14:37:39	Start Setting Sampling Rate to 16 kHz...
+14:37:39	Setting Sampling Rate Successfully
+Start -- Nov 10 14:41:50 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
+14:41:50	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+14:41:51	
+Start -- Nov 10 14:42:34 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
+14:42:34	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+14:43:01	Finish Loading Remote Dataset. Length of dataset: 8387
+14:43:01	Start Setting Sampling Rate to 16 kHz...
+14:43:01	Setting Sampling Rate Successfully
+14:43:10	Exception: <class 'TypeError'>. create_speaker_embedding() missing 1 required positional argument: 'speaker_model'
+Start -- Nov 10 14:51:17 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
+14:51:17	Initing processor, tokenizer, and speaker_model
+14:51:19	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+14:51:23	KeyboardInterrupt detected. Exiting...
+Start -- Nov 10 14:54:31 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
+14:54:31	Initing processor, tokenizer, and speaker_model
+14:54:32	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+14:54:38	KeyboardInterrupt detected. Exiting...
+Start -- Nov 10 14:55:50 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
+14:55:50	Initing processor, tokenizer, and speaker_model
+14:55:52	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+14:56:19	Finish Loading Remote Dataset. Length of dataset: 8387
+14:56:19	Start Setting Sampling Rate to 16 kHz...
+14:56:19	Setting Sampling Rate Successfully
+14:56:27	Exception: <class 'TypeError'>. create_speaker_embedding() missing 1 required positional argument: 'speaker_model'. Traceback: <traceback object at 0x7f4301dc97c0>
+Start -- Nov 10 14:57:00 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
+14:57:00	Initing processor, tokenizer, and speaker_model
+14:57:02	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+14:57:29	Finish Loading Remote Dataset. Length of dataset: 8387
+14:57:29	Start Setting Sampling Rate to 16 kHz...
+14:57:29	Setting Sampling Rate Successfully
+14:57:59	KeyboardInterrupt detected. Exiting...
+Start -- Nov 10 14:58:07 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
+14:58:07	Initing processor, tokenizer, and speaker_model
+14:58:08	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+14:58:35	Finish Loading Remote Dataset. Length of dataset: 8387
+14:58:35	Start Setting Sampling Rate to 16 kHz...
+14:58:35	Setting Sampling Rate Successfully
+14:58:44	Start Processing and Preparing Dataset
+15:00:22	Exception: <class 'multiprocess.context.TimeoutError'>. . Traceback: <traceback object at 0x7f398b7c0e40>
 
+Start -- Nov 10 15:04:58 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
+15:04:58	Initing processor, tokenizer, and speaker_model
+15:05:00	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+15:05:30	Finish Loading Remote Dataset. Length of dataset: 8387
+15:05:30	Start Setting Sampling Rate to 16 kHz...
+15:05:30	Setting Sampling Rate Successfully
+15:05:39	Start Processing and Preparing Dataset
+15:12:42	Exception: <class 'multiprocess.context.TimeoutError'>. . Traceback: <traceback object at 0x7fcac1659940>
 
-Start -- Nov 10 11:41:44 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
-Using Locally Processed Dataset. Skip Processing...
-11:50:11Start -- Nov 10 11:50:11 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
-11:50:13Using Locally Processed Dataset. Skip Processing...
-11:51:40	Start -- Nov 10 11:51:40 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
-11:51:42	Using Locally Processed Dataset. Skip Processing...
-11:58:28	Start -- Nov 10 11:58:28 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
-11:58:30	Using Locally Processed Dataset. Skip Processing...
+Start -- Nov 10 15:12:48 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
+15:12:48	Initing processor, tokenizer, and speaker_model
+15:12:50	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+15:13:18	Finish Loading Remote Dataset. Length of dataset: 8387
+15:13:18	Start Setting Sampling Rate to 16 kHz...
+15:13:18	Setting Sampling Rate Successfully
+15:13:27	Start Processing and Preparing Dataset
+15:14:18	Exception: <class 'multiprocess.context.TimeoutError'>. . Traceback: <traceback object at 0x7fa681f68700>
+
+Start -- Nov 10 15:14:23 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
+15:14:23	Initing processor, tokenizer, and speaker_model
+15:14:25	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+15:14:52	Finish Loading Remote Dataset. Length of dataset: 8387
+15:14:52	Start Setting Sampling Rate to 16 kHz...
+15:14:52	Setting Sampling Rate Successfully
+15:14:52	Start Processing and Preparing Dataset
+15:15:43	Exception: <class 'multiprocess.context.TimeoutError'>. . Traceback: <traceback object at 0x7fb59a1ffb80>
+
+Start -- Nov 10 15:23:32 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=40
+15:23:32	Initing processor, tokenizer, and speaker_model
+15:23:34	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+15:24:02	Finish Loading Remote Dataset. Length of dataset: 8387
+15:24:02	Start Setting Sampling Rate to 16 kHz...
+15:24:02	Setting Sampling Rate Successfully
+15:24:02	Start Processing and Preparing Dataset
+15:24:44	Exception: <class 'ValueError'>. can't extend empty axis 0 using modes other than 'constant' or 'empty'. Traceback: <traceback object at 0x7faaffc8fbc0>
