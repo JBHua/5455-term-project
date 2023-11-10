@@ -304,4 +304,3 @@ from IPython.display import Audio
 Audio(speech.numpy(), rate=16000)
 
 sf.write("output.wav", speech.numpy(), samplerate=16000)
-
