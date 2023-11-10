@@ -6,6 +6,10 @@ pip install datasets
 pip install soundfile
 pip install speechbrain
 pip install IPython
+pip install librosa
+pip install soundfile
+pip install accelerate -U
+pip install tensorboardX
 ```
 
 

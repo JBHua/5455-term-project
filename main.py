@@ -14,6 +14,7 @@ import soundfile as sf
 # Helper Functions
 ###############################################################################
 device = "cuda" if torch.cuda.is_available() else "cpu"
+print(f'pytorch={torch.version.__version__}, device={device}')
 
 def extract_all_chars(batch):
     all_text = " ".join(batch["normalized_text"])
@@ -107,10 +108,12 @@ tokenizer = processor.tokenizer
 ###############################################################################
 # Load Datasets
 ###############################################################################
+from datasets import load_dataset, Audio
 print("Loading Dataset...")
 dataset = load_dataset(
     # "facebook/voxpopuli", "en_accented", split="test"
-    "facebook/voxpopuli", "en", split="train", streaming=True
+    "facebook/voxpopuli", "en", split="test[:15]",
+    download_mode="reuse_cache_if_exists"
 )
 print("Finish Loading Dataset")
 
@@ -170,6 +173,7 @@ spectrogram = torch.tensor(processed_example["labels"])
 with torch.no_grad():
     speech = vocoder(spectrogram)
 
+from IPython.display import Audio
 Audio(speech.cpu().numpy(), rate=16000)
 
 ###############################################################################
