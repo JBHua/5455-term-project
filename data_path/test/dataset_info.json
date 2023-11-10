@@ -1,0 +1,70 @@
+{
+  "builder_name": "voxpopuli",
+  "citation": "\n@inproceedings{wang-etal-2021-voxpopuli,\n    title = \"{V}ox{P}opuli: A Large-Scale Multilingual Speech Corpus for Representation Learning, \n    Semi-Supervised Learning and Interpretation\",\n    author = \"Wang, Changhan  and\n      Riviere, Morgane  and\n      Lee, Ann  and\n      Wu, Anne  and\n      Talnikar, Chaitanya  and\n      Haziza, Daniel  and\n      Williamson, Mary  and\n      Pino, Juan  and\n      Dupoux, Emmanuel\",\n    booktitle = \"Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics \n    and the 11th International Joint Conference on Natural Language Processing (Volume 1: Long Papers)\",\n    month = aug,\n    year = \"2021\",\n    publisher = \"Association for Computational Linguistics\",\n    url = \"https://aclanthology.org/2021.acl-long.80\",\n    doi = \"10.18653/v1/2021.acl-long.80\",\n    pages = \"993--1003\",\n}\n",
+  "config_name": "en_accented",
+  "dataset_name": "voxpopuli",
+  "dataset_size": 4929866,
+  "description": "\nA large-scale multilingual speech corpus for representation learning, semi-supervised learning and interpretation.\n",
+  "download_checksums": {
+    "data/n_files.json": {
+      "num_bytes": 1290,
+      "checksum": null
+    },
+    "data/en_accented/asr_test.tsv": {
+      "num_bytes": 3130412,
+      "checksum": null
+    },
+    "data/en_accented/test/test_part_0.tar.gz": {
+      "num_bytes": 1866772964,
+      "checksum": null
+    },
+    "data/en_accented/test/test_part_1.tar.gz": {
+      "num_bytes": 1277010712,
+      "checksum": null
+    }
+  },
+  "download_size": 3146915378,
+  "features": {
+    "input_ids": {
+      "feature": {
+        "dtype": "int32",
+        "_type": "Value"
+      },
+      "_type": "Sequence"
+    },
+    "labels": {
+      "feature": {
+        "feature": {
+          "dtype": "float32",
+          "_type": "Value"
+        },
+        "_type": "Sequence"
+      },
+      "_type": "Sequence"
+    },
+    "speaker_embeddings": {
+      "feature": {
+        "dtype": "float32",
+        "_type": "Value"
+      },
+      "_type": "Sequence"
+    }
+  },
+  "homepage": "https://github.com/facebookresearch/voxpopuli",
+  "license": "CC0, also see https://www.europarl.europa.eu/legal-notice/en/",
+  "size_in_bytes": 3151845244,
+  "splits": {
+    "test": {
+      "name": "test",
+      "num_bytes": 4929866,
+      "num_examples": 8387,
+      "dataset_name": "voxpopuli"
+    }
+  },
+  "version": {
+    "version_str": "1.3.0",
+    "major": 1,
+    "minor": 3,
+    "patch": 0
+  }
+}

@@ -12,11 +12,15 @@ import multiprocess
 import socket
 import time
 
+huggingface_token = "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"
 ###############################################################################
 # Helper Functions
 ###############################################################################
 model_path = './model/trained_' + socket.gethostname() + time.strftime("%H:%M:%S", time.localtime())
-multiprocess.set_start_method("spawn", force=True)
+checkpoint_path = './speecht5_tts/checkpoint-4000'
+train=False
+data_path = './dataset/' + 'english_accented.hf'
+# multiprocess.set_start_method("spawn", force=True)
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f'pytorch={torch.version.__version__}, device={device}')
@@ -255,13 +259,31 @@ trainer = Seq2SeqTrainer(
     tokenizer=processor.tokenizer,
 )
 
-trainer.train()
-trainer.save_mode(model_path)
+dataset.save_to_disk("data_path")
+
+if train:
+    trainer.train()
+    trainer.save_model(model_path)
+
+    kwargs = {
+        "dataset_tags": "facebook/voxpopuli",
+        "dataset": "VoxPopuli",  # a 'pretty' name for the training dataset
+        "dataset_args": "config: nl, split: train",
+        "language": "en_accent",
+        "model_name": "SpeechT5 English Accent",  # a 'pretty' name for your model
+        "finetuned_from": "microsoft/speecht5_tts",
+        "tasks": "text-to-speech",
+        "tags": "",
+    }
+    trainer.push_to_hub(**kwargs)
+else:
+    model = SpeechT5ForTextToSpeech.from_pretrained(pretrained_model_name_or_path=checkpoint_path, local_files_only=True)    
 
 ###############################################################################
 # Process Entire Dataset
 ###############################################################################
-model = SpeechT5ForTextToSpeech.from_pretrained(pretrained_model_name_or_path=model_path, local_files_only=True)
+
+# model = SpeechT5ForTextToSpeech.from_pretrained(pretrained_model_name_or_path=model_path, local_files_only=True)
 
 example = dataset["test"][2]
 speaker_embeddings = torch.tensor(example["speaker_embeddings"]).unsqueeze(0)
