@@ -8,27 +8,21 @@ from speechbrain.pretrained import EncoderClassifier
 from dataclasses import dataclass
 from typing import Any, Dict, List, Union
 import soundfile as sf
-import multiprocess
-import socket
-import time
+import constants
 
-huggingface_token = "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"
+###############################################################################
+# Setup
+###############################################################################
+device = "cuda" if torch.cuda.is_available() else "cpu"
+cpu_count = len(os.sched_getaffinity(0))
+torch.set_num_threads(cpu_count)
+
+print(f'pytorch={torch.version.__version__}, device={device}')
+print("Using " + str(cpu_count) + " cpu")
+
 ###############################################################################
 # Helper Functions
 ###############################################################################
-model_path = './model/trained_' + socket.gethostname() + time.strftime("%H:%M:%S", time.localtime())
-checkpoint_path = './speecht5_tts/checkpoint-4000'
-train=False
-data_path = './dataset/' + 'english_accented.hf'
-# multiprocess.set_start_method("spawn", force=True)
-
-device = "cuda" if torch.cuda.is_available() else "cpu"
-print(f'pytorch={torch.version.__version__}, device={device}')
-cpu_count = len(os.sched_getaffinity(0))
-print("Using " + str(cpu_count) + " cpu")
-torch.set_num_threads(cpu_count)
-
-
 def select_speaker(speaker_id):
     return 100 <= speaker_counts[speaker_id] <= 400
 
@@ -261,9 +255,9 @@ trainer = Seq2SeqTrainer(
 
 dataset.save_to_disk("data_path")
 
-if train:
+if constants.train:
     trainer.train()
-    trainer.save_model(model_path)
+    trainer.save_model(constants.model_path)
 
     kwargs = {
         "dataset_tags": "facebook/voxpopuli",
@@ -277,7 +271,7 @@ if train:
     }
     trainer.push_to_hub(**kwargs)
 else:
-    model = SpeechT5ForTextToSpeech.from_pretrained(pretrained_model_name_or_path=checkpoint_path, local_files_only=True)    
+    model = SpeechT5ForTextToSpeech.from_pretrained(pretrained_model_name_or_path=constants.checkpoint_path, local_files_only=True)    
 
 ###############################################################################
 # Process Entire Dataset

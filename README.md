@@ -1,4 +1,5 @@
-# Install Dependencies
+# Setup
+## Install Dependencies
 ```
 pip install git+https://github.com/huggingface/transformers.git
 pip install sentencepiece
@@ -12,15 +13,21 @@ pip install accelerate -U
 pip install tensorboardX
 ```
 
-Also, you'll need Git Large File Storage. 
+## Git Large File Storage
+Also, you'll need Git Large File Storage to store model checkpoints and complete models.
 See: 
     1. https://docs.github.com/en/repositories/working-with-files/managing-large-files/installing-git-large-file-storage?platform=linux
     2. https://docs.github.com/en/repositories/working-with-files/managing-large-files/configuring-git-large-file-storage
 
+## Huggingface User Token
+User token (with write access) is used to upload the model to huggingface.
+See:
+    https://huggingface.co/docs/hub/security-tokens
+
 # Dataset
-https://huggingface.co/datasets/facebook/voxpopuli/tree/main/data/en
 https://huggingface.co/datasets/facebook/voxpopuli/tree/main/data/en_accented
 
 
 # Troubleshoot
-https://github.com/facebookresearch/voxpopuli/issues/43# 5455-term-project
+1. Manully download dataset using voxpopuli repo
+https://github.com/facebookresearch/voxpopuli/issues/43#
