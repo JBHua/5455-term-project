@@ -2,24 +2,28 @@ from transformers import SpeechT5Processor, SpeechT5ForTextToSpeech, SpeechT5Hif
 from datasets import load_dataset, Audio
 import torch
 import soundfile as sf
-from collections import defaultdict
 import matplotlib.pyplot as plt
 import os
 from speechbrain.pretrained import EncoderClassifier
 from dataclasses import dataclass
 from typing import Any, Dict, List, Union
 import soundfile as sf
+import multiprocess
+import socket
+import time
 
 ###############################################################################
 # Helper Functions
 ###############################################################################
+model_path = './model/trained_' + socket.gethostname() + time.strftime("%H:%M:%S", time.localtime())
+multiprocess.set_start_method("spawn", force=True)
+
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f'pytorch={torch.version.__version__}, device={device}')
+cpu_count = len(os.sched_getaffinity(0))
+print("Using " + str(cpu_count) + " cpu")
+torch.set_num_threads(cpu_count)
 
-def extract_all_chars(batch):
-    all_text = " ".join(batch["normalized_text"])
-    vocab = list(set(all_text))
-    return {"vocab": [vocab], "all_text": [all_text]}
 
 def select_speaker(speaker_id):
     return 100 <= speaker_counts[speaker_id] <= 400
@@ -50,6 +54,9 @@ def prepare_dataset(example):
     example["speaker_embeddings"] = create_speaker_embedding(audio["array"])
 
     return example
+
+def is_not_too_short(raw_text):
+    return len(raw_text) > 10
 
 def is_not_too_long(input_ids):
     input_length = len(input_ids)
@@ -101,7 +108,6 @@ class TTSDataCollatorWithPadding:
 ###############################################################################
 processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_tts")
 model = SpeechT5ForTextToSpeech.from_pretrained("microsoft/speecht5_tts")
-tokenizer = processor.tokenizer
 
 # inputs = processor(text="Don't count the days, make the days count.", return_tensors="pt")
 
@@ -112,37 +118,37 @@ from datasets import load_dataset, Audio
 print("Loading Dataset...")
 dataset = load_dataset(
     # "facebook/voxpopuli", "en_accented", split="test"
-    "facebook/voxpopuli", "en", split="test[:15]",
-    download_mode="reuse_cache_if_exists"
+    "facebook/voxpopuli", "en_accented", split="test",
+    download_mode="reuse_cache_if_exists",
+    keep_in_memory=True,
+    num_proc=cpu_count
 )
-print("Finish Loading Dataset")
+print("Finish Loading Dataset... Length of dataset:" + str(len(dataset)))
 
+print("Start Setting Sampling Rate...")
 dataset = dataset.cast_column("audio", Audio(sampling_rate=16000))
-# print("Length of dataset: " + str(len(dataset)))
-# vocabs = dataset.map(
-#     extract_all_chars, 
-#     batched=True, 
-#     batch_size=-1, 
-#     keep_in_memory=True, 
-#     remove_columns=dataset.column_names,
-# )
-# dataset_vocab = set(vocabs["vocab"][0])
-# tokenizer_vocab = {k for k,_ in tokenizer.get_vocab().items()}
+
+# dataset = dataset.train_test_split(test_size=5,train_size=15, shuffle=False).values()
+# print(dataset)
+# print("Finish Spliting Dataset")
+
+tokenizer = processor.tokenizer
 
 ###############################################################################
 # Select Speaker
 ###############################################################################
+from collections import defaultdict
 speaker_counts = defaultdict(int)
 
-plt.figure()
-plt.hist(speaker_counts.values(), bins=20)
-plt.ylabel("Speakers")
-plt.xlabel("Examples")
-plt.show()
+# plt.figure()
+# plt.hist(speaker_counts.values(), bins=20)
+# plt.ylabel("Speakers")
+# plt.xlabel("Examples")
+# plt.show()
 
-for speaker_id in dataset["speaker_id"]:
-    speaker_counts[speaker_id] += 1
-dataset = dataset.filter(select_speaker, input_columns=["speaker_id"])
+# for speaker_id in dataset["speaker_id"]:
+#     speaker_counts[speaker_id] += 1
+# dataset = dataset.filter(select_speaker, input_columns=["speaker_id"])
 
 ###############################################################################
 # Speaker Embeddings
@@ -158,9 +164,13 @@ print(list(processed_example.keys())) # ['input_ids', 'labels', 'speaker_embeddi
 tokenizer.decode(processed_example["input_ids"])
 
 print(processed_example["speaker_embeddings"].shape) # (512,)
-plt.figure()
-plt.imshow(processed_example["labels"].T)
-plt.show()
+# plt.figure()
+# plt.imshow(processed_example["labels"].T)
+# plt.show()
+# print(processed_example["speaker_embeddings"].shape) # (512,)
+# plt.figure()
+# plt.imshow(processed_example["labels"].T)
+# plt.show()
 
 vocoder = SpeechT5HifiGan.from_pretrained("microsoft/speecht5_hifigan")
 spectrogram = torch.tensor(processed_example["labels"])
@@ -179,28 +189,41 @@ Audio(speech.cpu().numpy(), rate=16000)
 ###############################################################################
 # Process Entire Dataset
 ###############################################################################
+print("Start preparing dataset...")
+print("Current Dataset Columns:")
+print(dataset.column_names)
+print(type(dataset))
+print(dataset)
+
+dataset = dataset.filter(is_not_too_short, input_columns=["normalized_text"])
+print("How many examples left after filtering is_not_too_short?")
+print(len(dataset)) # How many examples left?
+
 dataset = dataset.map(
     prepare_dataset, remove_columns=dataset.column_names,
 )
+
+print("Preparing dataset finished succesfully")
+print(dataset)
 dataset = dataset.filter(is_not_too_long, input_columns=["input_ids"])
+print("How many examples left after filtering not_too_long?")
 print(len(dataset)) # How many examples left?
 
-dataset = dataset.train_test_split(test_size=0.1)
+dataset = dataset.train_test_split(test_size=5, train_size=15)
 print(dataset)
 
 data_collator = TTSDataCollatorWithPadding(processor=processor)
 features = [
     dataset["train"][0],
     dataset["train"][1],
-    dataset["train"][20],
+    dataset["train"][5],
 ]
 
 batch = data_collator(features)
 {k:v.shape for k,v in batch.items()}
-# sf.write("tts_example.wav", speech.numpy(), samplerate=16000)
+sf.write("tts_example.wav", speech.numpy(), samplerate=16000)
 
 model.config.use_cache = True
-
 
 training_args = Seq2SeqTrainingArguments(
     output_dir="./speecht5_tts",  # change to a repo name of your choice
@@ -233,13 +256,14 @@ trainer = Seq2SeqTrainer(
 )
 
 trainer.train()
+trainer.save_mode(model_path)
 
 ###############################################################################
 # Process Entire Dataset
 ###############################################################################
-model = SpeechT5ForTextToSpeech.from_pretrained("Matthijs/speecht5_tts")
+model = SpeechT5ForTextToSpeech.from_pretrained(pretrained_model_name_or_path=model_path, local_files_only=True)
 
-example = dataset["test"][304]
+example = dataset["test"][2]
 speaker_embeddings = torch.tensor(example["speaker_embeddings"]).unsqueeze(0)
 print("speaker_embeddings.shape")
 print(speaker_embeddings.shape)
@@ -247,9 +271,9 @@ print(speaker_embeddings.shape)
 text = "hello, this is pytorch!"
 inputs = processor(text=text, return_tensors="pt")
 spectrogram = model.generate_speech(inputs["input_ids"], speaker_embeddings)
-plt.figure()
-plt.imshow(spectrogram.T)
-plt.show()
+# plt.figure()
+# plt.imshow(spectrogram.T)
+# plt.show()
 
 with torch.no_grad():
     speech = vocoder(spectrogram)
@@ -258,3 +282,4 @@ from IPython.display import Audio
 Audio(speech.numpy(), rate=16000)
 
 sf.write("output.wav", speech.numpy(), samplerate=16000)
+
