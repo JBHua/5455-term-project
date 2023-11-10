@@ -227,7 +227,7 @@ model.config.use_cache = True
 
 training_args = Seq2SeqTrainingArguments(
     output_dir="./speecht5_tts",  # change to a repo name of your choice
-    per_device_train_batch_size=16,
+    per_device_train_batch_size=32,
     gradient_accumulation_steps=2,
     learning_rate=1e-5,
     warmup_steps=500,
