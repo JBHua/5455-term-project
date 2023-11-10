@@ -1,4 +1,6 @@
-from transformers import SpeechT5Processor, SpeechT5ForTextToSpeech, SpeechT5HifiGan, Seq2SeqTrainer, Seq2SeqTrainingArguments, SpeechT5Tokenizer
+from transformers import SpeechT5Processor, SpeechT5ForTextToSpeech, SpeechT5HifiGan, Seq2SeqTrainer, \
+    Seq2SeqTrainingArguments, SpeechT5Tokenizer, PreTrainedModel
+from collections import defaultdict
 from datasets import DatasetDict, Dataset, IterableDatasetDict, IterableDataset
 import torch
 import matplotlib.pyplot as plt
@@ -10,7 +12,8 @@ from typing import Any, Dict, List, Union
 import soundfile as sf
 import time
 import constants
-from datasets import load_dataset
+from datasets import load_dataset, load_from_disk
+
 
 ###############################################################################
 # Helper Functions
@@ -18,7 +21,7 @@ from datasets import load_dataset
 def log_msg(message, outf=constants.log_file, include_time=True):
     msg = time.strftime("%H:%M:%S", time.localtime()) + '\t' + message if include_time else message
     print(msg)
-    if not outf is None:
+    if outf is not None:
         outf.write(msg)
         outf.write("\n")
         outf.flush()
@@ -32,21 +35,63 @@ def error_recording_hook(exctype, value, traceback):
         sys.__excepthook__(exctype, value, traceback)
 
 
-def init_global_variables() -> tuple[SpeechT5Processor, SpeechT5Tokenizer, EncoderClassifier]:
-    log_msg("Initing processor, tokenizer, and speaker_model")
-    # model = SpeechT5ForTextToSpeech.from_pretrained("microsoft/speecht5_tts")
-    
-    processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_tts")
+@dataclass
+class TTSDataCollatorWithPadding:
+    processor: Any
 
-    tokenizer = processor.tokenizer
-    
-    speaker_model = EncoderClassifier.from_hparams(
+    def __call__(self, features: List[Dict[str, Union[List[int], torch.Tensor]]]) -> Dict[str, torch.Tensor]:
+        input_ids = [{"input_ids": feature["input_ids"]} for feature in features]
+        label_features = [{"input_values": feature["labels"]} for feature in features]
+        speaker_features = [feature["speaker_embeddings"] for feature in features]
+
+        # collate the inputs and targets into a batch
+        batch = processor.pad(
+            input_ids=input_ids,
+            labels=label_features,
+            return_tensors="pt",
+        )
+
+        # replace padding with -100 to ignore loss correctly
+        batch["labels"] = batch["labels"].masked_fill(
+            batch.decoder_attention_mask.unsqueeze(-1).ne(1), -100
+        )
+
+        # not used during fine-tuning
+        del batch["decoder_attention_mask"]
+
+        # round down target lengths to multiple of reduction factor
+        if pretrained_model.config.reduction_factor > 1:
+            target_lengths = torch.tensor([
+                len(feature["input_values"]) for feature in label_features
+            ])
+            target_lengths = target_lengths.new([
+                length - length % pretrained_model.config.reduction_factor for length in target_lengths
+            ])
+            max_length = max(target_lengths)
+            batch["labels"] = batch["labels"][:, :max_length]
+
+        # also add in the speaker embeddings
+        batch["speaker_embeddings"] = torch.tensor(speaker_features)
+
+        return batch
+
+
+def init_global_variables() -> tuple[PreTrainedModel, SpeechT5Processor, SpeechT5Tokenizer, EncoderClassifier,
+    TTSDataCollatorWithPadding, PreTrainedModel]:
+    log_msg("Initializing processor, tokenizer, and speaker_model")
+
+    _pretrained_model = SpeechT5ForTextToSpeech.from_pretrained("microsoft/speecht5_tts")
+    _processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_tts")
+    _tokenizer = _processor.tokenizer
+    _speaker_model = EncoderClassifier.from_hparams(
         source=constants.spk_model_name,
         run_opts={"device": device},
         savedir=os.path.join("/tmp", constants.spk_model_name)
     )
+    _data_collator = TTSDataCollatorWithPadding(processor=_processor)
+    _vocoder = SpeechT5HifiGan.from_pretrained("microsoft/speecht5_hifigan")
 
-    return processor, tokenizer, speaker_model
+    return _pretrained_model, _processor, _tokenizer, _speaker_model, _data_collator, _vocoder
 
 
 def select_speaker(speaker_id):
@@ -62,14 +107,15 @@ def create_speaker_embedding(waveform):
 
 
 def prepare_dataset(example):
-    """prepare_dataset takes a single entry; tokenize input text; load audio into a log-mel spectrogram; and add speaker embeddings"""
+    """prepare_dataset takes a single entry; tokenize input text; load audio into a log-mel spectrogram; and add
+    speaker embeddings"""
     # load the audio data; if necessary, this resamples the audio to 16kHz
     audio = example["audio"]
 
     # feature extraction and tokenization
     example = processor(
         text=example["normalized_text"],
-        audio_target=audio["array"], 
+        audio_target=audio["array"],
         sampling_rate=audio["sampling_rate"],
         return_attention_mask=False,
     )
@@ -93,119 +139,86 @@ def is_not_too_long(input_ids):
     return input_length < 200
 
 
-@dataclass
-class TTSDataCollatorWithPadding:
-    processor: Any
+# @dataclass
+# class DatasetPrepper:
+#     """DatasetPrepper is used to solve multi-processing bug. See README.md trubleshotting section for detail"""
+#     processor: SpeechT5Processor
+#
+#     def __call__(self, example):
+#         """prepare_dataset takes a single entry; tokenize input text; load audio into a log-mel spectrogram; and add speaker embeddings"""
+#         # load the audio data; if necessary, this resamples the audio to 16kHz
+#         audio = example["audio"]
+#
+#         # feature extraction and tokenization
+#         example = processor(
+#             text=example["normalized_text"],
+#             audio_target=audio["array"],
+#             sampling_rate=audio["sampling_rate"],
+#             return_attention_mask=False,
+#         )
+#
+#         # strip off the batch dimension
+#         example["labels"] = example["labels"][0]
+#
+#         # use SpeechBrain to obtain x-vector
+#         example["speaker_embeddings"] = create_speaker_embedding(audio["array"])
+#
+#         return example
+#
 
-    def __call__(self, features: List[Dict[str, Union[List[int], torch.Tensor]]]) -> Dict[str, torch.Tensor]:
-        input_ids = [{"input_ids": feature["input_ids"]} for feature in features]
-        label_features = [{"input_values": feature["labels"]} for feature in features]
-        speaker_features = [feature["speaker_embeddings"] for feature in features]
-
-        # collate the inputs and targets into a batch
-        batch = processor.pad(
-            input_ids=input_ids,
-            labels=label_features,
-            return_tensors="pt",
-        )        
-
-        # replace padding with -100 to ignore loss correctly
-        batch["labels"] = batch["labels"].masked_fill(
-            batch.decoder_attention_mask.unsqueeze(-1).ne(1), -100
-        )
-
-        # not used during fine-tuning
-        del batch["decoder_attention_mask"]
-
-        # round down target lengths to multiple of reduction factor
-        if model.config.reduction_factor > 1:
-            target_lengths = torch.tensor([
-                len(feature["input_values"]) for feature in label_features
-            ])
-            target_lengths = target_lengths.new([
-                length - length % model.config.reduction_factor for length in target_lengths
-            ])
-            max_length = max(target_lengths)
-            batch["labels"] = batch["labels"][:, :max_length]
-
-        # also add in the speaker embeddings
-        batch["speaker_embeddings"] = torch.tensor(speaker_features)
-
-        return batch
-
-
-@dataclass
-class DatasetPrepper:
-    """DatasetPrepper is used to solve multi-processing bug. See README.md trubleshotting section for detail"""
-    processor: SpeechT5Processor
-
-    def __call__(self, example):
-        """prepare_dataset takes a single entry; tokenize input text; load audio into a log-mel spectrogram; and add speaker embeddings"""
-        # load the audio data; if necessary, this resamples the audio to 16kHz
-        audio = example["audio"]
-
-        # feature extraction and tokenization
-        example = processor(
-            text=example["normalized_text"],
-            audio_target=audio["array"], 
-            sampling_rate=audio["sampling_rate"],
-            return_attention_mask=False,
-        )
-
-        # strip off the batch dimension
-        example["labels"] = example["labels"][0]
-
-        # use SpeechBrain to obtain x-vector
-        example["speaker_embeddings"] = create_speaker_embedding(audio["array"])
-
-        return example
-    
 ###############################################################################
 # Setup
 ###############################################################################
+
 sys.excepthook = error_recording_hook
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 cpu_count = len(os.sched_getaffinity(0))
 torch.set_num_threads(cpu_count)
 
-log_msg(f'\nStart -- {time.strftime("%b %e %H:%M:%S", time.localtime())} -- pytorch={torch.version.__version__}, device={device}, cpu_count={cpu_count}', include_time=False)
+log_msg(
+    f'\nStart -- {time.strftime("%b %e %H:%M:%S", time.localtime())} -- pytorch={torch.version.__version__}, device={device}, cpu_count={cpu_count}',
+    include_time=False)
 
 ###############################################################################
 # Global Variables
 ###############################################################################
-processor, tokenizer, speaker_model = init_global_variables()
+pretrained_model, processor, tokenizer, speaker_model, data_collator, vocoder = init_global_variables()
+
 
 ###############################################################################
 # Load Datasets
 ###############################################################################
-def load_remote_dataset(name="facebook/voxpopuli", subset = "en_accented") -> DatasetDict | Dataset | IterableDatasetDict | IterableDataset:
+def load_remote_dataset(name="facebook/voxpopuli",
+                        subset="en_accented") -> DatasetDict | Dataset | IterableDatasetDict | IterableDataset:
     log_msg(f"Loading Remote Dataset: {name}. Sub-collection: {subset}")
-    dataset = load_dataset(
+    _dataset = load_dataset(
         name, subset, split="test",
         download_mode="reuse_cache_if_exists",
         keep_in_memory=True, num_proc=cpu_count
     )
-    log_msg("Finish Loading Remote Dataset. Length of dataset: " + str(len(dataset)))
+    log_msg("Finish Loading Remote Dataset. Length of dataset: " + str(len(_dataset)))
 
     log_msg("Start Setting Sampling Rate to 16 kHz...")
     from datasets import Audio
-    dataset = dataset.cast_column("audio", Audio(sampling_rate=16000)) # SpeechT5 requires the sampling rate to be 16 kHz.
+    _dataset = _dataset.cast_column("audio",
+                                    Audio(sampling_rate=16000))  # SpeechT5 requires the sampling rate to be 16 kHz.
     log_msg("Setting Sampling Rate Successfully")
-    
-    return dataset
+
+    return _dataset
 
 
 def load_local_dataset() -> DatasetDict | Dataset | IterableDatasetDict | IterableDataset:
     log_msg("Using Locally Processed Dataset. Skip Processing...")
-    
+
     try:
-        dataset = load_dataset(constants.data_path)
-    except:
-        log_msg("Failed to load local dataset. Please double check file exists and path is correct")
+        _dataset = load_from_disk(constants.data_path)
+    except Exception as e:
+        log_msg(f"Failed to load local dataset. Please double check file exists and path is correct. {e}")
         sys.exit()
 
-    return dataset
+    return _dataset
+
 
 # dataset = dataset.train_test_split(test_size=5,train_size=15, shuffle=False).values()
 # print(dataset)
@@ -215,9 +228,6 @@ def load_local_dataset() -> DatasetDict | Dataset | IterableDatasetDict | Iterab
 ###############################################################################
 # Select Speaker
 ###############################################################################
-from collections import defaultdict
-speaker_counts = defaultdict(int)
-
 ## plt.figure()
 ## plt.hist(speaker_counts.values(), bins=20)
 ## plt.ylabel("Speakers")
@@ -275,25 +285,27 @@ speaker_counts = defaultdict(int)
 ## print(type(dataset))
 ## print(dataset)
 
-def filter_and_prepare_dataset(dataset) -> DatasetDict | Dataset | IterableDatasetDict | IterableDataset:
+def filter_and_prepare_dataset(_dataset) -> DatasetDict | Dataset | IterableDatasetDict | IterableDataset:
     log_msg("Start Filtering Short Data")
-    dataset = dataset.filter(is_not_too_short, input_columns=["normalized_text"])
-    log_msg(f"{len(dataset)} data entries left after filtering")
-    
+    _dataset = _dataset.filter(is_not_too_short, input_columns=["normalized_text"])
+    log_msg(f"{len(_dataset)} data entries left after filtering")
+
     log_msg("Start Preparing Dataset")
-    dataset = dataset.map(prepare_dataset, remove_columns=dataset.column_names, num_proc=1)
-    # dataset = dataset.map(DatasetPrepper(processor), remove_columns=dataset.column_names, num_proc=cpu_count)
-    log_msg("Preparing dataset finished succesfully")
+    _dataset = _dataset.map(prepare_dataset, remove_columns=_dataset.column_names, num_proc=1)
+    # _dataset = _dataset.map(DatasetPrepper(processor), remove_columns=_dataset.column_names, num_proc=cpu_count)
+    log_msg("Preparing dataset finished successfully")
 
-    log_msg("Start Filtering Long Data") # TODO: why can't we do it beforehand?
-    dataset = dataset.filter(is_not_too_long, input_columns=["input_ids"])
-    log_msg(f"{len(dataset)} data entries left after filtering")
+    log_msg("Start Filtering Long Data")  # TODO: why can't we do it beforehand?
+    _dataset = _dataset.filter(is_not_too_long, input_columns=["input_ids"])
+    log_msg(f"{len(_dataset)} data entries left after filtering")
 
-    return dataset
+    return _dataset
 
-def split_dataset(dataset, test_size=5, train_size=15):
-    dataset = dataset.train_test_split(test_size=test_size, train_size=train_size)
-    return dataset
+
+def split_dataset(_dataset, test_size=5, train_size=15):
+    _dataset = _dataset.train_test_split(test_size=test_size, train_size=train_size)
+    return _dataset
+
 
 # data_collator = TTSDataCollatorWithPadding(processor=processor)
 # features = [
@@ -308,35 +320,42 @@ def split_dataset(dataset, test_size=5, train_size=15):
 
 # model.config.use_cache = True
 
-# training_args = Seq2SeqTrainingArguments(
-#     output_dir="./speecht5_tts",  # change to a repo name of your choice
-#     per_device_train_batch_size=32,
-#     gradient_accumulation_steps=2,
-#     learning_rate=1e-5,
-#     warmup_steps=500,
-#     max_steps=4000,
-#     gradient_checkpointing=True,
-#     fp16=True,
-#     evaluation_strategy="steps",
-#     per_device_eval_batch_size=8,
-#     save_steps=1000,
-#     eval_steps=1000,
-#     logging_steps=25,
-#     report_to=["tensorboard"],
-#     load_best_model_at_end=True,
-#     greater_is_better=False,
-#     label_names=["labels"],
-#     push_to_hub=False,
-# )
+def generate_train_arguments():
+    log_msg("Generating Seq2SeqTrainer Arguments")
+    return Seq2SeqTrainingArguments(
+        output_dir=constants.CHECKPOINT_BASE_PATH,
+        per_device_train_batch_size=32,
+        gradient_accumulation_steps=2,
+        learning_rate=1e-5,
+        warmup_steps=500,
+        max_steps=4000,
+        gradient_checkpointing=True,
+        fp16=True,
+        evaluation_strategy="steps",
+        per_device_eval_batch_size=8,
+        save_steps=1000,
+        eval_steps=1000,
+        logging_steps=25,
+        report_to=["tensorboard"],
+        load_best_model_at_end=True,
+        greater_is_better=False,
+        label_names=["labels"],
+        push_to_hub=True,
+    )
 
-# trainer = Seq2SeqTrainer(
-#     args=training_args,
-#     model=model,
-#     train_dataset=dataset["train"],
-#     eval_dataset=dataset["test"],
-#     data_collator=data_collator,
-#     tokenizer=processor.tokenizer,
-# )
+
+def generate_trainer(_training_args: Seq2SeqTrainingArguments, _model: PreTrainedModel, _dataset, _data_collator,
+                     _tokenizer):
+    log_msg("Generating Seq2SeqTrainer")
+    return Seq2SeqTrainer(
+        args=_training_args,
+        model=_model,
+        train_dataset=_dataset["train"],
+        eval_dataset=_dataset["test"],
+        data_collator=_data_collator,
+        tokenizer=_tokenizer,
+    )
+
 
 # dataset.save_to_disk("data_path")
 
@@ -384,20 +403,50 @@ def split_dataset(dataset, test_size=5, train_size=15):
 
 # sf.write("output.wav", speech.numpy(), samplerate=16000)
 
+
 if __name__ == "__main__":
     # Step 1: Download & Split datasets
     dataset = None
     if constants.download_remote_dataset:
         dataset = load_remote_dataset()
+        # Step 1A: Process & Preparing Dataset
+        dataset = filter_and_prepare_dataset(dataset)
+
+        if constants.save_processed_dataset:
+            log_msg(f"save_processed_dataset is True. Saving processed dataset to dir: {constants.data_path}")
+            dataset.save_to_disk(constants.data_path)
     else:
+        # We ensure the data in local file is already processed. So we don't need to process it again
         dataset = load_local_dataset()
 
-    # Step 2A: Process & Preparing Dataset
-    dataset = filter_and_prepare_dataset()
+    # Step 2: Split Dataset
+    divided_dataset = split_dataset(dataset)
 
-    # Step 2B: Process & Preparing Dataset
-    if constants.save_processed_dataset:
-        log_msg(f"save_processed_dataset is True. Saving processed dataset to dir: {constants.data_path}")
-        dataset.save_to_disk(constants.data_path)
+    # Step 3: Training
+    pretrained_model.config.use_cache = False
+    training_args = generate_train_arguments()
+    trainer = generate_trainer(training_args, pretrained_model, divided_dataset, data_collator, tokenizer)
+    trainer.push_to_hub(**constants.huggingface_kwargs)
+
+    log_msg("Start Training...")
+    trainer.train()
+    log_msg("Start Saving the model...")
+    trainer.save_model(constants.model_path)
+
+    text = "I'm loading the model from the Hugging Face Hub!"
+    inputs = processor(text=text, return_tensors="pt")
+
+    example = dataset["test"][1]
+    speaker_embeddings = torch.tensor(example["speaker_embeddings"]).unsqueeze(0)
+    spectrogram = pretrained_model.generate_speech(inputs["input_ids"], speaker_embeddings)
+
+    with torch.no_grad():
+        speech = vocoder(spectrogram)
+
+    from IPython.display import Audio
+    Audio(speech.numpy(), rate=16000)
+
+    import soundfile as sf
+    sf.write("output.wav", speech.numpy(), samplerate=16000)
 
     log_msg('', include_time=False)

@@ -1,0 +1,94 @@
+
+Start -- Nov 10 16:33:01 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+16:33:01	Initing processor, tokenizer, and speaker_model
+16:33:04	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+16:36:31	Finish Loading Remote Dataset. Length of dataset: 8387
+16:36:31	Start Setting Sampling Rate to 16 kHz...
+16:36:31	Setting Sampling Rate Successfully
+16:36:31	Exception: <class 'TypeError'>. filter_and_prepare_dataset() missing 1 required positional argument: 'dataset'. Traceback: <traceback object at 0x7f1be4598dc0>
+
+Start -- Nov 10 16:36:46 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+16:36:46	Initializing processor, tokenizer, and speaker_model
+16:36:47	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+16:37:12	Finish Loading Remote Dataset. Length of dataset: 8387
+16:37:12	Start Setting Sampling Rate to 16 kHz...
+16:37:12	Setting Sampling Rate Successfully
+16:37:12	Start Filtering Short Data
+16:37:12	8358 data entries left after filtering
+16:37:12	Start Preparing Dataset
+16:38:41	KeyboardInterrupt detected. Exiting...
+
+Start -- Nov 10 16:38:47 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+16:38:47	Initializing processor, tokenizer, and speaker_model
+16:38:48	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+16:39:13	Finish Loading Remote Dataset. Length of dataset: 8387
+16:39:13	Start Setting Sampling Rate to 16 kHz...
+16:39:13	Setting Sampling Rate Successfully
+16:39:13	Start Filtering Short Data
+16:39:13	8358 data entries left after filtering
+16:39:13	Start Preparing Dataset
+16:40:04	Exception: <class 'multiprocess.context.TimeoutError'>. . Traceback: <traceback object at 0x7f1327d49f80>
+
+Start -- Nov 10 16:40:08 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+16:40:08	Initializing processor, tokenizer, and speaker_model
+16:40:09	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+16:40:34	Finish Loading Remote Dataset. Length of dataset: 8387
+16:40:34	Start Setting Sampling Rate to 16 kHz...
+16:40:34	Setting Sampling Rate Successfully
+16:40:34	Start Filtering Short Data
+16:40:34	8358 data entries left after filtering
+16:40:34	Start Preparing Dataset
+16:41:04	Exception: <class 'multiprocess.context.TimeoutError'>. . Traceback: <traceback object at 0x7fa037fc5100>
+
+Start -- Nov 10 16:41:07 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+16:41:07	Initializing processor, tokenizer, and speaker_model
+16:41:08	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+16:41:33	Finish Loading Remote Dataset. Length of dataset: 8387
+16:41:33	Start Setting Sampling Rate to 16 kHz...
+16:41:33	Setting Sampling Rate Successfully
+16:41:33	Start Filtering Short Data
+16:41:33	8358 data entries left after filtering
+16:41:33	Start Preparing Dataset
+16:47:00	Preparing dataset finished successfully
+16:47:00	Start Filtering Long Data
+16:47:00	6329 data entries left after filtering
+16:47:00	save_processed_dataset is True. Saving processed dataset to dir: ./data/
+
+
+Start -- Nov 10 16:50:43 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+16:50:43	Initializing processor, tokenizer, and speaker_model
+16:50:44	Using Locally Processed Dataset. Skip Processing...
+16:50:44	Failed to load local dataset. Please double check file exists and path is correct
+
+Start -- Nov 10 16:51:12 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+16:51:12	Initializing processor, tokenizer, and speaker_model
+16:51:12	Using Locally Processed Dataset. Skip Processing...
+16:51:12	Failed to load local dataset. Please double check file exists and path is correct
+
+Start -- Nov 10 16:52:45 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+16:52:45	Initializing processor, tokenizer, and speaker_model
+16:52:45	Using Locally Processed Dataset. Skip Processing...
+16:52:45	Failed to load local dataset. Please double check file exists and path is correct. You are trying to load a dataset that was saved using `save_to_disk`. Please use `load_from_disk` instead.
+
+Start -- Nov 10 16:53:20 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+16:53:20	Initializing processor, tokenizer, and speaker_model
+16:53:21	Using Locally Processed Dataset. Skip Processing...
+
+
+Start -- Nov 10 17:42:43 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+17:42:43	Initializing processor, tokenizer, and speaker_model
+17:43:04	Using Locally Processed Dataset. Skip Processing...
+17:43:04	Generating Seq2SeqTrainer Arguments
+17:43:04	Generating Seq2SeqTrainer
+17:44:39	Exception: <class 'huggingface_hub.utils._errors.BadRequestError'>.  (Request ID: Root=1-654eb213-4bedca92381c9f61443bf392;dfd56855-90c4-42ec-bffa-f445e26543e3)
+
+Bad request for commit endpoint:
+"language[0]" with value "en_accented" is not valid. It must be an ISO 639-1, 639-2 or 639-3 code (two/three letters), or a special value like "code", "multilingual". If you want to use BCP-47 identifiers, you can specify them in language_bcp47.
+"tags[0]" is not allowed to be empty. Traceback: <traceback object at 0x7eff3ca4d400>
+
+Start -- Nov 10 17:46:04 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+17:46:04	Initializing processor, tokenizer, and speaker_model
+17:46:06	Using Locally Processed Dataset. Skip Processing...
+17:46:06	Generating Seq2SeqTrainer Arguments
+17:46:06	Generating Seq2SeqTrainer
+17:46:08	Start Training...

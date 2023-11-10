@@ -1,4 +1,5 @@
-./data
-./raw_audios
-./speecht5_tts
-./dataset
+/data
+/raw_audios
+/speecht5_tts
+/dataset
+/model

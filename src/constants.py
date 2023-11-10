@@ -2,9 +2,9 @@ import socket
 import time
 
 # Training Related
-train_model = False # if False, load saved model/checkpoints
-download_remote_dataset = True # if False, load local dataset
-save_processed_dataset = True # if True, save the processed (prepare_dataset) dataset to disk.
+train_model = False  # if False, load saved model/checkpoints
+download_remote_dataset = False  # if False, load local dataset
+save_processed_dataset = True  # if True, save the processed (prepare_dataset) dataset to disk.
 load_checkpoint = ''
 
 # Model Related
@@ -22,3 +22,13 @@ spk_model_name = "speechbrain/spkrec-xvect-voxceleb"
 log_file_path = './log/' + socket.gethostname() + '.log'
 log_file = open(log_file_path, 'a')
 
+huggingface_kwargs = {
+    "dataset_tags": "facebook/voxpopuli",
+    "dataset": "VoxPopuli",
+    "dataset_args": "config: en_accented",
+    "language": "en",
+    "model_name": "SpeechT5 TTS English Accented",
+    "finetuned_from": "microsoft/speecht5_tts",
+    "tasks": "text-to-speech",
+    "tags": "en_accent,vocpopuli,t5",
+}
