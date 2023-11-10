@@ -77,7 +77,7 @@ class TTSDataCollatorWithPadding:
 
 
 def init_global_variables() -> tuple[PreTrainedModel, SpeechT5Processor, SpeechT5Tokenizer, EncoderClassifier,
-    TTSDataCollatorWithPadding, PreTrainedModel]:
+TTSDataCollatorWithPadding, PreTrainedModel]:
     log_msg("Initializing processor, tokenizer, and speaker_model")
 
     _pretrained_model = SpeechT5ForTextToSpeech.from_pretrained("microsoft/speecht5_tts")
@@ -100,10 +100,10 @@ def select_speaker(speaker_id):
 
 def create_speaker_embedding(waveform):
     with torch.no_grad():
-        speaker_embeddings = speaker_model.encode_batch(torch.tensor(waveform))
-        speaker_embeddings = torch.nn.functional.normalize(speaker_embeddings, dim=2)
-        speaker_embeddings = speaker_embeddings.squeeze().cpu().numpy()
-    return speaker_embeddings
+        _speaker_embeddings = speaker_model.encode_batch(torch.tensor(waveform))
+        _speaker_embeddings = torch.nn.functional.normalize(_speaker_embeddings, dim=2)
+        _speaker_embeddings = _speaker_embeddings.squeeze().cpu().numpy()
+    return _speaker_embeddings
 
 
 def prepare_dataset(example):
@@ -130,7 +130,7 @@ def prepare_dataset(example):
 
 
 def is_not_too_short(raw_text, cutoff: int = 10):
-    """is_not_too_short filters out entry with short text (to prevent T5 from complaining). default cutoff is 10 characters"""
+    """filters out entry with short text (to prevent T5 from complaining). default cutoff is 10 characters"""
     return len(raw_text) > cutoff
 
 
@@ -139,37 +139,9 @@ def is_not_too_long(input_ids):
     return input_length < 200
 
 
-# @dataclass
-# class DatasetPrepper:
-#     """DatasetPrepper is used to solve multi-processing bug. See README.md trubleshotting section for detail"""
-#     processor: SpeechT5Processor
-#
-#     def __call__(self, example):
-#         """prepare_dataset takes a single entry; tokenize input text; load audio into a log-mel spectrogram; and add speaker embeddings"""
-#         # load the audio data; if necessary, this resamples the audio to 16kHz
-#         audio = example["audio"]
-#
-#         # feature extraction and tokenization
-#         example = processor(
-#             text=example["normalized_text"],
-#             audio_target=audio["array"],
-#             sampling_rate=audio["sampling_rate"],
-#             return_attention_mask=False,
-#         )
-#
-#         # strip off the batch dimension
-#         example["labels"] = example["labels"][0]
-#
-#         # use SpeechBrain to obtain x-vector
-#         example["speaker_embeddings"] = create_speaker_embedding(audio["array"])
-#
-#         return example
-#
-
 ###############################################################################
 # Setup
 ###############################################################################
-
 sys.excepthook = error_recording_hook
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -436,7 +408,7 @@ if __name__ == "__main__":
     text = "I'm loading the model from the Hugging Face Hub!"
     inputs = processor(text=text, return_tensors="pt")
 
-    example = dataset["test"][1]
+    example = divided_dataset["test"][1]
     speaker_embeddings = torch.tensor(example["speaker_embeddings"]).unsqueeze(0)
     spectrogram = pretrained_model.generate_speech(inputs["input_ids"], speaker_embeddings)
 
@@ -444,9 +416,11 @@ if __name__ == "__main__":
         speech = vocoder(spectrogram)
 
     from IPython.display import Audio
+
     Audio(speech.numpy(), rate=16000)
 
     import soundfile as sf
+
     sf.write("output.wav", speech.numpy(), samplerate=16000)
 
     log_msg('', include_time=False)
