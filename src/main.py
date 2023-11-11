@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import os
 import sys
 import curses
+import traceback
 from speechbrain.pretrained import EncoderClassifier
 from dataclasses import dataclass
 from typing import Any, Dict, List, Union
@@ -19,21 +20,21 @@ from datasets import load_dataset, load_from_disk
 ###############################################################################
 # Helper Functions
 ###############################################################################
-def log_msg(message, outf=constants.log_file, include_time=True):
+def log_msg(message, outf=constants.log_file, include_time=True, print_out=True):
     msg = time.strftime("%H:%M:%S", time.localtime()) + '\t' + message if include_time else message
-    print(msg)
+    if print_out: print(msg)
     if outf is not None:
         outf.write(msg)
         outf.write("\n")
         outf.flush()
 
 
-def error_recording_hook(exctype, value, traceback):
+def error_recording_hook(exctype, value, tb):
     if exctype == KeyboardInterrupt:
         log_msg("KeyboardInterrupt detected. Exiting...")
     else:
-        log_msg(f"Exception: {exctype}. {value}. Traceback: {traceback}")
-        sys.__excepthook__(exctype, value, traceback)
+        log_msg(f'Exception: {"".join(traceback.format_exception(exctype, value=value, tb=tb))}', print_out=False)
+        sys.__excepthook__(exctype, value, tb)
 
 
 @dataclass
@@ -81,7 +82,7 @@ def init_global_variables() -> tuple[PreTrainedModel, SpeechT5Processor, SpeechT
                                      TTSDataCollatorWithPadding, PreTrainedModel]:
     log_msg("Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder")
 
-    _pretrained_model = SpeechT5ForTextToSpeech.from_pretrained("microsoft/speecht5_tts")
+    _pretrained_model = SpeechT5ForTextToSpeech.from_pretrained("microsoft/speecht5_tts").to(device)
     _processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_tts")
     _tokenizer = _processor.tokenizer
     _speaker_model = EncoderClassifier.from_hparams(
@@ -90,7 +91,7 @@ def init_global_variables() -> tuple[PreTrainedModel, SpeechT5Processor, SpeechT
         savedir=os.path.join("/tmp", constants.spk_model_name)
     )
     _data_collator = TTSDataCollatorWithPadding(processor=_processor)
-    _vocoder = SpeechT5HifiGan.from_pretrained("microsoft/speecht5_hifigan")
+    _vocoder = SpeechT5HifiGan.from_pretrained("microsoft/speecht5_hifigan").to(device)
 
     return _pretrained_model, _processor, _tokenizer, _speaker_model, _data_collator, _vocoder
 
@@ -288,7 +289,7 @@ def filter_and_prepare_dataset(_dataset) -> DatasetDict | Dataset | IterableData
     return _dataset
 
 
-def split_dataset(_dataset, test_size=5, train_size=15):
+def split_dataset(_dataset, test_size=constants.dataset_test_size, train_size=constants.dataset_train_size):
     _dataset = _dataset.train_test_split(test_size=test_size, train_size=train_size)
     return _dataset
 
@@ -297,7 +298,7 @@ def generate_train_arguments():
     log_msg("Generating Seq2SeqTrainer Arguments")
     return Seq2SeqTrainingArguments(
         output_dir=constants.CHECKPOINT_BASE_PATH,
-        per_device_train_batch_size=32,
+        per_device_train_batch_size=6,
         gradient_accumulation_steps=2,
         learning_rate=1e-5,
         warmup_steps=500,
@@ -362,24 +363,22 @@ if __name__ == "__main__":
         if constants.push_to_hub: trainer.push_to_hub(**constants.huggingface_kwargs)
     else:
         pretrained_model = SpeechT5ForTextToSpeech.from_pretrained(pretrained_model_name_or_path=select_local_mode(),
-                                                                   local_files_only=True)
+                                                                   local_files_only=True).to(device)
 
     text = "I'm loading the model from the Hugging Face Hub!"
-    inputs = processor(text=text, return_tensors="pt")
+    log_msg(f'Input text: {text}')
+    inputs = processor(text=text, return_tensors="pt").to(device)
 
-    example = divided_dataset["test"][4]
-    speaker_embeddings = torch.tensor(example["speaker_embeddings"]).unsqueeze(0)
-    spectrogram = pretrained_model.generate_speech(inputs["input_ids"], speaker_embeddings)
+    example = divided_dataset["train"][5]
+    speaker_embeddings = torch.tensor(example["speaker_embeddings"]).unsqueeze(0).to(device)
+    spectrogram = pretrained_model.generate_speech(inputs["input_ids"], speaker_embeddings).to(device)
 
     with torch.no_grad():
         speech = vocoder(spectrogram)
+    speech = speech.cpu()  # move back to CPU
 
     from IPython.display import Audio
-
     Audio(speech.numpy(), rate=16000)
 
     import soundfile as sf
-
     sf.write("output.wav", speech.numpy(), samplerate=16000)
-
-    log_msg('', include_time=False)
