@@ -6,6 +6,7 @@ import torch
 import matplotlib.pyplot as plt
 import os
 import sys
+import curses
 from speechbrain.pretrained import EncoderClassifier
 from dataclasses import dataclass
 from typing import Any, Dict, List, Union
@@ -77,8 +78,8 @@ class TTSDataCollatorWithPadding:
 
 
 def init_global_variables() -> tuple[PreTrainedModel, SpeechT5Processor, SpeechT5Tokenizer, EncoderClassifier,
-TTSDataCollatorWithPadding, PreTrainedModel]:
-    log_msg("Initializing processor, tokenizer, and speaker_model")
+                                     TTSDataCollatorWithPadding, PreTrainedModel]:
+    log_msg("Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder")
 
     _pretrained_model = SpeechT5ForTextToSpeech.from_pretrained("microsoft/speecht5_tts")
     _processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_tts")
@@ -138,6 +139,73 @@ def is_not_too_long(input_ids):
     input_length = len(input_ids)
     return input_length < 200
 
+
+def list_directories(path):
+    """List all subdirectories in a given path"""
+    for root, dirs, _ in os.walk(path):
+        for dir in dirs:
+            yield os.path.join(root, dir)
+
+
+def print_menu(stdscr, selected_row_idx, directories):
+    stdscr.clear()
+    h, w = stdscr.getmaxyx()  # Get the height and width of the window
+
+    for idx, row in enumerate(directories):
+        if len(row) > w - 2:  # Check if the row is too long and truncate it if necessary
+            row = row[:w-5] + '...'
+
+        x = max(0, w//2 - len(row)//2)  # Ensure x is within the window
+        y = max(0, h//2 - len(directories)//2 + idx)  # Ensure y is within the window
+
+        if idx == selected_row_idx:
+            stdscr.attron(curses.color_pair(1))
+            stdscr.addstr(y, x, row)
+            stdscr.attroff(curses.color_pair(1))
+        else:
+            stdscr.addstr(y, x, row)
+
+    stdscr.refresh()
+
+
+def run_menu(stdscr, dirs):
+    """Handles the menu navigation and selection"""
+    curses.curs_set(0)  # Turn off cursor blinking
+    curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)  # Color scheme for selected row
+
+    current_row = 0
+    print_menu(stdscr, current_row, dirs)
+
+    while True:
+        key = stdscr.getch()
+
+        if key == curses.KEY_UP and current_row > 0:
+            current_row -= 1
+        elif key == curses.KEY_DOWN and current_row < len(dirs) - 1:
+            current_row += 1
+        elif key == curses.KEY_ENTER or key in [10, 13]:
+            stdscr.addstr(0, 0, f"You've selected model path: '{dirs[current_row]}'")
+            # stdscr.refresh()
+            # stdscr.getch()
+            # break
+            return dirs[current_row]
+
+        print_menu(stdscr, current_row, dirs)
+
+
+def select_local_mode():
+    directories = list(list_directories(constants.MODEL_BASE_PATH))
+    if len(directories) == 0:
+        log_msg(f"No model under dir {constants.MODEL_BASE_PATH}. Please double check. Exiting")
+        sys.exit()
+    elif len(directories) == 1:
+        selected_model = directories[0]
+        log_msg(f"Using model: {selected_model}")
+        return selected_model
+
+    selected_model = curses.wrapper(run_menu, directories)
+    log_msg(f"Using model: {selected_model}")
+    return selected_model
 
 ###############################################################################
 # Setup
@@ -328,27 +396,6 @@ def generate_trainer(_training_args: Seq2SeqTrainingArguments, _model: PreTraine
         tokenizer=_tokenizer,
     )
 
-
-# dataset.save_to_disk("data_path")
-
-# if constants.train:
-#     trainer.train()
-#     trainer.save_model(constants.model_path)
-
-#     kwargs = {
-#         "dataset_tags": "facebook/voxpopuli",
-#         "dataset": "VoxPopuli",  # a 'pretty' name for the training dataset
-#         "dataset_args": "config: nl, split: train",
-#         "language": "en_accent",
-#         "model_name": "SpeechT5 English Accent",  # a 'pretty' name for your model
-#         "finetuned_from": "microsoft/speecht5_tts",
-#         "tasks": "text-to-speech",
-#         "tags": "",
-#     }
-#     trainer.push_to_hub(**kwargs)
-# else:
-#     model = SpeechT5ForTextToSpeech.from_pretrained(pretrained_model_name_or_path=constants.checkpoint_path, local_files_only=True)    
-
 ###############################################################################
 # Process Entire Dataset
 ###############################################################################
@@ -407,13 +454,13 @@ if __name__ == "__main__":
         if constants.save_fine_tuned_model: trainer.save_model(constants.model_path)
         if constants.push_to_hub: trainer.push_to_hub(**constants.huggingface_kwargs)
     else:
-        pretrained_model = SpeechT5ForTextToSpeech.from_pretrained(pretrained_model_name_or_path=constants.model_path,
+        pretrained_model = SpeechT5ForTextToSpeech.from_pretrained(pretrained_model_name_or_path=select_local_mode(),
                                                                    local_files_only=True)
 
     text = "I'm loading the model from the Hugging Face Hub!"
     inputs = processor(text=text, return_tensors="pt")
 
-    example = divided_dataset["test"][1]
+    example = divided_dataset["test"][4]
     speaker_embeddings = torch.tensor(example["speaker_embeddings"]).unsqueeze(0)
     spectrogram = pretrained_model.generate_speech(inputs["input_ids"], speaker_embeddings)
 

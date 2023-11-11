@@ -94,3 +94,82 @@ Start -- Nov 10 17:46:04 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
 17:46:08	Start Training...
 18:44:14	Start Saving the model...
 18:44:17	Exception: <class 'KeyError'>. "Column test not in the dataset. Current columns in the dataset: ['input_ids', 'labels', 'speaker_embeddings']". Traceback: <traceback object at 0x7fc01cdca2c0>
+
+Start -- Nov 10 20:53:15 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+20:53:15	Initializing processor, tokenizer, and speaker_model
+20:53:17	Using Locally Processed Dataset. Skip Processing...
+20:53:17	Loading Locally Stored Model from: ./model/trained_yifanhua-threadripper20:53:15
+20:53:17	Exception: <class 'huggingface_hub.utils._validators.HFValidationError'>. Repo id must be in the form 'repo_name' or 'namespace/repo_name': './model/trained_yifanhua-threadripper20:53:15'. Use `repo_type` argument if needed.. Traceback: <traceback object at 0x7fca353cd380>
+
+Start -- Nov 10 20:54:20 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+20:54:20	Initializing processor, tokenizer, and speaker_model
+20:54:23	Using Locally Processed Dataset. Skip Processing...
+20:54:23	Loading Locally Stored Model from: ./model/trained_yifanhua-threadripper20:54:20
+20:54:23	Exception: <class 'huggingface_hub.utils._validators.HFValidationError'>. Repo id must be in the form 'repo_name' or 'namespace/repo_name': './model/trained_yifanhua-threadripper20:54:20'. Use `repo_type` argument if needed.. Traceback: <traceback object at 0x7fd3a2a8e1c0>
+
+Start -- Nov 10 21:05:37 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+21:05:37	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+21:05:39	Using Locally Processed Dataset. Skip Processing...
+21:05:39	Loading Locally Stored Model from: ./model/trained_yifanhua-threadripper21:03:24
+21:05:51	KeyboardInterrupt detected. Exiting...
+
+Start -- Nov 10 21:06:31 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+21:06:31	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+21:06:33	Using Locally Processed Dataset. Skip Processing...
+21:06:33	Loading Locally Stored Model from: ./model/trained_yifanhua-threadripper21:06:31
+21:06:36	Exception: <class 'IndexError'>. list index out of range. Traceback: <traceback object at 0x7fb5cb4a8380>
+
+Start -- Nov 10 21:07:53 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+21:07:53	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+21:07:55	Using Locally Processed Dataset. Skip Processing...
+21:07:55	Loading Locally Stored Model from: ./model/
+21:08:01	Exception: <class 'huggingface_hub.utils._validators.HFValidationError'>. Repo id must be in the form 'repo_name' or 'namespace/repo_name': './model/trained_yifanhua-threadripper21:07:53'. Use `repo_type` argument if needed.. Traceback: <traceback object at 0x7fba6c0c8180>
+
+Start -- Nov 10 21:08:30 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+21:08:30	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+21:08:32	Using Locally Processed Dataset. Skip Processing...
+21:08:32	Loading Locally Stored Model from: ./model/
+21:09:18	Exception: <class 'huggingface_hub.utils._validators.HFValidationError'>. Repo id must be in the form 'repo_name' or 'namespace/repo_name': './model/trained_yifanhua-threadripper21:08:30'. Use `repo_type` argument if needed.. Traceback: <traceback object at 0x7f064e128240>
+
+Start -- Nov 10 21:10:48 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+21:10:48	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+21:10:50	Using Locally Processed Dataset. Skip Processing...
+21:10:50	Loading Locally Stored Model from: ./model/
+21:10:51	Using model: ./model/trained_yifanhua-threadripper17:46:04
+21:10:51	Exception: <class 'huggingface_hub.utils._validators.HFValidationError'>. Repo id must be in the form 'repo_name' or 'namespace/repo_name': './model/trained_yifanhua-threadripper21:10:48'. Use `repo_type` argument if needed.. Traceback: <traceback object at 0x7f3dcffd6b40>
+
+Start -- Nov 10 21:11:12 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+21:11:12	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+21:11:14	Using Locally Processed Dataset. Skip Processing...
+21:11:14	Loading Locally Stored Model from: ./model/
+21:11:16	Using model: ./model/trained_yifanhua-threadripper17:46:04
+
+
+Start -- Nov 10 21:23:19 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+21:23:19	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+21:23:22	Using Locally Processed Dataset. Skip Processing...
+21:23:22	Exception: <class 'NameError'>. name 'selected_model' is not defined. Traceback: <traceback object at 0x7fb9d05c8c00>
+
+Start -- Nov 10 21:23:42 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+21:23:42	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+21:23:44	Using Locally Processed Dataset. Skip Processing...
+21:23:44	Using model: ./model/trained_yifanhua-threadripper17:46:04
+
+
+Start -- Nov 10 21:24:20 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+21:24:20	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+21:24:23	Using Locally Processed Dataset. Skip Processing...
+21:24:23	Using model: ./model/trained_yifanhua-threadripper17:46:04
+
+
+Start -- Nov 10 21:24:40 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+21:24:40	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+21:24:43	Using Locally Processed Dataset. Skip Processing...
+21:24:43	Using model: ./model/trained_yifanhua-threadripper17:46:04
+
+
+Start -- Nov 10 21:25:05 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+21:25:05	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+21:25:07	Using Locally Processed Dataset. Skip Processing...
+21:25:07	Using model: ./model/trained_yifanhua-threadripper17:46:04
+
