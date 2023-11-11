@@ -312,7 +312,7 @@ def generate_train_arguments():
         load_best_model_at_end=True,
         greater_is_better=False,
         label_names=["labels"],
-        push_to_hub=True,
+        push_to_hub=constants.push_to_hub,
     )
 
 
@@ -394,16 +394,21 @@ if __name__ == "__main__":
     # Step 2: Split Dataset
     divided_dataset = split_dataset(dataset)
 
-    # Step 3: Training
-    pretrained_model.config.use_cache = False
-    training_args = generate_train_arguments()
-    trainer = generate_trainer(training_args, pretrained_model, divided_dataset, data_collator, tokenizer)
-    trainer.push_to_hub(**constants.huggingface_kwargs)
+    # Step 3: Train or Load the model
+    if constants.train_model:
+        pretrained_model.config.use_cache = False
+        training_args = generate_train_arguments()
+        trainer = generate_trainer(training_args, pretrained_model, divided_dataset, data_collator, tokenizer)
 
-    log_msg("Start Training...")
-    trainer.train()
-    log_msg("Start Saving the model...")
-    trainer.save_model(constants.model_path)
+        log_msg("Start Training...")
+        trainer.train()
+        log_msg("Start Saving the model...")
+
+        if constants.save_fine_tuned_model: trainer.save_model(constants.model_path)
+        if constants.push_to_hub: trainer.push_to_hub(**constants.huggingface_kwargs)
+    else:
+        pretrained_model = SpeechT5ForTextToSpeech.from_pretrained(pretrained_model_name_or_path=constants.model_path,
+                                                                   local_files_only=True)
 
     text = "I'm loading the model from the Hugging Face Hub!"
     inputs = processor(text=text, return_tensors="pt")
