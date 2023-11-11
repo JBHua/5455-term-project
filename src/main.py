@@ -185,9 +185,6 @@ def run_menu(stdscr, dirs):
             current_row += 1
         elif key == curses.KEY_ENTER or key in [10, 13]:
             stdscr.addstr(0, 0, f"You've selected model path: '{dirs[current_row]}'")
-            # stdscr.refresh()
-            # stdscr.getch()
-            # break
             return dirs[current_row]
 
         print_menu(stdscr, current_row, dirs)
@@ -206,6 +203,7 @@ def select_local_mode():
     selected_model = curses.wrapper(run_menu, directories)
     log_msg(f"Using model: {selected_model}")
     return selected_model
+
 
 ###############################################################################
 # Setup
@@ -260,71 +258,19 @@ def load_local_dataset() -> DatasetDict | Dataset | IterableDatasetDict | Iterab
     return _dataset
 
 
-# dataset = dataset.train_test_split(test_size=5,train_size=15, shuffle=False).values()
-# print(dataset)
-# print("Finish Spliting Dataset")
-
-
 ###############################################################################
 # Select Speaker
 ###############################################################################
-## plt.figure()
-## plt.hist(speaker_counts.values(), bins=20)
-## plt.ylabel("Speakers")
-## plt.xlabel("Examples")
-## plt.show()
 
-## for speaker_id in dataset["speaker_id"]:
-##     speaker_counts[speaker_id] += 1
-## dataset = dataset.filter(select_speaker, input_columns=["speaker_id"])
 
 ###############################################################################
 # Speaker Embeddings
 ###############################################################################
-# spk_model_name = "speechbrain/spkrec-xvect-voxceleb"
-# speaker_model = EncoderClassifier.from_hparams(
-#     source=spk_model_name, 
-#     run_opts={"device": device}, 
-#     savedir=os.path.join("/tmp", spk_model_name)
-# )
-# processed_example = prepare_dataset(dataset[0])
-# print(list(processed_example.keys())) # ['input_ids', 'labels', 'speaker_embeddings']
-# tokenizer.decode(processed_example["input_ids"])
 
-# print(processed_example["speaker_embeddings"].shape) # (512,)
-
-## plt.figure()
-## plt.imshow(processed_example["labels"].T)
-## plt.show()
-## print(processed_example["speaker_embeddings"].shape) # (512,)
-## plt.figure()
-## plt.imshow(processed_example["labels"].T)
-## plt.show()
-
-# vocoder = SpeechT5HifiGan.from_pretrained("microsoft/speecht5_hifigan")
-# spectrogram = torch.tensor(processed_example["labels"])
-
-## embeddings_dataset = load_dataset("Matthijs/cmu-arctic-xvectors", split="validation")
-## speaker_embeddings = torch.tensor(embeddings_dataset[7306]["xvector"]).unsqueeze(0)
-
-###############################################################################
-# Training
-###############################################################################
-# with torch.no_grad():
-#     speech = vocoder(spectrogram)
-
-# from IPython.display import Audio
-# Audio(speech.cpu().numpy(), rate=16000)
 
 ###############################################################################
 # Process Entire Dataset
 ###############################################################################
-# print("Start preparing dataset...")
-# print("Current Dataset Columns:")
-## print(dataset.column_names)
-## print(type(dataset))
-## print(dataset)
-
 def filter_and_prepare_dataset(_dataset) -> DatasetDict | Dataset | IterableDatasetDict | IterableDataset:
     log_msg("Start Filtering Short Data")
     _dataset = _dataset.filter(is_not_too_short, input_columns=["normalized_text"])
@@ -346,19 +292,6 @@ def split_dataset(_dataset, test_size=5, train_size=15):
     _dataset = _dataset.train_test_split(test_size=test_size, train_size=train_size)
     return _dataset
 
-
-# data_collator = TTSDataCollatorWithPadding(processor=processor)
-# features = [
-#     dataset["train"][0],
-#     dataset["train"][1],
-#     dataset["train"][5],
-# ]
-
-# batch = data_collator(features)
-# {k:v.shape for k,v in batch.items()}
-# sf.write("tts_example.wav", speech.numpy(), samplerate=16000)
-
-# model.config.use_cache = True
 
 def generate_train_arguments():
     log_msg("Generating Seq2SeqTrainer Arguments")
@@ -396,32 +329,6 @@ def generate_trainer(_training_args: Seq2SeqTrainingArguments, _model: PreTraine
         tokenizer=_tokenizer,
     )
 
-###############################################################################
-# Process Entire Dataset
-###############################################################################
-
-# # model = SpeechT5ForTextToSpeech.from_pretrained(pretrained_model_name_or_path=model_path, local_files_only=True)
-
-# example = dataset["test"][2]
-# speaker_embeddings = torch.tensor(example["speaker_embeddings"]).unsqueeze(0)
-# print("speaker_embeddings.shape")
-# print(speaker_embeddings.shape)
-
-# text = "hello, this is pytorch!"
-# inputs = processor(text=text, return_tensors="pt")
-# spectrogram = model.generate_speech(inputs["input_ids"], speaker_embeddings)
-# # plt.figure()
-# # plt.imshow(spectrogram.T)
-# # plt.show()
-
-# with torch.no_grad():
-#     speech = vocoder(spectrogram)
-
-# from IPython.display import Audio
-# Audio(speech.numpy(), rate=16000)
-
-# sf.write("output.wav", speech.numpy(), samplerate=16000)
-
 
 if __name__ == "__main__":
     # Step 1: Download & Split datasets
@@ -435,7 +342,7 @@ if __name__ == "__main__":
             log_msg(f"save_processed_dataset is True. Saving processed dataset to dir: {constants.data_path}")
             dataset.save_to_disk(constants.data_path)
     else:
-        # We ensure the data in local file is already processed. So we don't need to process it again
+        # data in local file is guaranteed to be processed. So we don't need to process it again
         dataset = load_local_dataset()
 
     # Step 2: Split Dataset
