@@ -599,3 +599,315 @@ Start -- Nov 10 23:08:00 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
 23:08:03	Using Locally Processed Dataset. Skip Processing...
 23:08:03	Using model: ./model/trained_yifanhua-threadripper_Nov10_21:39
 23:08:04	Input text: I'm loading the model from the Hugging Face Hub!
+
+Start -- Nov 11 09:49:03 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+09:49:03	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+09:49:05	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+09:49:32	Finish Loading Remote Dataset. Length of dataset: 8387
+09:49:32	Start Setting Sampling Rate to 16 kHz...
+09:49:32	Setting Sampling Rate Successfully
+09:49:32	Exception: Traceback (most recent call last):
+  File "/home/yifanhua/5455-term-project/src/main.py", line 364, in <module>
+    sort_speaker()
+TypeError: sort_speaker() missing 1 required positional argument: '_dataset'
+
+
+Start -- Nov 11 09:49:49 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+09:49:49	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+09:49:51	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+09:50:17	Finish Loading Remote Dataset. Length of dataset: 8387
+09:50:17	Start Setting Sampling Rate to 16 kHz...
+09:50:17	Setting Sampling Rate Successfully
+09:50:18	Start Filtering Short Data
+09:50:18	8358 data entries left after filtering
+09:50:18	Start Preparing Dataset
+09:50:39	KeyboardInterrupt detected. Exiting...
+
+Start -- Nov 11 09:53:21 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+09:53:21	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+09:53:23	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+09:53:49	Finish Loading Remote Dataset. Length of dataset: 8387
+09:53:49	Start Setting Sampling Rate to 16 kHz...
+09:53:49	Setting Sampling Rate Successfully
+09:53:49	Start Filtering Short Data
+09:53:49	8358 data entries left after filtering
+09:53:49	Start Preparing Dataset
+09:53:55	KeyboardInterrupt detected. Exiting...
+
+Start -- Nov 11 11:47:35 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+11:47:35	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+11:47:38	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+12:22:59	Exception: Traceback (most recent call last):
+  File "/home/yifanhua/5455-term-project/src/main.py", line 397, in <module>
+    # Step 1A: Process & Preparing Dataset
+  File "/home/yifanhua/5455-term-project/src/main.py", line 265, in load_remote_dataset
+    _dataset = load_dataset(
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/load.py", line 2166, in load_dataset
+    ds = builder_instance.as_dataset(split=split, verification_mode=verification_mode, in_memory=keep_in_memory)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/builder.py", line 1190, in as_dataset
+    datasets = map_nested(
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/utils/py_utils.py", line 456, in map_nested
+    return function(data_struct)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/builder.py", line 1220, in _build_single_dataset
+    ds = self._as_dataset(
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/builder.py", line 1294, in _as_dataset
+    dataset_kwargs = ArrowReader(cache_dir, self.info).read(
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_reader.py", line 240, in read
+    files = self.get_file_instructions(name, instructions, split_infos)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_reader.py", line 213, in get_file_instructions
+    file_instructions = make_file_instructions(
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_reader.py", line 130, in make_file_instructions
+    absolute_instructions = instruction.to_absolute(name2len)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_reader.py", line 653, in to_absolute
+    return [_rel_to_abs_instr(rel_instr, name2len) for rel_instr in self._relative_instructions]
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_reader.py", line 653, in <listcomp>
+    return [_rel_to_abs_instr(rel_instr, name2len) for rel_instr in self._relative_instructions]
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_reader.py", line 465, in _rel_to_abs_instr
+    raise ValueError(f'Unknown split "{split}". Should be one of {list(name2len)}.')
+ValueError: Unknown split "validated". Should be one of ['train', 'test', 'validation', 'other', 'invalidated'].
+
+
+Start -- Nov 11 12:23:47 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+12:23:47	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+12:23:50	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+12:27:15	KeyboardInterrupt detected. Exiting...
+
+Start -- Nov 11 12:27:19 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+12:27:19	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+12:27:22	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+12:32:09	KeyboardInterrupt detected. Exiting...
+
+Start -- Nov 11 13:32:36 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+13:32:36	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+13:32:38	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+13:33:01	KeyboardInterrupt detected. Exiting...
+
+Start -- Nov 11 13:45:53 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+13:45:53	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+13:45:56	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+13:46:07	KeyboardInterrupt detected. Exiting...
+
+Start -- Nov 11 13:46:47 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+13:46:47	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+13:46:50	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+13:58:24	Finish Loading Remote Dataset. Length of dataset: 12135
+13:58:24	Begin Sharding the dataset
+13:58:24	Total 252 shards
+13:58:24	Using Mozilla Common Voice. Additional Cleaning Needed
+13:58:24	Starting Size of Mozilla Common Voice: 12135
+13:59:05	Size after filtering accent: 8671
+13:59:08	Exception: Traceback (most recent call last):
+  File "/home/yifanhua/5455-term-project/src/main.py", line 407, in <module>
+    dataset = load_remote_dataset()
+  File "/home/yifanhua/5455-term-project/src/main.py", line 281, in load_remote_dataset
+    _dataset = list(executor.map(clean_mozilla_dataset(_dataset), _shard_dataset))
+  File "/home/yifanhua/5455-term-project/src/main.py", line 250, in clean_mozilla_dataset
+    _dataset = _dataset.filter(lambda entry: entry["gender"].isin(['female', 'male']))
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 557, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/fingerprint.py", line 511, in wrapper
+    out = func(dataset, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3627, in filter
+    indices = self.map(
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 592, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 557, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3097, in map
+    for rank, done, content in Dataset._map_single(**dataset_kwargs):
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3474, in _map_single
+    batch = apply_function_on_filtered_inputs(
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3353, in apply_function_on_filtered_inputs
+    processed_inputs = function(*fn_args, *additional_args, **fn_kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 6238, in get_indices_from_mask_function
+    function(example, indices[i], **fn_kwargs) if with_indices else function(example, **fn_kwargs)
+  File "/home/yifanhua/5455-term-project/src/main.py", line 250, in <lambda>
+    _dataset = _dataset.filter(lambda entry: entry["gender"].isin(['female', 'male']))
+AttributeError: 'str' object has no attribute 'isin'
+
+
+Start -- Nov 11 13:59:29 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+13:59:29	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+13:59:32	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+13:59:32	KeyboardInterrupt detected. Exiting...
+
+Start -- Nov 11 14:02:27 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+14:02:27	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+14:02:29	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+14:14:06	Finish Loading Remote Dataset. Length of dataset: 12135
+14:14:06	Using Mozilla Common Voice. Additional Cleaning Needed
+14:14:06	Starting Size of Mozilla Common Voice: 12135
+14:14:45	Size after filtering accent: 8671
+14:15:12	Size after filtering gender: 8637
+14:15:38	Size after filtering voting: 8637
+14:15:38	Exception: Traceback (most recent call last):
+  File "/home/yifanhua/5455-term-project/src/main.py", line 410, in <module>
+    dataset = load_remote_dataset()
+  File "/home/yifanhua/5455-term-project/src/main.py", line 285, in load_remote_dataset
+    _dataset = clean_mozilla_dataset(_dataset)
+  File "/home/yifanhua/5455-term-project/src/main.py", line 256, in clean_mozilla_dataset
+    _dataset = _dataset.map(lambda entry: entry['sentence'].str.lower())
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 592, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 557, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3097, in map
+    for rank, done, content in Dataset._map_single(**dataset_kwargs):
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3450, in _map_single
+    example = apply_function_on_filtered_inputs(example, i, offset=offset)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3353, in apply_function_on_filtered_inputs
+    processed_inputs = function(*fn_args, *additional_args, **fn_kwargs)
+  File "/home/yifanhua/5455-term-project/src/main.py", line 256, in <lambda>
+    _dataset = _dataset.map(lambda entry: entry['sentence'].str.lower())
+AttributeError: 'str' object has no attribute 'str'
+
+
+Start -- Nov 11 14:17:45 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+14:17:45	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+14:17:47	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+14:29:20	Finish Loading Remote Dataset. Length of dataset: 5
+14:29:20	Using Mozilla Common Voice. Additional Cleaning Needed
+14:29:20	Starting Size of Mozilla Common Voice: 5
+14:30:28	Exception: Traceback (most recent call last):
+  File "/home/yifanhua/5455-term-project/src/main.py", line 410, in <module>
+    dataset = load_remote_dataset()
+  File "/home/yifanhua/5455-term-project/src/main.py", line 285, in load_remote_dataset
+    _dataset = clean_mozilla_dataset(_dataset)
+  File "/home/yifanhua/5455-term-project/src/main.py", line 247, in clean_mozilla_dataset
+    _dataset = _dataset.filter(lambda entry: True if entry["accent"] else False)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/dataset_dict.py", line 960, in filter
+    {
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/dataset_dict.py", line 961, in <dictcomp>
+    k: dataset.filter(
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 557, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/fingerprint.py", line 511, in wrapper
+    out = func(dataset, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3627, in filter
+    indices = self.map(
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 592, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 557, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3097, in map
+    for rank, done, content in Dataset._map_single(**dataset_kwargs):
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3474, in _map_single
+    batch = apply_function_on_filtered_inputs(
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3353, in apply_function_on_filtered_inputs
+    processed_inputs = function(*fn_args, *additional_args, **fn_kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 6236, in get_indices_from_mask_function
+    example = {key: batch[key][i] for key in batch}
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 6236, in <dictcomp>
+    example = {key: batch[key][i] for key in batch}
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 272, in __getitem__
+    value = self.format(key)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 375, in format
+    return self.formatter.format_column(self.pa_table.select([key]))
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 442, in format_column
+    column = self.python_features_decoder.decode_column(column, pa_table.column_names[0])
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 218, in decode_column
+    return self.features.decode_column(column, column_name) if self.features else column
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/features/features.py", line 1925, in decode_column
+    [decode_nested_example(self[column_name], value) if value is not None else None for value in column]
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/features/features.py", line 1925, in <listcomp>
+    [decode_nested_example(self[column_name], value) if value is not None else None for value in column]
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/features/features.py", line 1325, in decode_nested_example
+    return schema.decode_example(obj, token_per_repo_id=token_per_repo_id)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/features/audio.py", line 187, in decode_example
+    array, sampling_rate = sf.read(f)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/soundfile.py", line 285, in read
+    with SoundFile(file, 'r', samplerate, channels,
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/soundfile.py", line 658, in __init__
+    self._file = self._open(file, mode_int, closefd)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/soundfile.py", line 1216, in _open
+    raise LibsndfileError(err, prefix="Error opening {0!r}: ".format(self.name))
+soundfile.LibsndfileError: Error opening <_io.BufferedReader name='/home/yifanhua/.cache/huggingface/datasets/downloads/extracted/a62e68ef77daee3e83f95f22b1da75e786c3ec6a96e2f0e5c5288ea4b46ce202/clips/14dadaeff069012e7c585d95f43a504b52a592ea07ff1871caebd698ca80efbfa8a9bffb448fc93ff976516da5c4ee2841852095cca944ef56dc0abdf107fb0d.mp3'>: Format not recognised.
+
+
+Start -- Nov 11 14:36:54 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+14:36:54	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+14:37:02	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+14:48:36	Finish Loading Remote Dataset. Length of dataset: 5
+14:48:36	Exception: Traceback (most recent call last):
+  File "/home/yifanhua/5455-term-project/src/main.py", line 412, in <module>
+    if constants.download_remote_dataset:
+  File "/home/yifanhua/5455-term-project/src/main.py", line 286, in load_remote_dataset
+    # TODO: Remove next line, we dont need to save dataset now. It's just for speeding up the process of debugging
+AttributeError: 'NoneType' object has no attribute 'save_to_disk'
+
+
+Start -- Nov 11 14:52:16 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+14:52:16	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+14:52:18	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+15:03:55	Finish Loading Remote Dataset. Length of dataset: 12135
+15:03:56	Using Mozilla Common Voice. Additional Cleaning Needed
+15:03:56	Starting Size of Mozilla Common Voice: 12135
+15:04:35	Size after filtering accent: 8671
+15:05:01	Size after filtering gender: 8637
+15:05:28	Size after filtering voting: 8637
+15:05:28	Exception: Traceback (most recent call last):
+  File "/home/yifanhua/5455-term-project/src/main.py", line 413, in <module>
+    dataset = load_remote_dataset()
+  File "/home/yifanhua/5455-term-project/src/main.py", line 288, in load_remote_dataset
+    _dataset = clean_mozilla_dataset(_dataset)
+  File "/home/yifanhua/5455-term-project/src/main.py", line 256, in clean_mozilla_dataset
+    _dataset = _dataset.map(lambda entry: entry['sentence'].lower())
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 592, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 557, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3097, in map
+    for rank, done, content in Dataset._map_single(**dataset_kwargs):
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3450, in _map_single
+    example = apply_function_on_filtered_inputs(example, i, offset=offset)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3364, in apply_function_on_filtered_inputs
+    validate_function_output(processed_inputs, indices)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3309, in validate_function_output
+    raise TypeError(
+TypeError: Provided `function` which is applied to all elements of table returns a variable of type <class 'str'>. Make sure provided `function` returns a variable of type `dict` (or a pyarrow table) to update the dataset or `None` if you are only interested in side effects.
+
+
+Start -- Nov 11 17:10:50 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+17:10:50	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+17:10:52	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+17:11:01	KeyboardInterrupt detected. Exiting...
+
+Start -- Nov 11 17:11:05 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+17:11:05	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+17:11:08	Using Locally Processed Dataset. Skip Processing...
+17:11:08	Using model: ./model/trained_yifanhua-threadripper_Nov10_21:39
+17:11:09	Input text: I'm loading the model from the Hugging Face Hub!
+17:11:09	Exception: Traceback (most recent call last):
+  File "/home/yifanhua/5455-term-project/src/main.py", line 440, in <module>
+    speaker_embeddings = torch.tensor(example["speaker_embeddings"]).unsqueeze(0).to(device)
+KeyError: 'speaker_embeddings'
+
+
+Start -- Nov 11 17:11:49 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+17:11:49	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+17:11:52	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+17:23:25	Finish Loading Remote Dataset. Length of dataset: 12135
+17:23:26	Using Mozilla Common Voice. Additional Cleaning Needed
+17:23:26	Starting Size of Mozilla Common Voice: 12135
+17:24:05	Size after filtering accent: 8671
+17:24:32	Size after filtering gender: 8637
+17:24:58	Size after filtering voting: 8637
+17:24:59	Finish normalizing input text
+17:24:59	Finish Cleaning Dataset. Length of dataset: 8637
+17:24:59	Start Setting Sampling Rate to 16 kHz...
+17:24:59	Setting Sampling Rate Successfully
+17:24:59	Start Filtering Short Data
+17:24:59	8635 data entries left after filtering
+17:24:59	Start Preparing Dataset
+17:27:40	Preparing dataset finished successfully
+17:27:40	Start Filtering Long Data
+17:27:40	8635 data entries left after filtering
+17:27:40	save_processed_dataset is True. Saving processed dataset to dir: ./data/
+17:27:41	Using model: ./model/trained_yifanhua-threadripper_Nov10_21:39
+17:27:42	Input text: I'm loading the model from the Hugging Face Hub!
+
+Start -- Nov 11 19:11:38 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+19:11:38	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+19:11:40	Using Locally Processed Dataset. Skip Processing...
+19:11:40	Using model: ./model/trained_yifanhua-threadripper_Nov10_21:39
+19:11:41	Input text: I'm loading the model from the Hugging Face Hub!

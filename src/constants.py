@@ -2,6 +2,11 @@ import socket
 import time
 
 # Training Related
+# By default we use the mozilla one, since it contains necessary metadata on speaker gender & accent
+# remote_dataset_name = "facebook/voxpopuli"
+remote_dataset_name = "mozilla-foundation/common_voice_1_0"
+remote_dataset_subset = "en"
+remote_dataset_split = "train"
 download_remote_dataset = False  # if False, load local dataset
 save_processed_dataset = True  # if True, save the processed (prepare_dataset) dataset to disk.
 

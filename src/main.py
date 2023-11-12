@@ -15,7 +15,8 @@ import soundfile as sf
 import time
 import constants
 from datasets import load_dataset, load_from_disk
-
+from concurrent.futures import ProcessPoolExecutor
+from collections import defaultdict
 
 ###############################################################################
 # Helper Functions
@@ -228,23 +229,58 @@ pretrained_model, processor, tokenizer, speaker_model, data_collator, vocoder = 
 ###############################################################################
 # Load Datasets
 ###############################################################################
-def load_remote_dataset(name="facebook/voxpopuli",
-                        subset="en_accented") -> DatasetDict | Dataset | IterableDatasetDict | IterableDataset:
-    log_msg(f"Loading Remote Dataset: {name}. Sub-collection: {subset}")
-    _dataset = load_dataset(
-        name, subset, split="test",
-        download_mode="reuse_cache_if_exists",
-        keep_in_memory=True, num_proc=cpu_count
-    )
-    log_msg("Finish Loading Remote Dataset. Length of dataset: " + str(len(_dataset)))
+def set_sampling_rate(_dataset):
+    from datasets import Audio
 
     log_msg("Start Setting Sampling Rate to 16 kHz...")
-    from datasets import Audio
-    _dataset = _dataset.cast_column("audio",
-                                    Audio(sampling_rate=16000))  # SpeechT5 requires the sampling rate to be 16 kHz.
+    # SpeechT5 requires the sampling rate to be 16 kHz.
+    _dataset = _dataset.cast_column("audio", Audio(sampling_rate=16000))
     log_msg("Setting Sampling Rate Successfully")
 
     return _dataset
+
+
+def clean_mozilla_dataset(_dataset):
+    def normalize_text(entry):
+        entry['sentence'] = entry['sentence'].lower()
+        return entry
+
+    log_msg(f"Using Mozilla Common Voice. Additional Cleaning Needed")
+    log_msg(f"Starting Size of Mozilla Common Voice: {len(_dataset)}")
+
+    _dataset = _dataset.filter(lambda entry: len(entry["accent"]) > 0)
+    log_msg(f"Size after filtering accent: {len(_dataset)}")
+
+    _dataset = _dataset.filter(lambda entry: entry["gender"] in ['female', 'male'])
+    log_msg(f"Size after filtering gender: {len(_dataset)}")
+
+    _dataset = _dataset.filter(lambda entry: int(entry['down_votes']) <= int(entry['up_votes']))
+    log_msg(f"Size after filtering voting: {len(_dataset)}")
+
+    _dataset = _dataset.map(normalize_text)
+    _dataset = _dataset.rename_column("sentence", "normalized_text")
+    log_msg(f"Finish normalizing input text")
+
+    log_msg("Finish Cleaning Dataset. Length of dataset: " + str(len(_dataset)))
+
+    return _dataset
+
+
+def load_remote_dataset(name=constants.remote_dataset_name,
+                        subset=constants.remote_dataset_subset) -> DatasetDict | Dataset | IterableDatasetDict | IterableDataset:
+    log_msg(f"Loading Remote Dataset: {name}. Sub-collection: {subset}")
+    _dataset = load_dataset(
+        name, subset, split=constants.remote_dataset_split,
+        download_mode="reuse_cache_if_exists", num_proc=cpu_count
+    )
+
+    log_msg("Finish Loading Remote Dataset. Length of dataset: " + str(len(_dataset)))
+    if constants.remote_dataset_name.startswith("mozilla-foundation"):
+        # # TODO: Remove next line, we dont need to save dataset now. It's just for speeding up the process of debugging
+        # _dataset.save_to_disk(constants.data_path)
+        _dataset = clean_mozilla_dataset(_dataset)
+
+    return set_sampling_rate(_dataset)
 
 
 def load_local_dataset() -> DatasetDict | Dataset | IterableDatasetDict | IterableDataset:
@@ -272,6 +308,37 @@ def load_local_dataset() -> DatasetDict | Dataset | IterableDatasetDict | Iterab
 ###############################################################################
 # Process Entire Dataset
 ###############################################################################
+# def sort_speaker(_dataset):
+#     print(_dataset)
+#
+#     speaker_counts = defaultdict(int)
+#     for speaker_id in _dataset["speaker_id"]:
+#         speaker_counts[speaker_id] += 1
+#     plt.figure()
+#     plt.hist(speaker_counts.values(), bins=5)
+#     plt.ylabel("Speakers")
+#     plt.xlabel("Examples")
+#     plt.show()
+#
+#     accent_count = defaultdict(int)
+#     for accent_id in _dataset["accent"]:
+#         accent_count[accent_id] += 1
+#     plt.figure()
+#     plt.hist(accent_count.values(), bins=20)
+#     plt.ylabel("Accent")
+#     plt.xlabel("Examples")
+#     plt.show()
+#
+#     gender_count = defaultdict(int)
+#     for g_id in _dataset["gender"]:
+#         gender_count[g_id] += 1
+#     plt.figure()
+#     plt.hist(gender_count.values(), bins=5)
+#     plt.ylabel("Gender")
+#     plt.xlabel("Examples")
+#     plt.show()
+
+
 def filter_and_prepare_dataset(_dataset) -> DatasetDict | Dataset | IterableDatasetDict | IterableDataset:
     log_msg("Start Filtering Short Data")
     _dataset = _dataset.filter(is_not_too_short, input_columns=["normalized_text"])
