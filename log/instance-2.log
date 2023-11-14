@@ -1,0 +1,106 @@
+
+Start -- Nov 10 23:51:39 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=6
+23:51:39	Initializing processor, tokenizer, and speaker_model
+23:51:42	Using Locally Processed Dataset. Skip Processing...
+23:51:42	Failed to load local dataset. Please double check file exists and path is correct. Directory ./data/ not found
+
+Start -- Nov 10 23:52:56 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=6
+23:52:56	Initializing processor, tokenizer, and speaker_model
+23:52:59	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+23:53:44	Finish Loading Remote Dataset. Length of dataset: 8387
+23:53:44	Start Setting Sampling Rate to 16 kHz...
+23:53:44	Setting Sampling Rate Successfully
+23:53:44	Start Filtering Short Data
+23:53:44	8358 data entries left after filtering
+23:53:44	Start Preparing Dataset
+00:04:49	Preparing dataset finished successfully
+00:04:49	Start Filtering Long Data
+00:04:49	6329 data entries left after filtering
+00:04:49	save_processed_dataset is True. Saving processed dataset to dir: ./data/
+00:04:51	Generating Seq2SeqTrainer Arguments
+00:04:51	Generating Seq2SeqTrainer
+00:04:51	Exception: <class 'ValueError'>. Token is required (write-access action) but no token found. You need to provide a token or be logged in to Hugging Face with `huggingface-cli login` or `huggingface_hub.login`. See https://huggingface.co/settings/tokens.. Traceback: <traceback object at 0x7fbdab1e19c0>
+
+Start -- Nov 11 00:54:24 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=6
+00:54:24	Initializing processor, tokenizer, and speaker_model
+00:54:27	Loading Remote Dataset: facebook/voxpopuli. Sub-collection: en_accented
+00:55:09	Finish Loading Remote Dataset. Length of dataset: 8387
+00:55:09	Start Setting Sampling Rate to 16 kHz...
+00:55:09	Setting Sampling Rate Successfully
+00:55:09	Start Filtering Short Data
+00:55:09	8358 data entries left after filtering
+00:55:09	Start Preparing Dataset
+01:03:32	Preparing dataset finished successfully
+01:03:32	Start Filtering Long Data
+01:03:33	6329 data entries left after filtering
+01:03:33	save_processed_dataset is True. Saving processed dataset to dir: ./data/
+01:03:39	Generating Seq2SeqTrainer Arguments
+01:03:39	Generating Seq2SeqTrainer
+01:03:42	Start Training...
+01:46:56	Start Saving the model...
+01:47:02	Exception: <class 'RuntimeError'>. Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cpu! (when checking argument for argument index in method wrapper_CUDA__index_select). Traceback: <traceback object at 0x7f769aafd140>
+
+Start -- Nov 14 19:02:18 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=6
+19:02:18	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+19:02:24	Using Locally Processed Dataset. Skip Processing...
+19:02:24	Using model: ./model/trained_instance-200:54:23
+19:02:28	Input text: I'm loading the model from the Hugging Face Hub!
+
+Start -- Nov 14 19:03:21 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=6
+19:03:21	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+19:03:25	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+19:34:45	Finish Loading Remote Dataset. Length of dataset: 12135
+19:34:45	Using Mozilla Common Voice. Additional Cleaning Needed
+19:34:45	Starting Size of Mozilla Common Voice: 12135
+19:35:49	Size after filtering accent: 8671
+19:36:34	Size after filtering gender: 8637
+19:37:17	Size after filtering voting: 8637
+19:37:19	Finish normalizing input text
+19:37:19	Finish Cleaning Dataset. Length of dataset: 8637
+19:37:19	Start Setting Sampling Rate to 16 kHz...
+19:37:19	Setting Sampling Rate Successfully
+19:37:19	Start Filtering Short Data
+19:37:19	8635 data entries left after filtering
+19:37:19	Start Preparing Dataset
+19:44:59	Preparing dataset finished successfully
+19:44:59	Start Filtering Long Data
+19:44:59	8635 data entries left after filtering
+19:44:59	save_processed_dataset is True. Saving processed dataset to dir: ./data/
+19:45:01	Generating Seq2SeqTrainer Arguments
+19:45:01	Generating Seq2SeqTrainer
+19:45:01	Start Training...
+{'loss': 0.9523, 'learning_rate': 9.7e-06, 'epoch': 0.04, 'step': 5}
+{'loss': 0.9921, 'learning_rate': 9.200000000000002e-06, 'epoch': 0.08, 'step': 10}
+{'loss': 0.9212, 'learning_rate': 8.700000000000001e-06, 'epoch': 0.12, 'step': 15}
+{'loss': 0.8613, 'learning_rate': 8.2e-06, 'epoch': 0.16, 'step': 20}
+{'loss': 0.847, 'learning_rate': 7.7e-06, 'epoch': 0.2, 'step': 25}
+{'loss': 0.8761, 'learning_rate': 7.2000000000000005e-06, 'epoch': 0.24, 'step': 30}
+{'loss': 0.8118, 'learning_rate': 6.700000000000001e-06, 'epoch': 0.28, 'step': 35}
+{'loss': 0.8637, 'learning_rate': 6.200000000000001e-06, 'epoch': 0.32, 'step': 40}
+{'loss': 0.8271, 'learning_rate': 5.7e-06, 'epoch': 0.36, 'step': 45}
+{'loss': 0.7881, 'learning_rate': 5.2e-06, 'epoch': 0.4, 'step': 50}
+{'loss': 0.8192, 'learning_rate': 4.7e-06, 'epoch': 0.44, 'step': 55}
+{'loss': 0.7746, 'learning_rate': 4.2000000000000004e-06, 'epoch': 0.48, 'step': 60}
+{'loss': 0.8423, 'learning_rate': 3.7e-06, 'epoch': 0.52, 'step': 65}
+{'loss': 0.8345, 'learning_rate': 3.2000000000000003e-06, 'epoch': 0.56, 'step': 70}
+{'loss': 0.8038, 'learning_rate': 2.7000000000000004e-06, 'epoch': 0.6, 'step': 75}
+{'loss': 0.8161, 'learning_rate': 2.2e-06, 'epoch': 0.64, 'step': 80}
+{'loss': 0.7579, 'learning_rate': 1.7000000000000002e-06, 'epoch': 0.68, 'step': 85}
+{'loss': 0.7674, 'learning_rate': 1.2000000000000002e-06, 'epoch': 0.72, 'step': 90}
+{'loss': 0.7586, 'learning_rate': 7.000000000000001e-07, 'epoch': 0.76, 'step': 95}
+{'loss': 0.7528, 'learning_rate': 2.0000000000000002e-07, 'epoch': 0.8, 'step': 100}
+{'eval_loss': 0.7290300726890564, 'eval_runtime': 0.1058, 'eval_samples_per_second': 47.28, 'eval_steps_per_second': 9.456, 'epoch': 0.8, 'step': 100}
+{'train_runtime': 52.533, 'train_samples_per_second': 30.457, 'train_steps_per_second': 1.904, 'total_flos': 116888043000960.0, 'train_loss': 0.8334035134315491, 'epoch': 0.8, 'step': 100}
+19:46:10	Start Saving the model...
+19:46:22	Input text: I'm loading the model from the Hugging Face Hub!
+21:14:59	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+21:33:38	Finish Loading Remote Dataset. Length of dataset: 12135
+21:33:38	Using Mozilla Common Voice. Additional Cleaning Needed
+21:33:38	Starting Size of Mozilla Common Voice: 12135
+21:34:45	Size after filtering accent: 8671
+21:35:32	Size after filtering gender: 8637
+21:36:17	Size after filtering voting: 8637
+21:36:19	Finish normalizing input text
+21:36:19	Finish Cleaning Dataset. Length of dataset: 8637
+21:36:19	Start Setting Sampling Rate to 16 kHz...
+21:36:19	Setting Sampling Rate Successfully

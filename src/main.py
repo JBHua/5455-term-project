@@ -104,10 +104,6 @@ def init_global_variables() -> tuple[PreTrainedModel, SpeechT5Processor, SpeechT
     return _pretrained_model, _processor, _tokenizer, _speaker_model, _data_collator, _vocoder
 
 
-def select_speaker(speaker_id):
-    return 100 <= speaker_counts[speaker_id] <= 400
-
-
 def create_speaker_embedding(waveform):
     with torch.no_grad():
         _speaker_embeddings = speaker_model.encode_batch(torch.tensor(waveform))

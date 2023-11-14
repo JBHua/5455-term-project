@@ -1,4 +1,7 @@
 # Setup
+## Python Version:
+Python 3.10. If not possible, delete all type annotations in code and use Python 3.9 is ok
+
 ## Install Dependencies
 ```
 pip install git+https://github.com/huggingface/transformers.git

@@ -9,10 +9,10 @@ import time
 remote_dataset_name = "mozilla-foundation/common_voice_1_0"
 remote_dataset_subset = "en"
 remote_dataset_split = "train"
-download_remote_dataset = False  # if False, load local dataset
+download_remote_dataset = True  # if False, load local dataset
 save_processed_dataset = True  # if True, save the processed (prepare_dataset) dataset to disk.
 
-train_model = False  # if False, load saved model/checkpoints
+train_model = True  # if False, load saved model/checkpoints
 save_fine_tuned_model = True
 dataset_train_size = 2000  # can be `int` or `float`. `int` means absolute count; while `float` means percentage
 dataset_test_size = 5
