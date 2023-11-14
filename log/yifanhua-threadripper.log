@@ -911,3 +911,1067 @@ Start -- Nov 11 19:11:38 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
 19:11:40	Using Locally Processed Dataset. Skip Processing...
 19:11:40	Using model: ./model/trained_yifanhua-threadripper_Nov10_21:39
 19:11:41	Input text: I'm loading the model from the Hugging Face Hub!
+
+Start -- Nov 11 19:21:50 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+19:21:50	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+19:21:53	Using Locally Processed Dataset. Skip Processing...
+19:21:53	Generating Seq2SeqTrainer Arguments
+19:21:53	Generating Seq2SeqTrainer
+19:21:53	Start Training...
+19:44:36	Start Saving the model...
+19:44:41	Input text: I'm loading the model from the Hugging Face Hub!
+
+Start -- Nov 11 19:57:56 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+19:57:56	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+19:57:59	Using Locally Processed Dataset. Skip Processing...
+19:57:59	Generating Seq2SeqTrainer Arguments
+19:57:59	Generating Seq2SeqTrainer
+19:57:59	Start Training...
+19:58:24	KeyboardInterrupt detected. Exiting...
+
+Start -- Nov 11 19:58:37 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+19:58:37	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+19:58:39	Using Locally Processed Dataset. Skip Processing...
+19:58:39	Generating Seq2SeqTrainer Arguments
+19:58:39	Generating Seq2SeqTrainer
+19:58:39	Start Training...
+20:26:44	Start Saving the model...
+20:26:49	Input text: I'm loading the model from the Hugging Face Hub!
+
+Start -- Nov 13 15:54:00 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+15:54:00	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+15:54:03	Using Locally Processed Dataset. Skip Processing...
+15:54:03	Exception: Traceback (most recent call last):
+  File "/home/yifanhua/5455-term-project/src/main.py", line 415, in <module>
+    sort_speaker(dataset)
+  File "/home/yifanhua/5455-term-project/src/main.py", line 313, in sort_speaker
+    for speaker_id in _dataset["speaker_id"]:
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 2803, in __getitem__
+    return self._getitem(key)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 2787, in _getitem
+    pa_subtable = query_table(self._data, key, indices=self._indices if self._indices is not None else None)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 580, in query_table
+    _check_valid_column_key(key, table.column_names)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 520, in _check_valid_column_key
+    raise KeyError(f"Column {key} not in the dataset. Current columns in the dataset: {columns}")
+KeyError: "Column speaker_id not in the dataset. Current columns in the dataset: ['input_ids', 'labels', 'speaker_embeddings']"
+
+
+Start -- Nov 13 15:55:06 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+15:55:06	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+15:55:08	Using Locally Processed Dataset. Skip Processing...
+15:55:08	Generating Seq2SeqTrainer Arguments
+15:55:08	Generating Seq2SeqTrainer
+15:55:08	Start Training...
+15:55:33	KeyboardInterrupt detected. Exiting...
+
+Start -- Nov 13 15:55:40 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+15:55:40	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+15:55:42	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+16:07:36	Finish Loading Remote Dataset. Length of dataset: 12135
+16:07:36	Using Mozilla Common Voice. Additional Cleaning Needed
+16:07:36	Starting Size of Mozilla Common Voice: 12135
+16:08:18	Size after filtering accent: 8671
+16:08:45	Size after filtering gender: 8637
+16:09:12	Size after filtering voting: 8637
+16:09:13	Finish normalizing input text
+16:09:13	Finish Cleaning Dataset. Length of dataset: 8637
+16:09:13	Start Setting Sampling Rate to 16 kHz...
+16:09:13	Setting Sampling Rate Successfully
+16:09:13	Exception: Traceback (most recent call last):
+  File "/home/yifanhua/5455-term-project/src/main.py", line 406, in <module>
+    sort_speaker(dataset)
+  File "/home/yifanhua/5455-term-project/src/main.py", line 313, in sort_speaker
+    for speaker_id in _dataset["speaker_id"]:
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 2803, in __getitem__
+    return self._getitem(key)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 2787, in _getitem
+    pa_subtable = query_table(self._data, key, indices=self._indices if self._indices is not None else None)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 580, in query_table
+    _check_valid_column_key(key, table.column_names)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 520, in _check_valid_column_key
+    raise KeyError(f"Column {key} not in the dataset. Current columns in the dataset: {columns}")
+KeyError: "Column speaker_id not in the dataset. Current columns in the dataset: ['client_id', 'path', 'audio', 'normalized_text', 'up_votes', 'down_votes', 'age', 'gender', 'accent', 'locale', 'segment']"
+
+
+Start -- Nov 13 18:47:37 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+18:47:37	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+18:47:39	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+18:59:17	Finish Loading Remote Dataset. Length of dataset: 12135
+18:59:17	Using Mozilla Common Voice. Additional Cleaning Needed
+18:59:17	Starting Size of Mozilla Common Voice: 12135
+18:59:57	Size after filtering accent: 8671
+19:00:24	Size after filtering gender: 8637
+19:00:50	Size after filtering voting: 8637
+19:00:51	Finish normalizing input text
+19:00:51	Finish Cleaning Dataset. Length of dataset: 8637
+19:00:51	Start Setting Sampling Rate to 16 kHz...
+19:00:51	Setting Sampling Rate Successfully
+19:00:52	Start Filtering Short Data
+19:00:52	8635 data entries left after filtering
+19:00:52	Start Preparing Dataset
+19:03:39	Preparing dataset finished successfully
+19:03:39	Start Filtering Long Data
+19:03:39	8635 data entries left after filtering
+19:03:39	save_processed_dataset is True. Saving processed dataset to dir: ./data/
+19:03:40	Generating Seq2SeqTrainer Arguments
+19:03:40	Generating Seq2SeqTrainer
+19:03:41	Start Training...
+19:19:45	KeyboardInterrupt detected. Exiting...
+
+Start -- Nov 13 19:19:50 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+19:19:50	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+19:19:52	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+19:20:04	Exception: Traceback (most recent call last):
+  File "/home/yifanhua/5455-term-project/src/main.py", line 439, in <module>
+    dataset = load_remote_dataset()
+  File "/home/yifanhua/5455-term-project/src/main.py", line 272, in load_remote_dataset
+    _dataset = load_dataset(
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/load.py", line 2153, in load_dataset
+    builder_instance.download_and_prepare(
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/builder.py", line 954, in download_and_prepare
+    self._download_and_prepare(
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/builder.py", line 1717, in _download_and_prepare
+    super()._download_and_prepare(
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/builder.py", line 1027, in _download_and_prepare
+    split_generators = self._split_generators(dl_manager, **split_generators_kwargs)
+  File "/home/yifanhua/.cache/huggingface/modules/datasets_modules/datasets/mozilla-foundation--common_voice_1_0/f01470c32b0b93cfcd4baaa7725f5ec0285549a5d086fab27151c3260e5c8035/common_voice_1_0.py", line 159, in _split_generators
+    archive_path = dl_manager.download(self._get_bundle_url(self.config.name, bundle_url_template))
+  File "/home/yifanhua/.cache/huggingface/modules/datasets_modules/datasets/mozilla-foundation--common_voice_1_0/f01470c32b0b93cfcd4baaa7725f5ec0285549a5d086fab27151c3260e5c8035/common_voice_1_0.py", line 135, in _get_bundle_url
+    response = requests.get(f"{_API_URL}/bucket/dataset/{path}", timeout=10.0).json()
+  File "/usr/lib/python3/dist-packages/requests/models.py", line 900, in json
+    return complexjson.loads(self.text, **kwargs)
+  File "/usr/lib/python3.10/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.10/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.10/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 2 column 1 (char 1)
+
+
+Start -- Nov 13 19:26:45 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+19:26:45	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+19:26:47	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+19:38:23	Finish Loading Remote Dataset. Length of dataset: 12135
+19:38:23	Using Mozilla Common Voice. Additional Cleaning Needed
+19:38:23	Starting Size of Mozilla Common Voice: 12135
+19:39:02	Size after filtering accent: 8671
+19:39:29	Size after filtering gender: 8637
+19:39:55	Size after filtering voting: 8637
+19:39:56	Finish normalizing input text
+19:39:56	Finish Cleaning Dataset. Length of dataset: 8637
+19:39:56	Start Setting Sampling Rate to 16 kHz...
+19:39:56	Setting Sampling Rate Successfully
+19:39:57	Start Filtering Short Data
+19:39:57	8635 data entries left after filtering
+19:39:57	Start Preparing Dataset
+19:42:42	Preparing dataset finished successfully
+19:42:42	Start Filtering Long Data
+19:42:42	8635 data entries left after filtering
+19:42:42	save_processed_dataset is True. Saving processed dataset to dir: ./data/
+19:42:44	Generating Seq2SeqTrainer Arguments
+19:42:44	Generating Seq2SeqTrainer
+19:42:44	Start Training...
+20:18:29	Start Saving the model...
+20:18:34	Input text: I'm loading the model from the Hugging Face Hub!
+
+Start -- Nov 14 09:13:00 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+09:13:00	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+09:13:05	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+09:24:58	Finish Loading Remote Dataset. Length of dataset: 12135
+09:24:58	Using Mozilla Common Voice. Additional Cleaning Needed
+09:24:58	Starting Size of Mozilla Common Voice: 12135
+09:25:40	Size after filtering accent: 8671
+09:26:07	Size after filtering gender: 8637
+09:26:34	Size after filtering voting: 8637
+09:26:35	Finish normalizing input text
+09:26:35	Finish Cleaning Dataset. Length of dataset: 8637
+09:26:35	Start Setting Sampling Rate to 16 kHz...
+09:26:35	Setting Sampling Rate Successfully
+09:26:36	Start Filtering Short Data
+09:26:36	8635 data entries left after filtering
+09:26:36	Start Preparing Dataset
+09:29:20	Preparing dataset finished successfully
+09:29:20	Start Filtering Long Data
+09:29:20	8635 data entries left after filtering
+09:29:20	save_processed_dataset is True. Saving processed dataset to dir: ./data/
+09:29:21	Generating Seq2SeqTrainer Arguments
+09:29:21	Generating Seq2SeqTrainer
+09:29:21	Exception: Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/urllib3/connection.py", line 169, in _new_conn
+    conn = connection.create_connection(
+  File "/usr/lib/python3/dist-packages/urllib3/util/connection.py", line 73, in create_connection
+    for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
+  File "/usr/lib/python3.10/socket.py", line 955, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno -3] Temporary failure in name resolution
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 700, in urlopen
+    httplib_response = self._make_request(
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 383, in _make_request
+    self._validate_conn(conn)
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 1017, in _validate_conn
+    conn.connect()
+  File "/usr/lib/python3/dist-packages/urllib3/connection.py", line 353, in connect
+    conn = self._new_conn()
+  File "/usr/lib/python3/dist-packages/urllib3/connection.py", line 181, in _new_conn
+    raise NewConnectionError(
+urllib3.exceptions.NewConnectionError: <urllib3.connection.HTTPSConnection object at 0x7f77eb955060>: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 439, in send
+    resp = conn.urlopen(
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 756, in urlopen
+    retries = retries.increment(
+  File "/usr/lib/python3/dist-packages/urllib3/util/retry.py", line 574, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='huggingface.co', port=443): Max retries exceeded with url: /api/repos/create (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f77eb955060>: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/yifanhua/5455-term-project/src/main.py", line 461, in <module>
+    trainer = generate_trainer(training_args, pretrained_model, divided_dataset, data_collator, tokenizer)
+  File "/home/yifanhua/5455-term-project/src/main.py", line 425, in generate_trainer
+    return Seq2SeqTrainer(
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/transformers/trainer_seq2seq.py", line 56, in __init__
+    super().__init__(
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/transformers/trainer.py", line 536, in __init__
+    self.init_hf_repo()
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/transformers/trainer.py", line 3480, in init_hf_repo
+    repo_url = create_repo(repo_name, token=self.args.hub_token, private=self.args.hub_private_repo, exist_ok=True)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/huggingface_hub/hf_api.py", line 3053, in create_repo
+    r = get_session().post(path, headers=headers, json=json)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 592, in post
+    return self.request('POST', url, data=data, json=json, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 544, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 657, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 63, in send
+    return super().send(request, *args, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 516, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: (MaxRetryError("HTTPSConnectionPool(host='huggingface.co', port=443): Max retries exceeded with url: /api/repos/create (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f77eb955060>: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution'))"), '(Request ID: 066c2541-fa49-48d2-8041-8d560bde5683)')
+
+
+Start -- Nov 14 10:10:48 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+10:10:48	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+10:10:50	Using Locally Processed Dataset. Skip Processing...
+10:10:50	Generating Seq2SeqTrainer Arguments
+10:10:50	Exception: Traceback (most recent call last):
+  File "/home/yifanhua/5455-term-project/src/main.py", line 467, in <module>
+    training_args = generate_train_arguments()
+  File "/home/yifanhua/5455-term-project/src/main.py", line 406, in generate_train_arguments
+    return Seq2SeqTrainingArguments(
+TypeError: Seq2SeqTrainingArguments.__init__() got an unexpected keyword argument 'log'
+
+
+Start -- Nov 14 10:11:02 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+10:11:02	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+10:11:04	Using Locally Processed Dataset. Skip Processing...
+10:11:04	Generating Seq2SeqTrainer Arguments
+10:11:04	Generating Seq2SeqTrainer
+10:11:04	Start Training...
+10:14:38	KeyboardInterrupt detected. Exiting...
+
+Start -- Nov 14 10:18:54 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+10:18:54	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+10:18:56	Using Locally Processed Dataset. Skip Processing...
+10:18:56	Generating Seq2SeqTrainer Arguments
+10:18:56	Generating Seq2SeqTrainer
+10:18:56	Start Training...
+10:25:02	KeyboardInterrupt detected. Exiting...
+
+Start -- Nov 14 10:25:05 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+10:25:05	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+10:25:07	Using Locally Processed Dataset. Skip Processing...
+10:25:07	Generating Seq2SeqTrainer Arguments
+10:25:07	Generating Seq2SeqTrainer
+10:25:07	Start Training...
+10:25:15	KeyboardInterrupt detected. Exiting...
+
+Start -- Nov 14 10:25:19 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+10:25:19	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+10:25:21	Using Locally Processed Dataset. Skip Processing...
+10:25:21	Generating Seq2SeqTrainer Arguments
+10:25:21	Generating Seq2SeqTrainer
+10:25:21	Start Training...
+10:26:20	KeyboardInterrupt detected. Exiting...
+
+Start -- Nov 14 10:26:24 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+10:26:24	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+loading configuration file config.json from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_tts/snapshots/30fcde30f19b87502b8435427b5f5068e401d5f6/config.json
+Model config SpeechT5Config {
+  "activation_dropout": 0.1,
+  "apply_spec_augment": true,
+  "architectures": [
+    "SpeechT5ForTextToSpeech"
+  ],
+  "attention_dropout": 0.1,
+  "bos_token_id": 0,
+  "conv_bias": false,
+  "conv_dim": [
+    512,
+    512,
+    512,
+    512,
+    512,
+    512,
+    512
+  ],
+  "conv_kernel": [
+    10,
+    3,
+    3,
+    3,
+    3,
+    2,
+    2
+  ],
+  "conv_stride": [
+    5,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "decoder_attention_heads": 12,
+  "decoder_ffn_dim": 3072,
+  "decoder_layerdrop": 0.1,
+  "decoder_layers": 6,
+  "decoder_start_token_id": 2,
+  "encoder_attention_heads": 12,
+  "encoder_ffn_dim": 3072,
+  "encoder_layerdrop": 0.1,
+  "encoder_layers": 12,
+  "encoder_max_relative_position": 160,
+  "eos_token_id": 2,
+  "feat_extract_activation": "gelu",
+  "feat_extract_norm": "group",
+  "feat_proj_dropout": 0.0,
+  "guided_attention_loss_num_heads": 2,
+  "guided_attention_loss_scale": 10.0,
+  "guided_attention_loss_sigma": 0.4,
+  "hidden_act": "gelu",
+  "hidden_dropout": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "is_encoder_decoder": true,
+  "layer_norm_eps": 1e-05,
+  "mask_feature_length": 10,
+  "mask_feature_min_masks": 0,
+  "mask_feature_prob": 0.0,
+  "mask_time_length": 10,
+  "mask_time_min_masks": 2,
+  "mask_time_prob": 0.05,
+  "max_length": 1876,
+  "max_speech_positions": 1876,
+  "max_text_positions": 600,
+  "model_type": "speecht5",
+  "num_conv_pos_embedding_groups": 16,
+  "num_conv_pos_embeddings": 128,
+  "num_feat_extract_layers": 7,
+  "num_mel_bins": 80,
+  "pad_token_id": 1,
+  "positional_dropout": 0.1,
+  "reduction_factor": 2,
+  "scale_embedding": false,
+  "speaker_embedding_dim": 512,
+  "speech_decoder_postnet_dropout": 0.5,
+  "speech_decoder_postnet_kernel": 5,
+  "speech_decoder_postnet_layers": 5,
+  "speech_decoder_postnet_units": 256,
+  "speech_decoder_prenet_dropout": 0.5,
+  "speech_decoder_prenet_layers": 2,
+  "speech_decoder_prenet_units": 256,
+  "torch_dtype": "float32",
+  "transformers_version": "4.36.0.dev0",
+  "use_cache": true,
+  "use_guided_attention_loss": true,
+  "vocab_size": 81
+}
+
+loading weights file pytorch_model.bin from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_tts/snapshots/30fcde30f19b87502b8435427b5f5068e401d5f6/pytorch_model.bin
+Generate config GenerationConfig {
+  "bos_token_id": 0,
+  "decoder_start_token_id": 2,
+  "eos_token_id": 2,
+  "max_length": 1876,
+  "pad_token_id": 1
+}
+
+All model checkpoint weights were used when initializing SpeechT5ForTextToSpeech.
+
+All the weights of SpeechT5ForTextToSpeech were initialized from the model checkpoint at microsoft/speecht5_tts.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use SpeechT5ForTextToSpeech for predictions without further training.
+Generation config file not found, using a generation config created from the model config.
+loading configuration file preprocessor_config.json from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_tts/snapshots/30fcde30f19b87502b8435427b5f5068e401d5f6/preprocessor_config.json
+Feature extractor SpeechT5FeatureExtractor {
+  "do_normalize": false,
+  "feature_extractor_type": "SpeechT5FeatureExtractor",
+  "feature_size": 1,
+  "fmax": 7600,
+  "fmin": 80,
+  "frame_signal_scale": 1.0,
+  "hop_length": 16,
+  "mel_floor": 1e-10,
+  "num_mel_bins": 80,
+  "padding_side": "right",
+  "padding_value": 0.0,
+  "processor_class": "SpeechT5Processor",
+  "reduction_factor": 2,
+  "return_attention_mask": true,
+  "sampling_rate": 16000,
+  "win_function": "hann_window",
+  "win_length": 64
+}
+
+loading file spm_char.model from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_tts/snapshots/30fcde30f19b87502b8435427b5f5068e401d5f6/spm_char.model
+loading file added_tokens.json from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_tts/snapshots/30fcde30f19b87502b8435427b5f5068e401d5f6/added_tokens.json
+loading file special_tokens_map.json from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_tts/snapshots/30fcde30f19b87502b8435427b5f5068e401d5f6/special_tokens_map.json
+loading file tokenizer_config.json from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_tts/snapshots/30fcde30f19b87502b8435427b5f5068e401d5f6/tokenizer_config.json
+loading file tokenizer.json from cache at None
+loading configuration file config.json from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_hifigan/snapshots/bb6f429406e86a9992357a972c0698b22043307d/config.json
+Model config SpeechT5HifiGanConfig {
+  "architectures": [
+    "SpeechT5HifiGan"
+  ],
+  "initializer_range": 0.01,
+  "leaky_relu_slope": 0.1,
+  "model_in_dim": 80,
+  "model_type": "hifigan",
+  "normalize_before": true,
+  "resblock_dilation_sizes": [
+    [
+      1,
+      3,
+      5
+    ],
+    [
+      1,
+      3,
+      5
+    ],
+    [
+      1,
+      3,
+      5
+    ]
+  ],
+  "resblock_kernel_sizes": [
+    3,
+    7,
+    11
+  ],
+  "sampling_rate": 16000,
+  "torch_dtype": "float32",
+  "transformers_version": "4.36.0.dev0",
+  "upsample_initial_channel": 512,
+  "upsample_kernel_sizes": [
+    8,
+    8,
+    8,
+    8
+  ],
+  "upsample_rates": [
+    4,
+    4,
+    4,
+    4
+  ]
+}
+
+loading weights file pytorch_model.bin from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_hifigan/snapshots/bb6f429406e86a9992357a972c0698b22043307d/pytorch_model.bin
+All model checkpoint weights were used when initializing SpeechT5HifiGan.
+
+All the weights of SpeechT5HifiGan were initialized from the model checkpoint at microsoft/speecht5_hifigan.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use SpeechT5HifiGan for predictions without further training.
+10:26:26	Using Locally Processed Dataset. Skip Processing...
+10:26:26	Generating Seq2SeqTrainer Arguments
+PyTorch: setting up devices
+10:26:26	Generating Seq2SeqTrainer
+max_steps is given, it will override any value given in num_train_epochs
+Using auto half precision backend
+10:26:26	Start Training...
+Currently training with a batch size of: 8
+***** Running training *****
+  Num examples = 2,000
+  Num Epochs = 32
+  Instantaneous batch size per device = 8
+  Total train batch size (w. parallel, distributed & accumulation) = 16
+  Gradient Accumulation steps = 2
+  Total optimization steps = 4,000
+  Number of trainable parameters = 144,431,684
+10:27:11	KeyboardInterrupt detected. Exiting...
+
+Start -- Nov 14 10:27:14 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+10:27:14	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+loading configuration file config.json from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_tts/snapshots/30fcde30f19b87502b8435427b5f5068e401d5f6/config.json
+Model config SpeechT5Config {
+  "activation_dropout": 0.1,
+  "apply_spec_augment": true,
+  "architectures": [
+    "SpeechT5ForTextToSpeech"
+  ],
+  "attention_dropout": 0.1,
+  "bos_token_id": 0,
+  "conv_bias": false,
+  "conv_dim": [
+    512,
+    512,
+    512,
+    512,
+    512,
+    512,
+    512
+  ],
+  "conv_kernel": [
+    10,
+    3,
+    3,
+    3,
+    3,
+    2,
+    2
+  ],
+  "conv_stride": [
+    5,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "decoder_attention_heads": 12,
+  "decoder_ffn_dim": 3072,
+  "decoder_layerdrop": 0.1,
+  "decoder_layers": 6,
+  "decoder_start_token_id": 2,
+  "encoder_attention_heads": 12,
+  "encoder_ffn_dim": 3072,
+  "encoder_layerdrop": 0.1,
+  "encoder_layers": 12,
+  "encoder_max_relative_position": 160,
+  "eos_token_id": 2,
+  "feat_extract_activation": "gelu",
+  "feat_extract_norm": "group",
+  "feat_proj_dropout": 0.0,
+  "guided_attention_loss_num_heads": 2,
+  "guided_attention_loss_scale": 10.0,
+  "guided_attention_loss_sigma": 0.4,
+  "hidden_act": "gelu",
+  "hidden_dropout": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "is_encoder_decoder": true,
+  "layer_norm_eps": 1e-05,
+  "mask_feature_length": 10,
+  "mask_feature_min_masks": 0,
+  "mask_feature_prob": 0.0,
+  "mask_time_length": 10,
+  "mask_time_min_masks": 2,
+  "mask_time_prob": 0.05,
+  "max_length": 1876,
+  "max_speech_positions": 1876,
+  "max_text_positions": 600,
+  "model_type": "speecht5",
+  "num_conv_pos_embedding_groups": 16,
+  "num_conv_pos_embeddings": 128,
+  "num_feat_extract_layers": 7,
+  "num_mel_bins": 80,
+  "pad_token_id": 1,
+  "positional_dropout": 0.1,
+  "reduction_factor": 2,
+  "scale_embedding": false,
+  "speaker_embedding_dim": 512,
+  "speech_decoder_postnet_dropout": 0.5,
+  "speech_decoder_postnet_kernel": 5,
+  "speech_decoder_postnet_layers": 5,
+  "speech_decoder_postnet_units": 256,
+  "speech_decoder_prenet_dropout": 0.5,
+  "speech_decoder_prenet_layers": 2,
+  "speech_decoder_prenet_units": 256,
+  "torch_dtype": "float32",
+  "transformers_version": "4.36.0.dev0",
+  "use_cache": true,
+  "use_guided_attention_loss": true,
+  "vocab_size": 81
+}
+
+loading weights file pytorch_model.bin from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_tts/snapshots/30fcde30f19b87502b8435427b5f5068e401d5f6/pytorch_model.bin
+Generate config GenerationConfig {
+  "bos_token_id": 0,
+  "decoder_start_token_id": 2,
+  "eos_token_id": 2,
+  "max_length": 1876,
+  "pad_token_id": 1
+}
+
+All model checkpoint weights were used when initializing SpeechT5ForTextToSpeech.
+
+All the weights of SpeechT5ForTextToSpeech were initialized from the model checkpoint at microsoft/speecht5_tts.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use SpeechT5ForTextToSpeech for predictions without further training.
+Generation config file not found, using a generation config created from the model config.
+loading configuration file preprocessor_config.json from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_tts/snapshots/30fcde30f19b87502b8435427b5f5068e401d5f6/preprocessor_config.json
+Feature extractor SpeechT5FeatureExtractor {
+  "do_normalize": false,
+  "feature_extractor_type": "SpeechT5FeatureExtractor",
+  "feature_size": 1,
+  "fmax": 7600,
+  "fmin": 80,
+  "frame_signal_scale": 1.0,
+  "hop_length": 16,
+  "mel_floor": 1e-10,
+  "num_mel_bins": 80,
+  "padding_side": "right",
+  "padding_value": 0.0,
+  "processor_class": "SpeechT5Processor",
+  "reduction_factor": 2,
+  "return_attention_mask": true,
+  "sampling_rate": 16000,
+  "win_function": "hann_window",
+  "win_length": 64
+}
+
+loading file spm_char.model from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_tts/snapshots/30fcde30f19b87502b8435427b5f5068e401d5f6/spm_char.model
+loading file added_tokens.json from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_tts/snapshots/30fcde30f19b87502b8435427b5f5068e401d5f6/added_tokens.json
+loading file special_tokens_map.json from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_tts/snapshots/30fcde30f19b87502b8435427b5f5068e401d5f6/special_tokens_map.json
+loading file tokenizer_config.json from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_tts/snapshots/30fcde30f19b87502b8435427b5f5068e401d5f6/tokenizer_config.json
+loading file tokenizer.json from cache at None
+loading configuration file config.json from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_hifigan/snapshots/bb6f429406e86a9992357a972c0698b22043307d/config.json
+Model config SpeechT5HifiGanConfig {
+  "architectures": [
+    "SpeechT5HifiGan"
+  ],
+  "initializer_range": 0.01,
+  "leaky_relu_slope": 0.1,
+  "model_in_dim": 80,
+  "model_type": "hifigan",
+  "normalize_before": true,
+  "resblock_dilation_sizes": [
+    [
+      1,
+      3,
+      5
+    ],
+    [
+      1,
+      3,
+      5
+    ],
+    [
+      1,
+      3,
+      5
+    ]
+  ],
+  "resblock_kernel_sizes": [
+    3,
+    7,
+    11
+  ],
+  "sampling_rate": 16000,
+  "torch_dtype": "float32",
+  "transformers_version": "4.36.0.dev0",
+  "upsample_initial_channel": 512,
+  "upsample_kernel_sizes": [
+    8,
+    8,
+    8,
+    8
+  ],
+  "upsample_rates": [
+    4,
+    4,
+    4,
+    4
+  ]
+}
+
+loading weights file pytorch_model.bin from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_hifigan/snapshots/bb6f429406e86a9992357a972c0698b22043307d/pytorch_model.bin
+All model checkpoint weights were used when initializing SpeechT5HifiGan.
+
+All the weights of SpeechT5HifiGan were initialized from the model checkpoint at microsoft/speecht5_hifigan.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use SpeechT5HifiGan for predictions without further training.
+10:27:17	Using Locally Processed Dataset. Skip Processing...
+10:27:17	Generating Seq2SeqTrainer Arguments
+PyTorch: setting up devices
+10:27:17	Generating Seq2SeqTrainer
+max_steps is given, it will override any value given in num_train_epochs
+Using auto half precision backend
+10:27:17	Start Training...
+Currently training with a batch size of: 8
+***** Running training *****
+  Num examples = 2,000
+  Num Epochs = 1
+  Instantaneous batch size per device = 8
+  Total train batch size (w. parallel, distributed & accumulation) = 16
+  Gradient Accumulation steps = 2
+  Total optimization steps = 100
+  Number of trainable parameters = 144,431,684
+***** Running Evaluation *****
+  Num examples = 5
+  Batch size = 8
+Saving model checkpoint to ./speecht5_tts/checkpoint-100
+Configuration saved in ./speecht5_tts/checkpoint-100/config.json
+Configuration saved in ./speecht5_tts/checkpoint-100/generation_config.json
+Model weights saved in ./speecht5_tts/checkpoint-100/pytorch_model.bin
+tokenizer config file saved in ./speecht5_tts/checkpoint-100/tokenizer_config.json
+Special tokens file saved in ./speecht5_tts/checkpoint-100/special_tokens_map.json
+added tokens file saved in ./speecht5_tts/checkpoint-100/added_tokens.json
+tokenizer config file saved in ./speecht5_tts/tokenizer_config.json
+Special tokens file saved in ./speecht5_tts/special_tokens_map.json
+added tokens file saved in ./speecht5_tts/added_tokens.json
+
+
+Training completed. Do not forget to share your model on huggingface.co/models =)
+
+
+Loading best model from ./speecht5_tts/checkpoint-100 (score: 0.6336874961853027).
+Waiting for the current checkpoint push to be finished, this might take a couple of minutes.
+10:28:32	Start Saving the model...
+Saving model checkpoint to ./model/trained_yifanhua-threadripper_Nov14_10:27
+Configuration saved in ./model/trained_yifanhua-threadripper_Nov14_10:27/config.json
+Configuration saved in ./model/trained_yifanhua-threadripper_Nov14_10:27/generation_config.json
+Model weights saved in ./model/trained_yifanhua-threadripper_Nov14_10:27/pytorch_model.bin
+tokenizer config file saved in ./model/trained_yifanhua-threadripper_Nov14_10:27/tokenizer_config.json
+Special tokens file saved in ./model/trained_yifanhua-threadripper_Nov14_10:27/special_tokens_map.json
+added tokens file saved in ./model/trained_yifanhua-threadripper_Nov14_10:27/added_tokens.json
+Saving model checkpoint to ./speecht5_tts/
+Configuration saved in ./speecht5_tts/config.json
+Configuration saved in ./speecht5_tts/generation_config.json
+Model weights saved in ./speecht5_tts/pytorch_model.bin
+tokenizer config file saved in ./speecht5_tts/tokenizer_config.json
+Special tokens file saved in ./speecht5_tts/special_tokens_map.json
+added tokens file saved in ./speecht5_tts/added_tokens.json
+Dropping the following result as it does not have all the necessary fields:
+{'dataset': {'name': 'common_voice_1_0', 'type': 'common_voice_1_0', 'config': 'en', 'split': 'train', 'args': 'en'}}
+Saving model checkpoint to ./speecht5_tts/
+Configuration saved in ./speecht5_tts/config.json
+Configuration saved in ./speecht5_tts/generation_config.json
+Model weights saved in ./speecht5_tts/pytorch_model.bin
+tokenizer config file saved in ./speecht5_tts/tokenizer_config.json
+Special tokens file saved in ./speecht5_tts/special_tokens_map.json
+added tokens file saved in ./speecht5_tts/added_tokens.json
+Dropping the following result as it does not have all the necessary fields:
+{'dataset': {'name': 'Common Voice', 'type': 'mozilla-foundation/common_voice_1_0', 'config': 'en', 'split': 'train', 'args': 'config: en'}}
+10:28:38	Input text: I'm loading the model from the Hugging Face Hub!
+
+Start -- Nov 14 10:32:36 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+10:32:36	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+loading configuration file config.json from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_tts/snapshots/30fcde30f19b87502b8435427b5f5068e401d5f6/config.json
+Model config SpeechT5Config {
+  "activation_dropout": 0.1,
+  "apply_spec_augment": true,
+  "architectures": [
+    "SpeechT5ForTextToSpeech"
+  ],
+  "attention_dropout": 0.1,
+  "bos_token_id": 0,
+  "conv_bias": false,
+  "conv_dim": [
+    512,
+    512,
+    512,
+    512,
+    512,
+    512,
+    512
+  ],
+  "conv_kernel": [
+    10,
+    3,
+    3,
+    3,
+    3,
+    2,
+    2
+  ],
+  "conv_stride": [
+    5,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "decoder_attention_heads": 12,
+  "decoder_ffn_dim": 3072,
+  "decoder_layerdrop": 0.1,
+  "decoder_layers": 6,
+  "decoder_start_token_id": 2,
+  "encoder_attention_heads": 12,
+  "encoder_ffn_dim": 3072,
+  "encoder_layerdrop": 0.1,
+  "encoder_layers": 12,
+  "encoder_max_relative_position": 160,
+  "eos_token_id": 2,
+  "feat_extract_activation": "gelu",
+  "feat_extract_norm": "group",
+  "feat_proj_dropout": 0.0,
+  "guided_attention_loss_num_heads": 2,
+  "guided_attention_loss_scale": 10.0,
+  "guided_attention_loss_sigma": 0.4,
+  "hidden_act": "gelu",
+  "hidden_dropout": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "is_encoder_decoder": true,
+  "layer_norm_eps": 1e-05,
+  "mask_feature_length": 10,
+  "mask_feature_min_masks": 0,
+  "mask_feature_prob": 0.0,
+  "mask_time_length": 10,
+  "mask_time_min_masks": 2,
+  "mask_time_prob": 0.05,
+  "max_length": 1876,
+  "max_speech_positions": 1876,
+  "max_text_positions": 600,
+  "model_type": "speecht5",
+  "num_conv_pos_embedding_groups": 16,
+  "num_conv_pos_embeddings": 128,
+  "num_feat_extract_layers": 7,
+  "num_mel_bins": 80,
+  "pad_token_id": 1,
+  "positional_dropout": 0.1,
+  "reduction_factor": 2,
+  "scale_embedding": false,
+  "speaker_embedding_dim": 512,
+  "speech_decoder_postnet_dropout": 0.5,
+  "speech_decoder_postnet_kernel": 5,
+  "speech_decoder_postnet_layers": 5,
+  "speech_decoder_postnet_units": 256,
+  "speech_decoder_prenet_dropout": 0.5,
+  "speech_decoder_prenet_layers": 2,
+  "speech_decoder_prenet_units": 256,
+  "torch_dtype": "float32",
+  "transformers_version": "4.36.0.dev0",
+  "use_cache": true,
+  "use_guided_attention_loss": true,
+  "vocab_size": 81
+}
+
+loading weights file pytorch_model.bin from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_tts/snapshots/30fcde30f19b87502b8435427b5f5068e401d5f6/pytorch_model.bin
+Generate config GenerationConfig {
+  "bos_token_id": 0,
+  "decoder_start_token_id": 2,
+  "eos_token_id": 2,
+  "max_length": 1876,
+  "pad_token_id": 1
+}
+
+All model checkpoint weights were used when initializing SpeechT5ForTextToSpeech.
+
+All the weights of SpeechT5ForTextToSpeech were initialized from the model checkpoint at microsoft/speecht5_tts.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use SpeechT5ForTextToSpeech for predictions without further training.
+Generation config file not found, using a generation config created from the model config.
+loading configuration file preprocessor_config.json from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_tts/snapshots/30fcde30f19b87502b8435427b5f5068e401d5f6/preprocessor_config.json
+Feature extractor SpeechT5FeatureExtractor {
+  "do_normalize": false,
+  "feature_extractor_type": "SpeechT5FeatureExtractor",
+  "feature_size": 1,
+  "fmax": 7600,
+  "fmin": 80,
+  "frame_signal_scale": 1.0,
+  "hop_length": 16,
+  "mel_floor": 1e-10,
+  "num_mel_bins": 80,
+  "padding_side": "right",
+  "padding_value": 0.0,
+  "processor_class": "SpeechT5Processor",
+  "reduction_factor": 2,
+  "return_attention_mask": true,
+  "sampling_rate": 16000,
+  "win_function": "hann_window",
+  "win_length": 64
+}
+
+loading file spm_char.model from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_tts/snapshots/30fcde30f19b87502b8435427b5f5068e401d5f6/spm_char.model
+loading file added_tokens.json from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_tts/snapshots/30fcde30f19b87502b8435427b5f5068e401d5f6/added_tokens.json
+loading file special_tokens_map.json from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_tts/snapshots/30fcde30f19b87502b8435427b5f5068e401d5f6/special_tokens_map.json
+loading file tokenizer_config.json from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_tts/snapshots/30fcde30f19b87502b8435427b5f5068e401d5f6/tokenizer_config.json
+loading file tokenizer.json from cache at None
+loading configuration file config.json from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_hifigan/snapshots/bb6f429406e86a9992357a972c0698b22043307d/config.json
+Model config SpeechT5HifiGanConfig {
+  "architectures": [
+    "SpeechT5HifiGan"
+  ],
+  "initializer_range": 0.01,
+  "leaky_relu_slope": 0.1,
+  "model_in_dim": 80,
+  "model_type": "hifigan",
+  "normalize_before": true,
+  "resblock_dilation_sizes": [
+    [
+      1,
+      3,
+      5
+    ],
+    [
+      1,
+      3,
+      5
+    ],
+    [
+      1,
+      3,
+      5
+    ]
+  ],
+  "resblock_kernel_sizes": [
+    3,
+    7,
+    11
+  ],
+  "sampling_rate": 16000,
+  "torch_dtype": "float32",
+  "transformers_version": "4.36.0.dev0",
+  "upsample_initial_channel": 512,
+  "upsample_kernel_sizes": [
+    8,
+    8,
+    8,
+    8
+  ],
+  "upsample_rates": [
+    4,
+    4,
+    4,
+    4
+  ]
+}
+
+loading weights file pytorch_model.bin from cache at /home/yifanhua/.cache/huggingface/hub/models--microsoft--speecht5_hifigan/snapshots/bb6f429406e86a9992357a972c0698b22043307d/pytorch_model.bin
+All model checkpoint weights were used when initializing SpeechT5HifiGan.
+
+All the weights of SpeechT5HifiGan were initialized from the model checkpoint at microsoft/speecht5_hifigan.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use SpeechT5HifiGan for predictions without further training.
+10:32:38	Using Locally Processed Dataset. Skip Processing...
+10:32:38	Generating Seq2SeqTrainer Arguments
+10:32:38	Exception: Traceback (most recent call last):
+  File "/home/yifanhua/5455-term-project/src/main.py", line 468, in <module>
+    training_args = generate_train_arguments()
+  File "/home/yifanhua/5455-term-project/src/main.py", line 408, in generate_train_arguments
+    return Seq2SeqTrainingArguments(
+TypeError: Seq2SeqTrainingArguments.__init__() got an unexpected keyword argument 'callbacks'
+
+
+Start -- Nov 14 10:56:17 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+10:56:17	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+10:56:19	Using Locally Processed Dataset. Skip Processing...
+10:56:19	Generating Seq2SeqTrainer Arguments
+10:56:19	Generating Seq2SeqTrainer
+10:56:20	Start Training...
+10:57:33	Start Saving the model...
+10:57:38	Input text: I'm loading the model from the Hugging Face Hub!
+
+Start -- Nov 14 12:24:04 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+12:24:04	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+12:24:07	Using Locally Processed Dataset. Skip Processing...
+12:24:07	Generating Seq2SeqTrainer Arguments
+12:24:07	Generating Seq2SeqTrainer
+12:24:07	Start Training...
+12:25:16	Start Saving the model...
+12:25:21	Input text: I'm loading the model from the Hugging Face Hub!
+
+
+Start -- Nov 14 12:30:50 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+12:30:50	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+12:30:53	Using Locally Processed Dataset. Skip Processing...
+12:30:53	Generating Seq2SeqTrainer Arguments
+12:30:53	Generating Seq2SeqTrainer
+12:30:53	Start Training...
+12:32:04	Exception: Traceback (most recent call last):
+  File "/home/yifanhua/5455-term-project/src/main.py", line 471, in <module>
+    log_msg(trainer.state.log_history)
+  File "/home/yifanhua/5455-term-project/src/main.py", line 32, in log_msg
+    msg = time.strftime("%H:%M:%S", time.localtime()) + '\t' + m if include_time else m
+TypeError: can only concatenate str (not "dict") to str
+
+
+Start -- Nov 14 12:33:09 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+12:33:09	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+12:33:12	Using Locally Processed Dataset. Skip Processing...
+12:33:12	Generating Seq2SeqTrainer Arguments
+12:33:12	Generating Seq2SeqTrainer
+12:33:12	Start Training...
+12:34:28	{'loss': 0.9859, 'learning_rate': 9.600000000000001e-06, 'epoch': 0.04, 'step': 5}
+12:34:28	{'loss': 0.8889, 'learning_rate': 9.100000000000001e-06, 'epoch': 0.08, 'step': 10}
+12:34:28	{'loss': 0.9105, 'learning_rate': 8.6e-06, 'epoch': 0.12, 'step': 15}
+12:34:28	{'loss': 0.8511, 'learning_rate': 8.1e-06, 'epoch': 0.16, 'step': 20}
+12:34:28	{'loss': 0.8137, 'learning_rate': 7.7e-06, 'epoch': 0.2, 'step': 25}
+12:34:28	{'loss': 0.8476, 'learning_rate': 7.2000000000000005e-06, 'epoch': 0.24, 'step': 30}
+12:34:28	{'loss': 0.8663, 'learning_rate': 6.700000000000001e-06, 'epoch': 0.28, 'step': 35}
+12:34:28	{'loss': 0.8475, 'learning_rate': 6.200000000000001e-06, 'epoch': 0.32, 'step': 40}
+12:34:28	{'loss': 0.8243, 'learning_rate': 5.7e-06, 'epoch': 0.36, 'step': 45}
+12:34:28	{'loss': 0.8349, 'learning_rate': 5.2e-06, 'epoch': 0.4, 'step': 50}
+12:34:28	{'loss': 0.7796, 'learning_rate': 4.800000000000001e-06, 'epoch': 0.44, 'step': 55}
+12:34:28	{'loss': 0.7706, 'learning_rate': 4.3e-06, 'epoch': 0.48, 'step': 60}
+12:34:28	{'loss': 0.8132, 'learning_rate': 3.8000000000000005e-06, 'epoch': 0.52, 'step': 65}
+12:34:28	{'loss': 0.8094, 'learning_rate': 3.3000000000000006e-06, 'epoch': 0.56, 'step': 70}
+12:34:28	{'loss': 0.7413, 'learning_rate': 2.8000000000000003e-06, 'epoch': 0.6, 'step': 75}
+12:34:28	{'loss': 0.8326, 'learning_rate': 2.3000000000000004e-06, 'epoch': 0.64, 'step': 80}
+12:34:28	{'loss': 0.7873, 'learning_rate': 1.8000000000000001e-06, 'epoch': 0.68, 'step': 85}
+12:34:28	{'loss': 0.789, 'learning_rate': 1.3e-06, 'epoch': 0.72, 'step': 90}
+12:34:28	{'loss': 0.8452, 'learning_rate': 8.000000000000001e-07, 'epoch': 0.76, 'step': 95}
+12:34:28	{'loss': 0.8092, 'learning_rate': 3.0000000000000004e-07, 'epoch': 0.8, 'step': 100}
+12:34:28	{'eval_loss': 0.744220495223999, 'eval_runtime': 0.0774, 'eval_samples_per_second': 64.586, 'eval_steps_per_second': 12.917, 'epoch': 0.8, 'step': 100}
+12:34:28	{'train_runtime': 47.6549, 'train_samples_per_second': 33.575, 'train_steps_per_second': 2.098, 'total_flos': 114345191087424.0, 'train_loss': 0.8323853802680969, 'epoch': 0.8, 'step': 100}
+12:34:28	Start Saving the model...
+12:34:33	Input text: I'm loading the model from the Hugging Face Hub!
+
+Start -- Nov 14 12:34:59 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+12:34:59	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+12:35:02	Using Locally Processed Dataset. Skip Processing...
+12:35:02	Generating Seq2SeqTrainer Arguments
+12:35:02	Generating Seq2SeqTrainer
+12:35:02	Start Training...
+{'loss': 0.9372, 'learning_rate': 9.600000000000001e-06, 'epoch': 0.04, 'step': 5}
+{'loss': 0.9539, 'learning_rate': 9.200000000000002e-06, 'epoch': 0.08, 'step': 10}
+{'loss': 0.9213, 'learning_rate': 8.700000000000001e-06, 'epoch': 0.12, 'step': 15}
+{'loss': 0.874, 'learning_rate': 8.2e-06, 'epoch': 0.16, 'step': 20}
+{'loss': 0.8497, 'learning_rate': 7.7e-06, 'epoch': 0.2, 'step': 25}
+{'loss': 0.8623, 'learning_rate': 7.2000000000000005e-06, 'epoch': 0.24, 'step': 30}
+{'loss': 0.7895, 'learning_rate': 6.700000000000001e-06, 'epoch': 0.28, 'step': 35}
+{'loss': 0.8644, 'learning_rate': 6.200000000000001e-06, 'epoch': 0.32, 'step': 40}
+{'loss': 0.8408, 'learning_rate': 5.7e-06, 'epoch': 0.36, 'step': 45}
+{'loss': 0.7933, 'learning_rate': 5.2e-06, 'epoch': 0.4, 'step': 50}
+{'loss': 0.7975, 'learning_rate': 4.7e-06, 'epoch': 0.44, 'step': 55}
+{'loss': 0.7626, 'learning_rate': 4.2000000000000004e-06, 'epoch': 0.48, 'step': 60}
+{'loss': 0.8135, 'learning_rate': 3.7e-06, 'epoch': 0.52, 'step': 65}
+{'loss': 0.7836, 'learning_rate': 3.2000000000000003e-06, 'epoch': 0.56, 'step': 70}
+{'loss': 0.762, 'learning_rate': 2.7000000000000004e-06, 'epoch': 0.6, 'step': 75}
+{'loss': 0.8379, 'learning_rate': 2.2e-06, 'epoch': 0.64, 'step': 80}
+{'loss': 0.738, 'learning_rate': 1.7000000000000002e-06, 'epoch': 0.68, 'step': 85}
+{'loss': 0.7998, 'learning_rate': 1.2000000000000002e-06, 'epoch': 0.72, 'step': 90}
+{'loss': 0.7802, 'learning_rate': 7.000000000000001e-07, 'epoch': 0.76, 'step': 95}
+{'loss': 0.7681, 'learning_rate': 2.0000000000000002e-07, 'epoch': 0.8, 'step': 100}
+{'eval_loss': 0.6385095715522766, 'eval_runtime': 0.0999, 'eval_samples_per_second': 50.062, 'eval_steps_per_second': 10.012, 'epoch': 0.8, 'step': 100}
+{'train_runtime': 47.1112, 'train_samples_per_second': 33.962, 'train_steps_per_second': 2.123, 'total_flos': 115758656456256.0, 'train_loss': 0.8264809226989747, 'epoch': 0.8, 'step': 100}
+12:36:15	Start Saving the model...
+12:36:23	Input text: I'm loading the model from the Hugging Face Hub!
+
+Start -- Nov 14 13:36:01 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+13:36:01	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+13:36:03	Using Locally Processed Dataset. Skip Processing...
+13:37:29	Using model: ./model/trained_yifanhua-threadripper_Nov14_12:24
+13:37:30	Input text: I'm loading the model from the Hugging Face Hub!
+
+Start -- Nov 14 13:38:25 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+13:38:25	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+13:38:28	Using Locally Processed Dataset. Skip Processing...
+13:38:35	Using model: ./model/trained_yifanhua-threadripper_Nov13_19:26
+13:38:36	Input text: I'm loading the model from the Hugging Face Hub!

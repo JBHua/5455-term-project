@@ -15,19 +15,26 @@ import soundfile as sf
 import time
 import constants
 from datasets import load_dataset, load_from_disk
-from concurrent.futures import ProcessPoolExecutor
 from collections import defaultdict
+
 
 ###############################################################################
 # Helper Functions
 ###############################################################################
 def log_msg(message, outf=constants.log_file, include_time=True, print_out=True):
-    msg = time.strftime("%H:%M:%S", time.localtime()) + '\t' + message if include_time else message
-    if print_out: print(msg)
-    if outf is not None:
-        outf.write(msg)
-        outf.write("\n")
-        outf.flush()
+    messages = []
+    if isinstance(message, str):
+        messages.append(message)
+    else:
+        messages = message
+
+    for m in messages:
+        msg = time.strftime("%H:%M:%S", time.localtime()) + '\t' + str(m) if include_time else str(m)
+        if print_out: print(msg)
+        if outf is not None:
+            outf.write(msg)
+            outf.write("\n")
+            outf.flush()
 
 
 def error_recording_hook(exctype, value, tb):
@@ -109,27 +116,27 @@ def create_speaker_embedding(waveform):
     return _speaker_embeddings
 
 
-def prepare_dataset(example):
+def prepare_dataset(entry):
     """prepare_dataset takes a single entry; tokenize input text; load audio into a log-mel spectrogram; and add
     speaker embeddings"""
-    # load the audio data; if necessary, this resamples the audio to 16kHz
-    audio = example["audio"]
+    # load the entry data; if necessary, this resamples the audio to 16kHz
+    audio = entry["audio"]
 
     # feature extraction and tokenization
-    example = processor(
-        text=example["normalized_text"],
+    entry = processor(
+        text=entry["normalized_text"],
         audio_target=audio["array"],
         sampling_rate=audio["sampling_rate"],
         return_attention_mask=False,
     )
 
     # strip off the batch dimension
-    example["labels"] = example["labels"][0]
+    entry["labels"] = entry["labels"][0]
 
     # use SpeechBrain to obtain x-vector
-    example["speaker_embeddings"] = create_speaker_embedding(audio["array"])
+    entry["speaker_embeddings"] = create_speaker_embedding(audio["array"])
 
-    return example
+    return entry
 
 
 def is_not_too_short(raw_text, cutoff: int = 10):
@@ -276,8 +283,6 @@ def load_remote_dataset(name=constants.remote_dataset_name,
 
     log_msg("Finish Loading Remote Dataset. Length of dataset: " + str(len(_dataset)))
     if constants.remote_dataset_name.startswith("mozilla-foundation"):
-        # # TODO: Remove next line, we dont need to save dataset now. It's just for speeding up the process of debugging
-        # _dataset.save_to_disk(constants.data_path)
         _dataset = clean_mozilla_dataset(_dataset)
 
     return set_sampling_rate(_dataset)
@@ -308,35 +313,71 @@ def load_local_dataset() -> DatasetDict | Dataset | IterableDatasetDict | Iterab
 ###############################################################################
 # Process Entire Dataset
 ###############################################################################
-# def sort_speaker(_dataset):
-#     print(_dataset)
-#
-#     speaker_counts = defaultdict(int)
-#     for speaker_id in _dataset["speaker_id"]:
-#         speaker_counts[speaker_id] += 1
-#     plt.figure()
-#     plt.hist(speaker_counts.values(), bins=5)
-#     plt.ylabel("Speakers")
-#     plt.xlabel("Examples")
-#     plt.show()
-#
-#     accent_count = defaultdict(int)
-#     for accent_id in _dataset["accent"]:
-#         accent_count[accent_id] += 1
-#     plt.figure()
-#     plt.hist(accent_count.values(), bins=20)
-#     plt.ylabel("Accent")
-#     plt.xlabel("Examples")
-#     plt.show()
-#
-#     gender_count = defaultdict(int)
-#     for g_id in _dataset["gender"]:
-#         gender_count[g_id] += 1
-#     plt.figure()
-#     plt.hist(gender_count.values(), bins=5)
-#     plt.ylabel("Gender")
-#     plt.xlabel("Examples")
-#     plt.show()
+def sort_speaker(_dataset):
+    # For Mozilla Dataset, the columns (before being mapped on prepare_dataset) are:
+    # ['client_id', 'path', 'audio', 'normalized_text', 'up_votes', 'down_votes', 'age', 'gender', 'accent', 'locale', 'segment']
+    #
+    print(_dataset)
+
+    # Accents
+    up_count = defaultdict(int)
+    for up in _dataset["up_votes"]:
+        up_count[up] += 1
+    ups = list(up_count.keys())
+    ups_frequencies = list(up_count.values())
+    plt.figure()  # Adjust the figure size as needed
+    plt.bar(ups, ups_frequencies)
+    plt.title('Frequency of Upvote count')
+    plt.xlabel('Upvote')
+    plt.ylabel('Frequency')
+    plt.xticks(rotation=45)  # Rotates the x-axis labels for better readability
+    plt.show()
+
+    # Accents
+    accent_count = defaultdict(int)
+    for accent_id in _dataset["accent"]:
+        accent_count[accent_id] += 1
+    accents = list(accent_count.keys())
+    accents_frequencies = list(accent_count.values())
+    plt.figure()  # Adjust the figure size as needed
+    plt.bar(accents, accents_frequencies)
+    plt.title('Frequency of Accents')
+    plt.xlabel('Accent')
+    plt.ylabel('Frequency')
+    plt.xticks(rotation=45)  # Rotates the x-axis labels for better readability
+    plt.show()
+
+    # Genders
+    gender_count = defaultdict(int)
+    for gender in _dataset["gender"]:
+        gender_count[gender] += 1
+    genders = list(gender_count.keys())
+    genders_frequencies = list(gender_count.values())
+    plt.figure()
+    plt.bar(genders, genders_frequencies)
+    plt.title('Frequency of Genders')
+    plt.xlabel('Gender')
+    plt.ylabel('Frequency')
+    plt.xticks(rotation=45)  # Rotates the x-axis labels for better readability
+    plt.show()
+
+    # Genders
+    age_count = defaultdict(int)
+    for age in _dataset["age"]:
+        age_count[age] += 1
+    ages = list(age_count.keys())
+    ages_frequencies = list(age_count.values())
+    plt.figure()
+    plt.bar(ages, ages_frequencies)
+    plt.title('Frequency of Ages')
+    plt.xlabel('Ages')
+    plt.ylabel('Frequency')
+    plt.xticks(rotation=45)  # Rotates the x-axis labels for better readability
+    plt.show()
+
+
+def generate_speaker_embeddings():
+    pass
 
 
 def filter_and_prepare_dataset(_dataset) -> DatasetDict | Dataset | IterableDatasetDict | IterableDataset:
@@ -365,19 +406,18 @@ def generate_train_arguments():
     log_msg("Generating Seq2SeqTrainer Arguments")
     return Seq2SeqTrainingArguments(
         output_dir=constants.CHECKPOINT_BASE_PATH,
-        per_device_train_batch_size=6,
-        gradient_accumulation_steps=2,
-        learning_rate=1e-5,
-        warmup_steps=500,
-        max_steps=4000,
+        per_device_train_batch_size=constants.batch_size,
+        gradient_accumulation_steps=constants.gradient_accumulation_steps,
+        learning_rate=constants.learning_rate,
+        warmup_steps=constants.warm_up_step,
+        max_steps=constants.max_steps,
         gradient_checkpointing=True,
         fp16=True,
         evaluation_strategy="steps",
-        per_device_eval_batch_size=8,
-        save_steps=1000,
-        eval_steps=1000,
-        logging_steps=25,
-        report_to=["tensorboard"],
+        per_device_eval_batch_size=constants.batch_size,
+        save_steps=constants.save_steps,
+        eval_steps=constants.eval_steps,
+        logging_steps=5,
         load_best_model_at_end=True,
         greater_is_better=False,
         label_names=["labels"],
@@ -403,6 +443,10 @@ if __name__ == "__main__":
     dataset = None
     if constants.download_remote_dataset:
         dataset = load_remote_dataset()
+
+        # # Debugging Step: Visualize Speaker info
+        # sort_speaker(dataset)
+
         # Step 1A: Process & Preparing Dataset
         dataset = filter_and_prepare_dataset(dataset)
 
@@ -413,10 +457,10 @@ if __name__ == "__main__":
         # data in local file is guaranteed to be processed. So we don't need to process it again
         dataset = load_local_dataset()
 
-    # Step 2: Split Dataset
+    # Step 2: Split Dataset. Yes, we load first and then split, this method is more flexible
     divided_dataset = split_dataset(dataset)
 
-    # Step 3: Train or Load the model
+    # Step 3: Train or Load the local model
     if constants.train_model:
         pretrained_model.config.use_cache = False
         training_args = generate_train_arguments()
@@ -424,20 +468,28 @@ if __name__ == "__main__":
 
         log_msg("Start Training...")
         trainer.train()
-        log_msg("Start Saving the model...")
+        log_msg(trainer.state.log_history, include_time=False)
 
-        if constants.save_fine_tuned_model: trainer.save_model(constants.model_path)
+        if constants.save_fine_tuned_model:
+            log_msg("Start Saving the model...")
+            trainer.save_model(constants.model_path)
         if constants.push_to_hub: trainer.push_to_hub(**constants.huggingface_kwargs)
     else:
         pretrained_model = SpeechT5ForTextToSpeech.from_pretrained(pretrained_model_name_or_path=select_local_mode(),
                                                                    local_files_only=True).to(device)
 
+    # Step 6: Generate or load speaker embeddings
+
+
+    # Step 5: Generate Audio according to Text and Speaker embeddings
     text = "I'm loading the model from the Hugging Face Hub!"
     log_msg(f'Input text: {text}')
     inputs = processor(text=text, return_tensors="pt").to(device)
 
-    example = divided_dataset["train"][5]
-    speaker_embeddings = torch.tensor(example["speaker_embeddings"]).unsqueeze(0).to(device)
+    pre_trained_speaker_embeddings = torch.load('./tensor.pt')
+    speaker_embeddings = torch.tensor(
+        pre_trained_speaker_embeddings,
+    ).unsqueeze(0).to(device)
     spectrogram = pretrained_model.generate_speech(inputs["input_ids"], speaker_embeddings).to(device)
 
     with torch.no_grad():
