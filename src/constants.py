@@ -42,7 +42,7 @@ data_path = DATA_BASE_PATH
 log_file_path = './log/' + socket.gethostname() + '.log'
 log_file = open(log_file_path, 'a')
 
-
+unprocessed_data_path = './raw_data/'
 ###############################################################################
 # HuggingFace Related
 ###############################################################################

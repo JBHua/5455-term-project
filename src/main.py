@@ -304,7 +304,14 @@ def load_local_dataset() -> DatasetDict | Dataset | IterableDatasetDict | Iterab
 ###############################################################################
 # Speaker Embeddings
 ###############################################################################
+def load_local_speaker_embeddings() -> dict:
+    _speaker_embeddings = dict()
 
+
+    return _speaker_embeddings
+
+def retrieve_speaker_embeddings() -> Any:
+    pass
 
 ###############################################################################
 # Process Entire Dataset
@@ -475,7 +482,7 @@ if __name__ == "__main__":
                                                                    local_files_only=True).to(device)
 
     # Step 6: Generate or load speaker embeddings
-
+    speaker_embeddings = load_local_speaker_embeddings()
 
     # Step 5: Generate Audio according to Text and Speaker embeddings
     text = "I'm loading the model from the Hugging Face Hub!"

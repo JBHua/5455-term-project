@@ -16,11 +16,6 @@ pip install accelerate -U
 pip install tensorboardX
 ```
 
-## Git Large File Storage
-Also, you'll need Git Large File Storage to store model checkpoints and complete models.
-See: 
-    1. https://docs.github.com/en/repositories/working-with-files/managing-large-files/installing-git-large-file-storage?platform=linux
-    2. https://docs.github.com/en/repositories/working-with-files/managing-large-files/configuring-git-large-file-storage
 
 ## Huggingface User Token
 User token (with write access) is used to upload the model to huggingface.
@@ -30,6 +25,11 @@ See:
 # Dataset
 https://huggingface.co/datasets/facebook/voxpopuli/tree/main/data/en_accented
 
+
+https://huggingface.co/datasets/mozilla-foundation/common_voice_1_0/tree/main
+For Mozilla Common Voice 01 English, the gender and accent distribution is the following:
+8637 samples total
+{'us female': 454, 'us male': 4236, 'england male': 1614, 'canada male': 480, 'malaysia male': 82, 'canada female': 142, 'australia male': 963, 'indian male': 319, 'hongkong female': 16, 'other male': 112, 'hongkong male': 4, 'england female': 53, 'newzealand male': 43, 'philippines female': 14, 'african male': 50, 'indian female': 9, 'ireland female': 21, 'australia female': 5, 'scotland male': 4, 'ireland male': 12, 'wales male': 3, 'other female': 1}
 
 # Troubleshoot
 1. Manully download dataset using voxpopuli repo

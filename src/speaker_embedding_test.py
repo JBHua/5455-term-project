@@ -6,9 +6,10 @@ import constants
 from speechbrain.pretrained import EncoderClassifier
 from datasets import Audio, DatasetDict, Dataset, IterableDatasetDict, IterableDataset
 from datasets import load_dataset, load_from_disk
-
+import numpy
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
+
 
 def log_msg(message, outf=constants.log_file, include_time=True, print_out=True):
     messages = []
@@ -41,14 +42,21 @@ def create_speaker_embedding(waveform):
     return _speaker_embeddings
 
 
-def combine_waveform(gender="male", accent=""):
+def combine_waveform(entry, wc):
+    if entry['gender'] not in genders:
+        pass
 
-    pass
+    if entry['accent'] not in accents:
+        pass
+
+    key = entry['accent'] + '_' + entry['gender']
+    if key not in wc:
+        wc[key] = entry['audio']['array']
+    else:
+        wc[key] = numpy.concatenate((wc[key], entry['audio']['array']))
 
 
 def set_sampling_rate(_dataset):
-    from datasets import Audio
-
     log_msg("Start Setting Sampling Rate to 16 kHz...")
     # SpeechT5 requires the sampling rate to be 16 kHz.
     _dataset = _dataset.cast_column("audio", Audio(sampling_rate=16000))
@@ -110,37 +118,59 @@ def load_local_dataset() -> DatasetDict | Dataset | IterableDatasetDict | Iterab
     return _dataset
 
 
-
 accents = dict()
+
+genders = ['male', 'female']
+all_accents = ['us', 'england','canada','malaysia','australia','indian', 'hongkong', 'newzealand','philippines',]
+
+
+
 
 def count_accent(entry):
     a = entry["accent"]
     g = entry["gender"]
-    k = a+g
+    k = a + " " + g
 
     if k not in accents:
         accents[k] = 1
     else:
         accents[k] += 1
-    
-dataset = load_remote_dataset()
+
+
+def set_sampling_rate(_dataset):
+    from datasets import Audio
+
+    log_msg("Start Setting Sampling Rate to 16 kHz...")
+    # SpeechT5 requires the sampling rate to be 16 kHz.
+    _dataset = _dataset.cast_column("audio", Audio(sampling_rate=16000))
+    log_msg("Setting Sampling Rate Successfully")
+
+    return _dataset
+
+
+# dataset = load_remote_dataset()
+# dataset.save_to_disk(constants.unprocessed_data_path)
+dataset = load_from_disk(constants.unprocessed_data_path)
 print(dataset)
-dataset.map(count_accent)
 
-print(accents)
+dataset = set_sampling_rate(dataset)
+print(dataset)
 
-# combine_waveform()
+waveform_collection = dict()
+# dataset.map(combine_waveform, fn_kwargs={"wc": waveform_collection}, num_proc=1)
 
-# fp = "./audio_test/combined_16k.mp3"  # change to the correct path to your file accordingly
-# signal, sampling_rate = audio2numpy.open_audio(fp)
+i = 0
+for e in dataset:
+    combine_waveform(e, waveform_collection)
+    i += 1
+    if i % 500 == 0:
+        print(f'{i*100/8637}%')
 
-# print("signal")
-# print(signal)
+print(waveform_collection)
+print(len(waveform_collection.keys()))
 
-# print("sampling_rate")
-# print(sampling_rate)
-
-# embedding = create_speaker_embedding(signal)
-# print(embedding)
-
-# torch.save(embedding, '../tensor.pt')
+for k, v in waveform_collection.items():
+    embedding = create_speaker_embedding(v)
+    filename = './speaker_embeddings/' + k + '.pt'
+    print('saving embedding to: ' + filename)
+    torch.save(embedding, filename)
