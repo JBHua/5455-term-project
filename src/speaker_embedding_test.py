@@ -8,7 +8,10 @@ from datasets import Audio, DatasetDict, Dataset, IterableDatasetDict, IterableD
 from datasets import load_dataset, load_from_disk
 import numpy
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
+from src.constants import genders
+
+# device = "cuda" if torch.cuda.is_available() else "cpu"
+device = "cpu"  # using cuda will result in VRAM exhaustion, unless u have a GPU with 48GB of VRAM
 
 
 def log_msg(message, outf=constants.log_file, include_time=True, print_out=True):
@@ -38,15 +41,15 @@ def create_speaker_embedding(waveform):
     with torch.no_grad():
         _speaker_embeddings = speaker_model.encode_batch(torch.tensor(waveform))
         _speaker_embeddings = torch.nn.functional.normalize(_speaker_embeddings, dim=2)
-        _speaker_embeddings = _speaker_embeddings.squeeze()#.cpu()#.numpy()
+        _speaker_embeddings = _speaker_embeddings.squeeze().cpu().numpy()
     return _speaker_embeddings
 
 
 def combine_waveform(entry, wc):
-    if entry['gender'] not in genders:
+    if entry['gender'] not in constants.all_genders:
         pass
 
-    if entry['accent'] not in accents:
+    if entry['accent'] not in constants.all_accents:
         pass
 
     key = entry['accent'] + '_' + entry['gender']
@@ -120,11 +123,6 @@ def load_local_dataset() -> DatasetDict | Dataset | IterableDatasetDict | Iterab
 
 accents = dict()
 
-genders = ['male', 'female']
-all_accents = ['us', 'england','canada','malaysia','australia','indian', 'hongkong', 'newzealand','philippines',]
-
-
-
 
 def count_accent(entry):
     a = entry["accent"]
@@ -157,7 +155,6 @@ dataset = set_sampling_rate(dataset)
 print(dataset)
 
 waveform_collection = dict()
-# dataset.map(combine_waveform, fn_kwargs={"wc": waveform_collection}, num_proc=1)
 
 i = 0
 for e in dataset:

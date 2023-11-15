@@ -64,3 +64,5 @@ push_to_hub = True
 # Others
 ###############################################################################
 spk_model_name = "speechbrain/spkrec-xvect-voxceleb"
+all_genders = ['male', 'female']
+all_accents = ['us', 'england','canada','malaysia','australia','indian', 'hongkong', 'newzealand','philippines',]
