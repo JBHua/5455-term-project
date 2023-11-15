@@ -11,12 +11,12 @@ import traceback
 from speechbrain.pretrained import EncoderClassifier
 from dataclasses import dataclass
 from typing import Any, Dict, List, Union
-import soundfile as sf
 import time
 import constants
 from datasets import load_dataset, load_from_disk
 from collections import defaultdict
-
+import argparse
+import json
 
 ###############################################################################
 # Helper Functions
@@ -43,6 +43,19 @@ def error_recording_hook(exctype, value, tb):
     else:
         log_msg(f'Exception: {"".join(traceback.format_exception(exctype, value=value, tb=tb))}', print_out=False)
         sys.__excepthook__(exctype, value, tb)
+
+
+def parse_arguments():
+    # Create the parser
+    parser = argparse.ArgumentParser(description='Example script to take command line parameters.')
+
+    # Add arguments
+    parser.add_argument('-g', type=str, default='male', help='Speaker Gender: male | female | other')
+    parser.add_argument('-a', type=str, default='australia',
+                        help=f'Speaker Accent: see {constants.EMBEDDINGS_BASE_PATH}')
+
+    # Parse and return the arguments
+    return parser.parse_args()
 
 
 @dataclass
@@ -80,7 +93,7 @@ class TTSDataCollatorWithPadding:
             max_length = max(target_lengths)
             batch["labels"] = batch["labels"][:, :max_length]
 
-        # also add in the speaker embeddings
+        # TODO: this should be replaced by the corresponding pre-trained embedding
         batch["speaker_embeddings"] = torch.tensor(speaker_features)
 
         return batch
@@ -158,10 +171,10 @@ def print_menu(stdscr, selected_row_idx, directories):
 
     for idx, row in enumerate(directories):
         if len(row) > w - 2:  # Check if the row is too long and truncate it if necessary
-            row = row[:w-5] + '...'
+            row = row[:w - 5] + '...'
 
-        x = max(0, w//2 - len(row)//2)  # Ensure x is within the window
-        y = max(0, h//2 - len(directories)//2 + idx)  # Ensure y is within the window
+        x = max(0, w // 2 - len(row) // 2)  # Ensure x is within the window
+        y = max(0, h // 2 - len(directories) // 2 + idx)  # Ensure y is within the window
 
         if idx == selected_row_idx:
             stdscr.attron(curses.color_pair(1))
@@ -189,7 +202,7 @@ def run_menu(stdscr, dirs):
         elif key == curses.KEY_DOWN and current_row < len(dirs) - 1:
             current_row += 1
         elif key == curses.KEY_ENTER or key in [10, 13]:
-            stdscr.addstr(0, 0, f"You've selected model path: '{dirs[current_row]}'")
+            stdscr.addstr(0, 0, f"You've selected file path: '{dirs[current_row]}'")
             return dirs[current_row]
 
         print_menu(stdscr, current_row, dirs)
@@ -198,7 +211,7 @@ def run_menu(stdscr, dirs):
 def select_local_mode():
     directories = list(list_directories(constants.MODEL_BASE_PATH))
     if len(directories) == 0:
-        log_msg(f"No model under dir {constants.MODEL_BASE_PATH}. Please double check. Exiting")
+        log_msg(f"No model under dir {constants.MODEL_BASE_PATH}. Please train and save a model first. Exiting")
         sys.exit()
     elif len(directories) == 1:
         selected_model = directories[0]
@@ -297,29 +310,31 @@ def load_local_dataset() -> DatasetDict | Dataset | IterableDatasetDict | Iterab
 
 
 ###############################################################################
-# Select Speaker
-###############################################################################
-
-
-###############################################################################
 # Speaker Embeddings
 ###############################################################################
-def load_local_speaker_embeddings() -> dict:
-    _speaker_embeddings = dict()
+def load_local_speaker_embeddings(_args, _device='cpu'):
+    accent = args.a
+    gender = args.g
 
+    embedding_file_path = constants.EMBEDDINGS_BASE_PATH + accent + '_' + gender + '.pt'
+    try:
+        pre_trained_embeddings = torch.load(embedding_file_path)
+    except Exception as e:
+        log_msg(f"Failed to load local speaker embedding for gender: {gender} and accent: {accent}."
+                f" Please double check file exists and path is correct. {e}")
+        sys.exit()
 
-    return _speaker_embeddings
+    pre_trained_embeddings_tensor = torch.tensor(pre_trained_embeddings).unsqueeze(0).to(_device)
 
-def retrieve_speaker_embeddings() -> Any:
-    pass
+    return pre_trained_embeddings_tensor
+
 
 ###############################################################################
 # Process Entire Dataset
 ###############################################################################
 def sort_speaker(_dataset):
-    # For Mozilla Dataset, the columns (before being mapped on prepare_dataset) are:
-    # ['client_id', 'path', 'audio', 'normalized_text', 'up_votes', 'down_votes', 'age', 'gender', 'accent', 'locale', 'segment']
-    #
+    # For Mozilla Dataset, the columns (before being mapped on prepare_dataset) are: ['client_id', 'path', 'audio',
+    # 'normalized_text', 'up_votes', 'down_votes', 'age', 'gender', 'accent', 'locale', 'segment']
     print(_dataset)
 
     # Accents
@@ -389,7 +404,7 @@ def filter_and_prepare_dataset(_dataset) -> DatasetDict | Dataset | IterableData
     log_msg(f"{len(_dataset)} data entries left after filtering")
 
     log_msg("Start Preparing Dataset")
-    _dataset = _dataset.map(prepare_dataset, remove_columns=_dataset.column_names, num_proc=1)
+    _dataset = _dataset.map(prepare_dataset, remove_columns=_dataset.column_names)
     # _dataset = _dataset.map(DatasetPrepper(processor), remove_columns=_dataset.column_names, num_proc=cpu_count)
     log_msg("Preparing dataset finished successfully")
 
@@ -441,7 +456,23 @@ def generate_trainer(_training_args: Seq2SeqTrainingArguments, _model: PreTraine
     )
 
 
+def generate_audio(_spectrogram):
+    log_msg(f'Generating output audio file...')
+    with torch.no_grad():
+        speech = vocoder(_spectrogram)
+    speech = speech.cpu()  # move back to CPU
+
+    from IPython.display import Audio
+    Audio(speech.numpy(), rate=16000)
+
+    import soundfile as sf
+    sf.write(f"{constants.AUDIO_OUTPUT_PATH + used_model_name + '_' + args.a + '_' + args.g}.wav", speech.numpy(), samplerate=16000)
+
+
 if __name__ == "__main__":
+    # Step 0: Parse Commandline Argument
+    args = parse_arguments()
+
     # Step 1: Download & Split datasets
     dataset = None
     if constants.download_remote_dataset:
@@ -464,10 +495,14 @@ if __name__ == "__main__":
     divided_dataset = split_dataset(dataset)
 
     # Step 3: Train or Load the local model
+    used_model_name = None
     if constants.train_model:
+        used_model_name = constants.model_name
+
         pretrained_model.config.use_cache = False
         training_args = generate_train_arguments()
         trainer = generate_trainer(training_args, pretrained_model, divided_dataset, data_collator, tokenizer)
+        log_msg(["Using Training Argument: ", json.dumps(training_args.to_dict(), indent=2)])
 
         log_msg("Start Training...")
         trainer.train()
@@ -476,31 +511,24 @@ if __name__ == "__main__":
         if constants.save_fine_tuned_model:
             log_msg("Start Saving the model...")
             trainer.save_model(constants.model_path)
-        if constants.push_to_hub: trainer.push_to_hub(**constants.huggingface_kwargs)
+        if constants.push_to_hub:
+            log_msg("Start Pushing Fine-tuned model to Huggingface")
+            trainer.push_to_hub(**constants.huggingface_kwargs)
     else:
-        pretrained_model = SpeechT5ForTextToSpeech.from_pretrained(pretrained_model_name_or_path=select_local_mode(),
+        local_model_path = select_local_mode()
+        used_model_name = local_model_path.replace(constants.MODEL_BASE_PATH, '').replace('trained_', '')
+        pretrained_model = SpeechT5ForTextToSpeech.from_pretrained(pretrained_model_name_or_path=local_model_path,
                                                                    local_files_only=True).to(device)
 
-    # Step 6: Generate or load speaker embeddings
-    speaker_embeddings = load_local_speaker_embeddings()
-
-    # Step 5: Generate Audio according to Text and Speaker embeddings
-    text = "I'm loading the model from the Hugging Face Hub!"
+    # Step 4: Generate Audio according to Text and Speaker embeddings
+    text = "Is Indonesia finally set to become an economic superpower?"
     log_msg(f'Input text: {text}')
     inputs = processor(text=text, return_tensors="pt").to(device)
 
-    pre_trained_speaker_embeddings = torch.load('./tensor.pt')
-    speaker_embeddings = torch.tensor(
-        pre_trained_speaker_embeddings,
-    ).unsqueeze(0).to(device)
+    # Step 5: Select speaker embeddings (we might generate speaker embeddings on the fly, but there is really no need)
+    log_msg(f'Generation Speaker Embedding for {args.a} {args.g}')
+    speaker_embeddings = load_local_speaker_embeddings(args, device)
     spectrogram = pretrained_model.generate_speech(inputs["input_ids"], speaker_embeddings).to(device)
 
-    with torch.no_grad():
-        speech = vocoder(spectrogram)
-    speech = speech.cpu()  # move back to CPU
-
-    from IPython.display import Audio
-    Audio(speech.numpy(), rate=16000)
-
-    import soundfile as sf
-    sf.write("output.wav", speech.numpy(), samplerate=16000)
+    # Step 6: Generate Audio
+    generate_audio(spectrogram)

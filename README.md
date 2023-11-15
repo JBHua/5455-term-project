@@ -1,6 +1,6 @@
 # Setup
 ## Python Version:
-Python 3.10. If not possible, delete all type annotations in code and use Python 3.9 is ok
+Python 3.10. If not possible, delete all type annotations in code and use Python 3.9
 
 ## Install Dependencies
 ```
@@ -15,21 +15,42 @@ pip install soundfile
 pip install accelerate -U
 pip install tensorboardX
 ```
-
+See `requirements.txt` for complete list
 
 ## Huggingface User Token
-User token (with write access) is used to upload the model to huggingface.
+User token (with write access) is used to upload the model to huggingface. Use huggingface-cli to login or set `push_to_hub` to `False`
+
 See:
     https://huggingface.co/docs/hub/security-tokens
 
+# How to Use:
+1. First, go to `src/constants.py` for settings (whether to train, and training hyperparameters)
+2. Run `python3 src/main.py` with commandline parameters
+
 # Dataset
-https://huggingface.co/datasets/facebook/voxpopuli/tree/main/data/en_accented
-
-
+1. Mozilla Common Voice 
+It contains at least 15 sub-dataset, we only use 01 for now.
 https://huggingface.co/datasets/mozilla-foundation/common_voice_1_0/tree/main
+
 For Mozilla Common Voice 01 English, the gender and accent distribution is the following:
 8637 samples total
-{'us female': 454, 'us male': 4236, 'england male': 1614, 'canada male': 480, 'malaysia male': 82, 'canada female': 142, 'australia male': 963, 'indian male': 319, 'hongkong female': 16, 'other male': 112, 'hongkong male': 4, 'england female': 53, 'newzealand male': 43, 'philippines female': 14, 'african male': 50, 'indian female': 9, 'ireland female': 21, 'australia female': 5, 'scotland male': 4, 'ireland male': 12, 'wales male': 3, 'other female': 1}
+'us male': 4236, 'us female': 454,
+'england male': 1614, 'england female': 53,
+'australia male': 963, 'australia female': 5,
+'canada male': 480, 'canada female': 142, 
+'indian male': 319, 'indian female': 9,
+'malaysia male': 82,
+'african male': 50,
+'newzealand male': 43,
+'philippines female': 14,
+'ireland male': 12, 'ireland female': 21,
+'hongkong male': 4, 'hongkong female': 16,
+'scotland male': 4,  'wales male': 3,
+'other male': 112, 'other female': 1,
+
+2. Facebook's Voxpopuli. We currently don't use it since it lacks gender annotation for `en_accented` 
+https://huggingface.co/datasets/facebook/voxpopuli/tree/main/data/en_accented
+
 
 # Troubleshoot
 1. Manully download dataset using voxpopuli repo
