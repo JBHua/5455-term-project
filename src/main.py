@@ -520,6 +520,8 @@ if __name__ == "__main__":
         pretrained_model = SpeechT5ForTextToSpeech.from_pretrained(pretrained_model_name_or_path=local_model_path,
                                                                    local_files_only=True).to(device)
 
+    # used_model_name = "T5_Vanilla"
+    # pretrained_model = SpeechT5ForTextToSpeech.from_pretrained("microsoft/speecht5_tts").to(device)
     # Step 4: Generate Audio according to Text and Speaker embeddings
     text = "Is Indonesia finally set to become an economic superpower?"
     log_msg(f'Input text: {text}')

@@ -33,7 +33,9 @@ It contains at least 15 sub-dataset, we only use 01 for now.
 https://huggingface.co/datasets/mozilla-foundation/common_voice_1_0/tree/main
 
 For Mozilla Common Voice 01 English, the gender and accent distribution is the following:
+
 8637 samples total
+```
 'us male': 4236, 'us female': 454,
 'england male': 1614, 'england female': 53,
 'australia male': 963, 'australia female': 5,
@@ -47,6 +49,7 @@ For Mozilla Common Voice 01 English, the gender and accent distribution is the f
 'hongkong male': 4, 'hongkong female': 16,
 'scotland male': 4,  'wales male': 3,
 'other male': 112, 'other female': 1,
+```
 
 2. Facebook's Voxpopuli. We currently don't use it since it lacks gender annotation for `en_accented` 
 https://huggingface.co/datasets/facebook/voxpopuli/tree/main/data/en_accented
