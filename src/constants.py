@@ -6,13 +6,13 @@ import time
 ###############################################################################
 # By default we use the mozilla one, since it contains necessary metadata on speaker gender & accent
 # remote_dataset_name = "facebook/voxpopuli"
-remote_dataset_name = "mozilla-foundation/common_voice_1_0"
+remote_dataset_name = "mozilla-foundation/common_voice_13_0"
 remote_dataset_subset = "en"
 remote_dataset_split = "train"
 download_remote_dataset = False  # if False, load local dataset
 save_processed_dataset = True  # if True, save the processed (prepare_dataset) dataset to disk.
 
-train_model = True  # if False, load saved model/checkpoints
+train_model = False  # if False, load saved model/checkpoints
 save_fine_tuned_model = True
 dataset_train_size = 2000  # can be `int` or `float`. `int` means absolute count; while `float` means percentage
 dataset_test_size = 50
@@ -20,7 +20,7 @@ dataset_test_size = 50
 ###############################################################################
 # Hyper-Parameters
 ###############################################################################
-batch_size = 16  # dependent on how much VRAM you have, on my 8G RTX 2070, it should be able to handle a size of 16
+batch_size = 8  # dependent on how much VRAM you have, on my 8G RTX 2070, it should be able to handle a size of 16
 gradient_accumulation_steps = 2
 learning_rate = 2e-5  # 0.00001
 # https://datascience.stackexchange.com/questions/55991/in-the-context-of-deep-learning-what-is-training-warmup-steps
@@ -67,5 +67,6 @@ push_to_hub = True
 # Others
 ###############################################################################
 spk_model_name = "speechbrain/spkrec-xvect-voxceleb"
+eval_model_name = 'dima806/english_accents_classification'
 all_genders = ['male', 'female']
-all_accents = ['us', 'england','canada','malaysia','australia','indian', 'hongkong', 'newzealand','philippines',]
+all_accents = ['us', 'england', 'canada', 'malaysia', 'australia', 'indian', 'hongkong', 'newzealand','philippines']

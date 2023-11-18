@@ -4,3 +4,5 @@
 /dataset
 /model
 /raw_data
+/pretrained_models
+/wav2vec2_checkpoints

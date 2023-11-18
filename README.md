@@ -14,6 +14,7 @@ pip install librosa
 pip install soundfile
 pip install accelerate -U
 pip install tensorboardX
+pip install speechbrain
 ```
 See `requirements.txt` for complete list
 

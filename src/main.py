@@ -1,5 +1,5 @@
 from transformers import SpeechT5Processor, SpeechT5ForTextToSpeech, SpeechT5HifiGan, Seq2SeqTrainer, \
-    Seq2SeqTrainingArguments, SpeechT5Tokenizer, PreTrainedModel
+    Seq2SeqTrainingArguments, SpeechT5Tokenizer, PreTrainedModel, pipeline
 from collections import defaultdict
 from datasets import DatasetDict, Dataset, IterableDatasetDict, IterableDataset
 import torch
@@ -456,7 +456,7 @@ def generate_trainer(_training_args: Seq2SeqTrainingArguments, _model: PreTraine
     )
 
 
-def generate_audio(_spectrogram):
+def generate_audio(_spectrogram) -> str:
     log_msg(f'Generating output audio file...')
     with torch.no_grad():
         speech = vocoder(_spectrogram)
@@ -466,7 +466,10 @@ def generate_audio(_spectrogram):
     Audio(speech.numpy(), rate=16000)
 
     import soundfile as sf
-    sf.write(f"{constants.AUDIO_OUTPUT_PATH + used_model_name + '_' + args.a + '_' + args.g}.wav", speech.numpy(), samplerate=16000)
+    audio_file_name = f"{constants.AUDIO_OUTPUT_PATH + used_model_name + '_' + args.a + '_' + args.g}.wav"
+    sf.write(audio_file_name, speech.numpy(), samplerate=16000)
+
+    return audio_file_name
 
 
 if __name__ == "__main__":
@@ -522,15 +525,22 @@ if __name__ == "__main__":
 
     # used_model_name = "T5_Vanilla"
     # pretrained_model = SpeechT5ForTextToSpeech.from_pretrained("microsoft/speecht5_tts").to(device)
+
     # Step 4: Generate Audio according to Text and Speaker embeddings
     text = "Is Indonesia finally set to become an economic superpower?"
     log_msg(f'Input text: {text}')
     inputs = processor(text=text, return_tensors="pt").to(device)
 
     # Step 5: Select speaker embeddings (we might generate speaker embeddings on the fly, but there is really no need)
-    log_msg(f'Generation Speaker Embedding for {args.a} {args.g}')
+    log_msg(f'Loading Speaker Embedding for {args.a} {args.g}')
     speaker_embeddings = load_local_speaker_embeddings(args, device)
     spectrogram = pretrained_model.generate_speech(inputs["input_ids"], speaker_embeddings).to(device)
 
     # Step 6: Generate Audio
-    generate_audio(spectrogram)
+    audio_file_path = generate_audio(spectrogram)
+
+    # Step 7: Add Evaluation Result
+    eval_pipeline = pipeline(model=constants.eval_model_name)
+    log_msg(f"Evaluating Generated Audio for {audio_file_path}")
+    log_msg(eval_pipeline(audio_file_path))
+
