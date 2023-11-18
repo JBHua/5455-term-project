@@ -1,6 +1,5 @@
 from transformers import SpeechT5Processor, SpeechT5ForTextToSpeech, SpeechT5HifiGan, Seq2SeqTrainer, \
     Seq2SeqTrainingArguments, SpeechT5Tokenizer, PreTrainedModel, pipeline
-from collections import defaultdict
 from datasets import DatasetDict, Dataset, IterableDatasetDict, IterableDataset
 import torch
 import matplotlib.pyplot as plt
@@ -18,23 +17,12 @@ from collections import defaultdict
 import argparse
 import json
 
+from constants import log_msg
+
+
 ###############################################################################
 # Helper Functions
 ###############################################################################
-def log_msg(message, outf=constants.log_file, include_time=True, print_out=True):
-    messages = []
-    if isinstance(message, str):
-        messages.append(message)
-    else:
-        messages = message
-
-    for m in messages:
-        msg = time.strftime("%H:%M:%S", time.localtime()) + '\t' + str(m) if include_time else str(m)
-        if print_out: print(msg)
-        if outf is not None:
-            outf.write(msg)
-            outf.write("\n")
-            outf.flush()
 
 
 def error_recording_hook(exctype, value, tb):
@@ -50,8 +38,8 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description='Example script to take command line parameters.')
 
     # Add arguments
-    parser.add_argument('-g', type=str, default='male', help='Speaker Gender: male | female | other')
-    parser.add_argument('-a', type=str, default='australia',
+    parser.add_argument('-g', type=str, default=constants.default_gender, help='Speaker Gender: male | female | other')
+    parser.add_argument('-a', type=str, default=constants.default_accent,
                         help=f'Speaker Accent: see {constants.EMBEDDINGS_BASE_PATH}')
 
     # Parse and return the arguments

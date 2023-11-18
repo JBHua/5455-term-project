@@ -1,173 +1,42 @@
+from transformers import SpeechT5Processor, SpeechT5ForTextToSpeech, SpeechT5HifiGan, Seq2SeqTrainer, \
+    Seq2SeqTrainingArguments, SpeechT5Tokenizer, PreTrainedModel, pipeline
 import torch
-import os
-import time
-import sys
 import constants
-from speechbrain.pretrained import EncoderClassifier
-from datasets import Audio, DatasetDict, Dataset, IterableDatasetDict, IterableDataset
-from datasets import load_dataset, load_from_disk
-import numpy
-
-from src.constants import genders
-
-# device = "cuda" if torch.cuda.is_available() else "cpu"
-device = "cpu"  # using cuda will result in VRAM exhaustion, unless u have a GPU with 48GB of VRAM
 
 
-def log_msg(message, outf=constants.log_file, include_time=True, print_out=True):
-    messages = []
-    if isinstance(message, str):
-        messages.append(message)
-    else:
-        messages = message
+device = "cuda" if torch.cuda.is_available() else "cpu"
 
-    for m in messages:
-        msg = time.strftime("%H:%M:%S", time.localtime()) + '\t' + str(m) if include_time else str(m)
-        if print_out: print(msg)
-        if outf is not None:
-            outf.write(msg)
-            outf.write("\n")
-            outf.flush()
+gender = 'male'
+# accent = 'england'
+accent = 'us'
 
+t5_vanilla_model = SpeechT5ForTextToSpeech.from_pretrained("microsoft/speecht5_tts").to(device)
+processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_tts")
+vocoder = SpeechT5HifiGan.from_pretrained("microsoft/speecht5_hifigan").to(device)
 
-speaker_model = EncoderClassifier.from_hparams(
-    source="speechbrain/spkrec-xvect-voxceleb",
-    run_opts={"device": device},
-    savedir=os.path.join("/tmp", "speechbrain/spkrec-xvect-voxceleb")
-)
+text = "Is Indonesia finally set to become an economic superpower?"
+
+inputs = processor(text=text, return_tensors="pt").to(device)
 
 
-def create_speaker_embedding(waveform):
-    with torch.no_grad():
-        _speaker_embeddings = speaker_model.encode_batch(torch.tensor(waveform))
-        _speaker_embeddings = torch.nn.functional.normalize(_speaker_embeddings, dim=2)
-        _speaker_embeddings = _speaker_embeddings.squeeze().cpu().numpy()
-    return _speaker_embeddings
+embedding_file_path = constants.EMBEDDINGS_BASE_PATH + accent + '_' + gender + '.pt'
+
+pre_trained_embeddings = torch.load(embedding_file_path)
+pre_trained_embeddings_tensor = torch.tensor(pre_trained_embeddings).unsqueeze(0).to(device)
+
+spectrogram = t5_vanilla_model.generate_speech(inputs["input_ids"], pre_trained_embeddings_tensor).to(device)
 
 
-def combine_waveform(entry, wc):
-    if entry['gender'] not in constants.all_genders:
-        pass
+with torch.no_grad():
+    speech = vocoder(spectrogram)
+speech = speech.cpu()  # move back to CPU
 
-    if entry['accent'] not in constants.all_accents:
-        pass
+from IPython.display import Audio
+Audio(speech.numpy(), rate=16000)
 
-    key = entry['accent'] + '_' + entry['gender']
-    if key not in wc:
-        wc[key] = entry['audio']['array']
-    else:
-        wc[key] = numpy.concatenate((wc[key], entry['audio']['array']))
+import soundfile as sf
+audio_file_name = f"{constants.AUDIO_OUTPUT_PATH + 't5_vanilla_' + accent + '_' + accent}.wav"
+sf.write(audio_file_name, speech.numpy(), samplerate=16000)
 
-
-def set_sampling_rate(_dataset):
-    log_msg("Start Setting Sampling Rate to 16 kHz...")
-    # SpeechT5 requires the sampling rate to be 16 kHz.
-    _dataset = _dataset.cast_column("audio", Audio(sampling_rate=16000))
-    log_msg("Setting Sampling Rate Successfully")
-
-    return _dataset
-
-
-def clean_mozilla_dataset(_dataset):
-    def normalize_text(entry):
-        entry['sentence'] = entry['sentence'].lower()
-        return entry
-
-    log_msg(f"Using Mozilla Common Voice. Additional Cleaning Needed")
-    log_msg(f"Starting Size of Mozilla Common Voice: {len(_dataset)}")
-
-    _dataset = _dataset.filter(lambda entry: len(entry["accent"]) > 0)
-    log_msg(f"Size after filtering accent: {len(_dataset)}")
-
-    _dataset = _dataset.filter(lambda entry: entry["gender"] in ['female', 'male'])
-    log_msg(f"Size after filtering gender: {len(_dataset)}")
-
-    _dataset = _dataset.filter(lambda entry: int(entry['down_votes']) <= int(entry['up_votes']))
-    log_msg(f"Size after filtering voting: {len(_dataset)}")
-
-    _dataset = _dataset.map(normalize_text)
-    _dataset = _dataset.rename_column("sentence", "normalized_text")
-    log_msg(f"Finish normalizing input text")
-
-    log_msg("Finish Cleaning Dataset. Length of dataset: " + str(len(_dataset)))
-
-    return _dataset
-
-
-def load_remote_dataset(name=constants.remote_dataset_name,
-                        subset=constants.remote_dataset_subset) -> DatasetDict | Dataset | IterableDatasetDict | IterableDataset:
-    log_msg(f"Loading Remote Dataset: {name}. Sub-collection: {subset}")
-    _dataset = load_dataset(
-        name, subset, split=constants.remote_dataset_split,
-        download_mode="reuse_cache_if_exists"
-    )
-
-    log_msg("Finish Loading Remote Dataset. Length of dataset: " + str(len(_dataset)))
-    if constants.remote_dataset_name.startswith("mozilla-foundation"):
-        _dataset = clean_mozilla_dataset(_dataset)
-
-    return set_sampling_rate(_dataset)
-
-
-def load_local_dataset() -> DatasetDict | Dataset | IterableDatasetDict | IterableDataset:
-    print("Using Locally Processed Dataset. Skip Processing...")
-
-    try:
-        _dataset = load_from_disk(constants.data_path)
-    except Exception as e:
-        print(f"Failed to load local dataset. Please double check file exists and path is correct. {e}")
-        sys.exit()
-
-    return _dataset
-
-
-accents = dict()
-
-
-def count_accent(entry):
-    a = entry["accent"]
-    g = entry["gender"]
-    k = a + " " + g
-
-    if k not in accents:
-        accents[k] = 1
-    else:
-        accents[k] += 1
-
-
-def set_sampling_rate(_dataset):
-    from datasets import Audio
-
-    log_msg("Start Setting Sampling Rate to 16 kHz...")
-    # SpeechT5 requires the sampling rate to be 16 kHz.
-    _dataset = _dataset.cast_column("audio", Audio(sampling_rate=16000))
-    log_msg("Setting Sampling Rate Successfully")
-
-    return _dataset
-
-
-# dataset = load_remote_dataset()
-# dataset.save_to_disk(constants.unprocessed_data_path)
-dataset = load_from_disk(constants.unprocessed_data_path)
-print(dataset)
-
-dataset = set_sampling_rate(dataset)
-print(dataset)
-
-waveform_collection = dict()
-
-i = 0
-for e in dataset:
-    combine_waveform(e, waveform_collection)
-    i += 1
-    if i % 500 == 0:
-        print(f'{i*100/8637}%')
-
-print(waveform_collection)
-print(len(waveform_collection.keys()))
-
-for k, v in waveform_collection.items():
-    embedding = create_speaker_embedding(v)
-    filename = './speaker_embeddings/' + k + '.pt'
-    print('saving embedding to: ' + filename)
-    torch.save(embedding, filename)
+eval_pipeline = pipeline(model=constants.eval_model_name)
+print(eval_pipeline(audio_file_name))
