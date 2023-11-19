@@ -12,10 +12,10 @@ remote_dataset_split = "train"
 download_remote_dataset = False  # if False, load local dataset
 save_processed_dataset = True  # if True, save the processed (prepare_dataset) dataset to disk.
 
-train_model = False  # if False, load saved model/checkpoints
+train_model = True  # if False, load saved model/checkpoints
 save_fine_tuned_model = True
 dataset_train_size = 50  # can be `int` or `float`. `int` means absolute count; while `float` means percentage
-dataset_test_size = 10
+dataset_test_size = 50
 
 ###############################################################################
 # Hyper-Parameters
@@ -25,9 +25,9 @@ gradient_accumulation_steps = 1
 learning_rate = 1e-5  # 0.00001
 # https://datascience.stackexchange.com/questions/55991/in-the-context-of-deep-learning-what-is-training-warmup-steps
 warm_up_step = 500
-max_steps = 5000  # Default -1. When set to a positive number, overrides num_train_epochs
+max_steps = 10000  # Default -1. When set to a positive number, overrides num_train_epochs
 save_steps = 1000
-eval_steps = 1000
+eval_steps = 100
 logging_steps = 100
 ###############################################################################
 # Files & Directories

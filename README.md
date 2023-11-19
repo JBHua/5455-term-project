@@ -16,7 +16,8 @@ pip install accelerate -U
 pip install tensorboardX
 pip install speechbrain
 ```
-See `requirements.txt` for complete list
+Note: if you're using Windows, install `windows-curses` instead of `curses-util`
+See `requirements.txt` for complete list.
 
 ## Huggingface User Token
 User token (with write access) is used to upload the model to huggingface. Use huggingface-cli to login or set `push_to_hub` to `False`
@@ -24,9 +25,20 @@ User token (with write access) is used to upload the model to huggingface. Use h
 See:
     https://huggingface.co/docs/hub/security-tokens
 
+
 # How to Use:
 1. First, go to `src/constants.py` for settings (whether to train, and training hyperparameters)
-2. Run `python3 src/main.py` with commandline parameters
+2. Run `python3 src/main.py` with commandline parameters under the project root
+
+# Project Structure
+- `audio_outputs`: all generated audio will be in this dir
+- `data`: processed and cached dataset will live here. Not included in Git
+- `log`: all logs from program
+- `model`: cached model from previous training. Not included in Git
+- `pretrained-models` & `speecht5_tts`: cached pretrained model. Not included in Git
+- `speaker_embeddings`: generated speaker embeddings from Mozilla Common Voice 01 dataset. Seperated by accent and gender
+- `src`: all python source files
+
 
 # Dataset
 1. Mozilla Common Voice 
@@ -55,6 +67,8 @@ For Mozilla Common Voice 01 English, the gender and accent distribution is the f
 2. Facebook's Voxpopuli. We currently don't use it since it lacks gender annotation for `en_accented` 
 https://huggingface.co/datasets/facebook/voxpopuli/tree/main/data/en_accented
 
+# Evaluation
+We use https://huggingface.co/dima806/english_accents_classification for evaluation
 
 # Troubleshoot
 1. Manully download dataset using voxpopuli repo
