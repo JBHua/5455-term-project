@@ -12,9 +12,9 @@ remote_dataset_split = "train"
 download_remote_dataset = False  # if False, load local dataset
 save_processed_dataset = True  # if True, save the processed (prepare_dataset) dataset to disk.
 
-train_model = True  # if False, load saved model/checkpoints
+train_model = False  # if False, load saved model/checkpoints
 save_fine_tuned_model = True
-dataset_train_size = 100  # can be `int` or `float`. `int` means absolute count; while `float` means percentage
+dataset_train_size = 50  # can be `int` or `float`. `int` means absolute count; while `float` means percentage
 dataset_test_size = 10
 
 ###############################################################################
@@ -28,7 +28,7 @@ warm_up_step = 500
 max_steps = 5000  # Default -1. When set to a positive number, overrides num_train_epochs
 save_steps = 1000
 eval_steps = 1000
-
+logging_steps = 100
 ###############################################################################
 # Files & Directories
 ###############################################################################

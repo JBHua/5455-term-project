@@ -423,7 +423,7 @@ def generate_train_arguments():
         per_device_eval_batch_size=constants.batch_size,
         save_steps=constants.save_steps,
         eval_steps=constants.eval_steps,
-        logging_steps=5,
+        logging_steps=constants.logging_steps,
         load_best_model_at_end=True,
         greater_is_better=False,
         label_names=["labels"],
@@ -515,7 +515,7 @@ if __name__ == "__main__":
     # pretrained_model = SpeechT5ForTextToSpeech.from_pretrained("microsoft/speecht5_tts").to(device)
 
     # Step 4: Generate Audio according to Text and Speaker embeddings
-    text = "Is Indonesia finally set to become an economic superpower?"
+    text = "Jane was working at a diner."
     log_msg(f'Input text: {text}')
     inputs = processor(text=text, return_tensors="pt").to(device)
 
