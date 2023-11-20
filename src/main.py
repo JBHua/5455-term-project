@@ -417,7 +417,7 @@ def generate_train_arguments():
         learning_rate=constants.learning_rate,
         warmup_steps=constants.warm_up_step,
         max_steps=constants.max_steps,
-        gradient_checkpointing=True,
+        gradient_checkpointing=False,
         fp16=True,
         evaluation_strategy="steps",
         per_device_eval_batch_size=constants.batch_size,
