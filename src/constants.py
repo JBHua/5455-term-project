@@ -14,7 +14,7 @@ save_processed_dataset = True  # if True, save the processed (prepare_dataset) d
 
 train_model = True  # if False, load saved model/checkpoints
 save_fine_tuned_model = True
-dataset_train_size = 2000  # can be `int` or `float`. `int` means absolute count; while `float` means percentage
+dataset_train_size = 4000  # can be `int` or `float`. `int` means absolute count; while `float` means percentage
 dataset_test_size = 200
 
 ###############################################################################
@@ -25,7 +25,7 @@ gradient_accumulation_steps = 1
 learning_rate = 1e-5  # 0.00001
 # https://datascience.stackexchange.com/questions/55991/in-the-context-of-deep-learning-what-is-training-warmup-steps
 warm_up_step = 500
-max_steps = 160000  # Default -1. When set to a positive number, overrides num_train_epochs
+max_steps = 150000  # Default -1. When set to a positive number, overrides num_train_epochs
 save_steps = 10000
 eval_steps = 250
 logging_steps = 500
