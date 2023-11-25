@@ -14,13 +14,13 @@ save_processed_dataset = True  # if True, save the processed (prepare_dataset) d
 
 train_model = True  # if False, load saved model/checkpoints
 save_fine_tuned_model = True
-dataset_train_size = 3500  # can be `int` or `float`. `int` means absolute count; while `float` means percentage
-dataset_test_size = 250
+dataset_train_size = 7000  # can be `int` or `float`. `int` means absolute count; while `float` means percentage
+dataset_test_size = 500
 
 ###############################################################################
 # Hyper-Parameters
 ###############################################################################
-batch_size = 10  # dependent on how much VRAM you have, on my 8G RTX 2070, it should be able to handle a size of 16
+batch_size = 2  # dependent on how much VRAM you have, on my 8G RTX 2070, it should be able to handle a size of 16
 gradient_accumulation_steps = 1
 learning_rate = 1e-5  # 0.00001
 # https://datascience.stackexchange.com/questions/55991/in-the-context-of-deep-learning-what-is-training-warmup-steps
