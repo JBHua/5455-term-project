@@ -14,7 +14,7 @@ save_processed_dataset = True  # if True, save the processed (prepare_dataset) d
 
 train_model = True  # if False, load saved model/checkpoints
 save_fine_tuned_model = True
-dataset_train_size = 20000  # can be `int` or `float`. `int` means absolute count; while `float` means percentage
+dataset_train_size = 30000  # can be `int` or `float`. `int` means absolute count; while `float` means percentage
 dataset_test_size = 500
 
 ###############################################################################
