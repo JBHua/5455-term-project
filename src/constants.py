@@ -9,6 +9,7 @@ import time
 remote_dataset_name = "mozilla-foundation/common_voice_1_0"
 remote_dataset_subset = "en"
 remote_dataset_split = "train"
+common_voice_dataset_split = "validation"
 download_remote_dataset = False  # if False, load local dataset
 save_processed_dataset = True  # if True, save the processed (prepare_dataset) dataset to disk.
 
@@ -46,6 +47,7 @@ log_file_path = './log/' + socket.gethostname() + '.log'
 log_file = open(log_file_path, 'a')
 
 unprocessed_data_path = './raw_data/'
+custom_cv_data_path = './custom_cv_data/'
 
 ###############################################################################
 # HuggingFace Related
@@ -75,7 +77,8 @@ default_accent = 'england'
 spk_model_name = "speechbrain/spkrec-xvect-voxceleb"
 eval_model_name = 'dima806/english_accents_classification'
 all_genders = ['male', 'female']
-all_accents = ['us', 'england', 'canada', 'malaysia', 'australia', 'indian', 'hongkong', 'newzealand','philippines']
+all_accents = ['us', 'england', 'canada', 'malaysia', 'australia', 'indian', 'hongkong', 'singapore',
+               'newzealand', 'philippines', 'bermuda', 'ireland', 'scotland']
 
 
 def log_msg(message, outf=log_file, include_time=True, print_out=True):

@@ -1,5 +1,5 @@
 sentencepiece
-datasets~=2.14.6
+datasets~=2.15.0
 soundfile~=0.12.1
 speechbrain~=0.5.15
 IPython~=8.17.2

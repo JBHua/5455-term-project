@@ -6,3 +6,4 @@
 /raw_data
 /pretrained_models
 /wav2vec2_checkpoints
+/custom_cv_data

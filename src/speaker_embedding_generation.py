@@ -7,8 +7,8 @@ from speechbrain.pretrained import EncoderClassifier
 from datasets import Audio, DatasetDict, Dataset, IterableDatasetDict, IterableDataset
 from datasets import load_dataset, load_from_disk
 import numpy
-from src.constants import log_msg
-from src.constants import all_genders
+from constants import log_msg
+import itertools
 
 # device = "cuda" if torch.cuda.is_available() else "cpu"
 device = "cpu"  # using cuda will result in VRAM exhaustion, unless u have a GPU with 48GB of VRAM
@@ -29,14 +29,11 @@ def create_speaker_embedding(waveform):
     return _speaker_embeddings
 
 
-def combine_waveform(entry, wc):
-    if entry['gender'] not in constants.all_genders:
-        pass
+def combine_waveform(entry, wc, _accent, _gender, _client_id):
+    if entry['client_id'] != _client_id:
+        return
 
-    if entry['accent'] not in constants.all_accents:
-        pass
-
-    key = entry['accent'] + '_' + entry['gender']
+    key = _accent + '_' + _gender
     if key not in wc:
         wc[key] = entry['audio']['array']
     else:
@@ -78,19 +75,33 @@ def clean_mozilla_dataset(_dataset):
     return _dataset
 
 
+def filter_by_client_id(_dataset, c_id):
+    log_msg(f"Starting Size of Mozilla Common Voice: {len(_dataset)}")
+    print("start filtering by client id: " + c_id)
+    _dataset = _dataset.filter(lambda entry: entry["client_id"] == c_id, num_proc=48)
+    log_msg(f"Size after filtering by client_id: {len(_dataset)}")
+
+    return _dataset
+
+
 def load_remote_dataset(name=constants.remote_dataset_name,
                         subset=constants.remote_dataset_subset) -> DatasetDict | Dataset | IterableDatasetDict | IterableDataset:
     log_msg(f"Loading Remote Dataset: {name}. Sub-collection: {subset}")
     _dataset = load_dataset(
-        name, subset, split=constants.remote_dataset_split,
-        download_mode="reuse_cache_if_exists"
+        name, subset,
+        # split=constants.common_voice_dataset_split,
+        # split=None,
+        split='all',
+        download_mode="reuse_cache_if_exists",
+        token=True,
     )
 
     log_msg("Finish Loading Remote Dataset. Length of dataset: " + str(len(_dataset)))
-    if constants.remote_dataset_name.startswith("mozilla-foundation"):
-        _dataset = clean_mozilla_dataset(_dataset)
+    # if constants.remote_dataset_name.startswith("mozilla-foundation"):
+    #     _dataset = clean_mozilla_dataset(_dataset)
 
-    return set_sampling_rate(_dataset)
+    # return set_sampling_rate(_dataset)
+    return _dataset
 
 
 def load_local_dataset() -> DatasetDict | Dataset | IterableDatasetDict | IterableDataset:
@@ -108,15 +119,15 @@ def load_local_dataset() -> DatasetDict | Dataset | IterableDatasetDict | Iterab
 accents = dict()
 
 
-def count_accent(entry):
-    a = entry["accent"]
-    g = entry["gender"]
-    k = a + " " + g
-
-    if k not in accents:
-        accents[k] = 1
-    else:
-        accents[k] += 1
+# def count_accent(entry):
+#     a = entry["accent"]
+#     g = entry["gender"]
+#     k = a + " " + g
+#
+#     if k not in accents:
+#         accents[k] = 1
+#     else:
+#         accents[k] += 1
 
 
 def set_sampling_rate(_dataset):
@@ -130,28 +141,37 @@ def set_sampling_rate(_dataset):
     return _dataset
 
 
-# dataset = load_remote_dataset()
-# dataset.save_to_disk(constants.unprocessed_data_path)
-dataset = load_from_disk(constants.unprocessed_data_path)
-print(dataset)
+if __name__ == '__main__':
+    # dataset = load_remote_dataset()
+    # dataset.save_to_disk(constants.unprocessed_data_path)
 
-dataset = set_sampling_rate(dataset)
-print(dataset)
+    dataset = load_from_disk(constants.unprocessed_data_path)
+    # dataset = clean_mozilla_dataset(dataset)
+    # dataset = set_sampling_rate(dataset)
+    print(dataset)
 
-waveform_collection = dict()
+    waveform_collection = dict()
+    client_id_file_name = './src/dataset_analysis/top_client_id.txt'
+    with (open(client_id_file_name) as client_id_file):
+        for accent, gender, client_id, count in itertools.zip_longest(*[client_id_file] * 4):
+            print("Processing audio file for: " + accent.strip() + ", " + gender.strip() + ". Total count: ", count)
+            filtered_dataset = filter_by_client_id(dataset, client_id.strip())
 
-i = 0
-for e in dataset:
-    combine_waveform(e, waveform_collection)
-    i += 1
-    if i % 500 == 0:
-        print(f'{i*100/8637}%')
+            print("Finish filtering using client_id, combining waveform...")
+            for e in filtered_dataset:
+                combine_waveform(e, waveform_collection, accent.strip(), gender.strip(), client_id.strip())
 
-print(waveform_collection)
-print(len(waveform_collection.keys()))
+    print(waveform_collection)
+    print(len(waveform_collection.keys()))
 
-for k, v in waveform_collection.items():
-    embedding = create_speaker_embedding(v)
-    filename = './speaker_embeddings/' + k + '.pt'
-    print('saving embedding to: ' + filename)
-    torch.save(embedding, filename)
+    for k, v in waveform_collection.items():
+        from sys import getsizeof
+        print(len(v))
+
+        print("creating speaker embeddings...")
+        speaker_embeddings = create_speaker_embedding(v)
+
+        pt_file_name = './speaker_embeddings/client_id/' + k + '.pt'
+        print('saving embedding to: ' + pt_file_name)
+        torch.save(speaker_embeddings, pt_file_name)
+
