@@ -6,7 +6,7 @@ import time
 ###############################################################################
 # By default we use the mozilla one, since it contains necessary metadata on speaker gender & accent
 # remote_dataset_name = "facebook/voxpopuli"
-remote_dataset_name = "mozilla-foundation/common_voice_1_0"
+remote_dataset_name = "mozilla-foundation/common_voice_13_0"
 remote_dataset_subset = "en"
 remote_dataset_split = "train"
 common_voice_dataset_split = "validation"

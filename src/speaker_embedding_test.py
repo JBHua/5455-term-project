@@ -8,14 +8,15 @@ import soundfile as sf
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 use_client_id_version = True
-gender = 'male'
-accent = 'england'
+# gender = 'male'
+gender = 'female'
+accent = 'hongkong'
 
 t5_vanilla_model = SpeechT5ForTextToSpeech.from_pretrained("microsoft/speecht5_tts").to(device)
 processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_tts")
 vocoder = SpeechT5HifiGan.from_pretrained("microsoft/speecht5_hifigan").to(device)
 
-text = "Is Indonesia finally set to become an economic superpower?"
+text = "The freedom to be a kid without being influenced by the internet"
 
 inputs = processor(text=text, return_tensors="pt").to(device)
 

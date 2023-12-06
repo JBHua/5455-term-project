@@ -9,6 +9,9 @@ from datasets import load_dataset, load_from_disk
 import numpy
 from constants import log_msg
 import itertools
+import pyarrow as pa
+import pyarrow.compute as compute
+import datasets
 
 # device = "cuda" if torch.cuda.is_available() else "cpu"
 device = "cpu"  # using cuda will result in VRAM exhaustion, unless u have a GPU with 48GB of VRAM
@@ -78,20 +81,28 @@ def clean_mozilla_dataset(_dataset):
 def filter_by_client_id(_dataset, c_id):
     log_msg(f"Starting Size of Mozilla Common Voice: {len(_dataset)}")
     print("start filtering by client id: " + c_id)
-    _dataset = _dataset.filter(lambda entry: entry["client_id"] == c_id, num_proc=48)
-    log_msg(f"Size after filtering by client_id: {len(_dataset)}")
+    # _dataset = _dataset.filter(lambda entry: entry["client_id"] == c_id, num_proc=40)
 
-    return _dataset
+    post_id_test_list = [c_id]
+    table = _dataset.data
+
+    flags = compute.is_in(table['client_id'], value_set=pa.array(post_id_test_list, pa.string()))
+    filtered_table = table.filter(flags)
+
+    filtered_dataset = datasets.Dataset(filtered_table, _dataset.info, _dataset.split)
 
 
-def load_remote_dataset(name=constants.remote_dataset_name,
+    log_msg(f"Size after filtering by client_id: {len(filtered_dataset)}")
+
+    return filtered_dataset
+
+
+def load_remote_dataset(name="mozilla-foundation/common_voice_1_0",
                         subset=constants.remote_dataset_subset) -> DatasetDict | Dataset | IterableDatasetDict | IterableDataset:
     log_msg(f"Loading Remote Dataset: {name}. Sub-collection: {subset}")
     _dataset = load_dataset(
         name, subset,
-        # split=constants.common_voice_dataset_split,
-        # split=None,
-        split='all',
+        split='other',
         download_mode="reuse_cache_if_exists",
         token=True,
     )
@@ -116,38 +127,12 @@ def load_local_dataset() -> DatasetDict | Dataset | IterableDatasetDict | Iterab
     return _dataset
 
 
-accents = dict()
-
-
-# def count_accent(entry):
-#     a = entry["accent"]
-#     g = entry["gender"]
-#     k = a + " " + g
-#
-#     if k not in accents:
-#         accents[k] = 1
-#     else:
-#         accents[k] += 1
-
-
-def set_sampling_rate(_dataset):
-    from datasets import Audio
-
-    log_msg("Start Setting Sampling Rate to 16 kHz...")
-    # SpeechT5 requires the sampling rate to be 16 kHz.
-    _dataset = _dataset.cast_column("audio", Audio(sampling_rate=16000))
-    log_msg("Setting Sampling Rate Successfully")
-
-    return _dataset
-
-
 if __name__ == '__main__':
     # dataset = load_remote_dataset()
     # dataset.save_to_disk(constants.unprocessed_data_path)
 
     dataset = load_from_disk(constants.unprocessed_data_path)
     # dataset = clean_mozilla_dataset(dataset)
-    # dataset = set_sampling_rate(dataset)
     print(dataset)
 
     waveform_collection = dict()
@@ -165,9 +150,8 @@ if __name__ == '__main__':
     print(len(waveform_collection.keys()))
 
     for k, v in waveform_collection.items():
-        from sys import getsizeof
-        print(len(v))
-
+        # first, save the numpy array
+        numpy.save('./speaker_embeddings/numpy/' + k, v)
         print("creating speaker embeddings...")
         speaker_embeddings = create_speaker_embedding(v)
 

@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Load the CSV file
-df = pd.read_csv('cv_validated.tsv', delimiter='\t')
+df = pd.read_csv('other.tsv', delimiter='\t')
 
 # Filter out rows where 'gender' or 'accent' is NaN
 filtered_df = df.dropna(subset=['gender', 'accent'])
