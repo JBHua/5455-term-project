@@ -36404,3 +36404,333 @@ Start -- Nov 29 12:58:30 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
 14:14:34	Size after filtering by client_id: 3
 14:14:34	Starting Size of Mozilla Common Voice: 8637
 14:14:34	Size after filtering by client_id: 0
+14:43:19	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+14:43:50	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+14:52:22	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+15:25:00	Finish Loading Remote Dataset. Length of dataset: 125337
+15:25:19	Starting Size of Mozilla Common Voice: 125337
+16:16:41	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+16:16:52	Starting Size of Mozilla Common Voice: 125337
+16:35:02	Start Setting Sampling Rate to 16 kHz...
+16:35:02	Setting Sampling Rate Successfully
+16:35:02	Starting Size of Mozilla Common Voice: 125337
+16:56:05	Starting Size of Mozilla Common Voice: 125337
+17:15:13	Starting Size of Mozilla Common Voice: 125337
+17:15:23	Starting Size of Mozilla Common Voice: 125337
+17:15:49	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:16:42	Starting Size of Mozilla Common Voice: 125337
+17:16:42	Size after filtering by client_id: 125337
+17:55:57	Starting Size of Mozilla Common Voice: 125337
+17:55:57	Size after filtering by client_id: 125337
+17:55:59	Starting Size of Mozilla Common Voice: 125337
+17:56:00	Size after filtering by client_id: 125337
+17:56:00	Starting Size of Mozilla Common Voice: 125337
+17:56:00	Size after filtering by client_id: 125337
+17:56:00	Starting Size of Mozilla Common Voice: 125337
+17:56:00	Size after filtering by client_id: 125337
+17:56:02	Starting Size of Mozilla Common Voice: 125337
+17:56:02	Size after filtering by client_id: 125337
+17:56:08	Starting Size of Mozilla Common Voice: 125337
+17:56:08	Size after filtering by client_id: 125337
+17:56:08	Starting Size of Mozilla Common Voice: 125337
+17:56:08	Size after filtering by client_id: 125337
+17:56:24	Starting Size of Mozilla Common Voice: 125337
+17:56:24	Size after filtering by client_id: 125337
+17:56:25	Starting Size of Mozilla Common Voice: 125337
+17:56:25	Size after filtering by client_id: 125337
+17:56:25	Starting Size of Mozilla Common Voice: 125337
+17:56:25	Size after filtering by client_id: 125337
+17:56:25	Starting Size of Mozilla Common Voice: 125337
+17:56:25	Size after filtering by client_id: 125337
+18:08:11	Starting Size of Mozilla Common Voice: 125337
+18:08:11	Size after filtering by client_id: 97
+18:08:14	Starting Size of Mozilla Common Voice: 125337
+18:08:14	Size after filtering by client_id: 30
+18:08:14	Starting Size of Mozilla Common Voice: 125337
+18:08:14	Size after filtering by client_id: 3
+18:08:14	Starting Size of Mozilla Common Voice: 125337
+18:08:14	Size after filtering by client_id: 107
+18:08:16	Starting Size of Mozilla Common Voice: 125337
+18:08:16	Size after filtering by client_id: 247
+18:08:22	Starting Size of Mozilla Common Voice: 125337
+18:08:22	Size after filtering by client_id: 5
+18:08:22	Starting Size of Mozilla Common Voice: 125337
+18:08:22	Size after filtering by client_id: 348
+18:08:39	Starting Size of Mozilla Common Voice: 125337
+18:08:39	Size after filtering by client_id: 41
+18:08:39	Starting Size of Mozilla Common Voice: 125337
+18:08:39	Size after filtering by client_id: 20
+18:08:39	Starting Size of Mozilla Common Voice: 125337
+18:08:39	Size after filtering by client_id: 21
+18:08:39	Starting Size of Mozilla Common Voice: 125337
+18:08:40	Size after filtering by client_id: 4032
+18:36:48	Starting Size of Mozilla Common Voice: 125337
+18:36:48	Size after filtering by client_id: 322
+18:37:04	Starting Size of Mozilla Common Voice: 125337
+18:37:04	Size after filtering by client_id: 70
+18:37:04	Starting Size of Mozilla Common Voice: 125337
+18:37:05	Size after filtering by client_id: 193
+18:37:08	Starting Size of Mozilla Common Voice: 125337
+18:37:08	Size after filtering by client_id: 417
+18:37:35	Starting Size of Mozilla Common Voice: 125337
+18:37:35	Size after filtering by client_id: 18
+18:37:35	Starting Size of Mozilla Common Voice: 125337
+18:37:35	Size after filtering by client_id: 262
+18:37:41	Starting Size of Mozilla Common Voice: 125337
+18:37:41	Size after filtering by client_id: 946
+18:39:07	Starting Size of Mozilla Common Voice: 125337
+18:39:07	Size after filtering by client_id: 42
+18:39:08	Starting Size of Mozilla Common Voice: 125337
+18:39:08	Size after filtering by client_id: 569
+18:39:50	Starting Size of Mozilla Common Voice: 125337
+18:39:50	Size after filtering by client_id: 40
+18:39:50	Starting Size of Mozilla Common Voice: 125337
+18:39:50	Size after filtering by client_id: 100
+18:39:52	Starting Size of Mozilla Common Voice: 125337
+18:39:52	Size after filtering by client_id: 4890
+19:27:45	Starting Size of Mozilla Common Voice: 125337
+19:27:45	Size after filtering by client_id: 114
+19:27:47	Starting Size of Mozilla Common Voice: 125337
+19:27:47	Size after filtering by client_id: 33
+19:27:47	Starting Size of Mozilla Common Voice: 125337
+19:27:47	Size after filtering by client_id: 118
+19:27:49	Starting Size of Mozilla Common Voice: 125337
+19:27:49	Size after filtering by client_id: 50
+19:27:49	Starting Size of Mozilla Common Voice: 125337
+19:27:49	Size after filtering by client_id: 2516
+19:36:43	Starting Size of Mozilla Common Voice: 125337
+19:36:43	Size after filtering by client_id: 156
+20:17:36	Starting Size of Mozilla Common Voice: 125337
+20:17:36	Size after filtering by client_id: 97
+20:18:19	Starting Size of Mozilla Common Voice: 125337
+20:18:19	Size after filtering by client_id: 97
+20:18:22	Starting Size of Mozilla Common Voice: 125337
+20:18:22	Size after filtering by client_id: 30
+20:18:22	Starting Size of Mozilla Common Voice: 125337
+20:18:22	Size after filtering by client_id: 3
+20:18:22	Starting Size of Mozilla Common Voice: 125337
+20:18:22	Size after filtering by client_id: 107
+20:18:24	Starting Size of Mozilla Common Voice: 125337
+20:18:24	Size after filtering by client_id: 247
+20:18:30	Starting Size of Mozilla Common Voice: 125337
+20:18:30	Size after filtering by client_id: 5
+20:18:30	Starting Size of Mozilla Common Voice: 125337
+20:18:30	Size after filtering by client_id: 348
+20:18:47	Starting Size of Mozilla Common Voice: 125337
+20:18:47	Size after filtering by client_id: 41
+20:18:47	Starting Size of Mozilla Common Voice: 125337
+20:18:47	Size after filtering by client_id: 20
+20:18:47	Starting Size of Mozilla Common Voice: 125337
+20:18:47	Size after filtering by client_id: 21
+20:18:47	Starting Size of Mozilla Common Voice: 125337
+20:18:48	Size after filtering by client_id: 4032
+20:46:58	Starting Size of Mozilla Common Voice: 125337
+20:46:58	Size after filtering by client_id: 322
+20:47:14	Starting Size of Mozilla Common Voice: 125337
+20:47:14	Size after filtering by client_id: 70
+20:47:15	Starting Size of Mozilla Common Voice: 125337
+20:47:15	Size after filtering by client_id: 193
+20:47:19	Starting Size of Mozilla Common Voice: 125337
+20:47:19	Size after filtering by client_id: 417
+20:47:45	Starting Size of Mozilla Common Voice: 125337
+20:47:45	Size after filtering by client_id: 18
+20:47:45	Starting Size of Mozilla Common Voice: 125337
+20:47:46	Size after filtering by client_id: 262
+20:47:52	Starting Size of Mozilla Common Voice: 125337
+20:47:52	Size after filtering by client_id: 946
+20:49:18	Starting Size of Mozilla Common Voice: 125337
+20:49:18	Size after filtering by client_id: 42
+20:49:18	Starting Size of Mozilla Common Voice: 125337
+20:49:19	Size after filtering by client_id: 569
+20:50:01	Starting Size of Mozilla Common Voice: 125337
+20:50:01	Size after filtering by client_id: 40
+20:50:01	Starting Size of Mozilla Common Voice: 125337
+20:50:01	Size after filtering by client_id: 100
+20:50:03	Starting Size of Mozilla Common Voice: 125337
+20:50:04	Size after filtering by client_id: 4890
+21:37:11	Starting Size of Mozilla Common Voice: 125337
+21:37:12	Size after filtering by client_id: 114
+21:37:13	Starting Size of Mozilla Common Voice: 125337
+21:37:13	Size after filtering by client_id: 33
+21:37:13	Starting Size of Mozilla Common Voice: 125337
+21:37:13	Size after filtering by client_id: 118
+21:37:15	Starting Size of Mozilla Common Voice: 125337
+21:37:15	Size after filtering by client_id: 50
+21:37:15	Starting Size of Mozilla Common Voice: 125337
+21:37:16	Size after filtering by client_id: 2516
+21:45:54	Starting Size of Mozilla Common Voice: 125337
+21:45:54	Size after filtering by client_id: 156
+22:11:28	Starting Size of Mozilla Common Voice: 125337
+22:11:28	Size after filtering by client_id: 97
+22:11:31	Starting Size of Mozilla Common Voice: 125337
+22:11:31	Size after filtering by client_id: 30
+22:11:31	Starting Size of Mozilla Common Voice: 125337
+22:11:31	Size after filtering by client_id: 3
+22:11:31	Starting Size of Mozilla Common Voice: 125337
+22:11:31	Size after filtering by client_id: 107
+22:11:33	Starting Size of Mozilla Common Voice: 125337
+22:11:34	Size after filtering by client_id: 247
+22:11:40	Starting Size of Mozilla Common Voice: 125337
+22:11:40	Size after filtering by client_id: 5
+22:11:40	Starting Size of Mozilla Common Voice: 125337
+22:11:40	Size after filtering by client_id: 348
+22:11:57	Starting Size of Mozilla Common Voice: 125337
+22:11:57	Size after filtering by client_id: 41
+22:11:57	Starting Size of Mozilla Common Voice: 125337
+22:11:57	Size after filtering by client_id: 20
+22:11:57	Starting Size of Mozilla Common Voice: 125337
+22:11:57	Size after filtering by client_id: 21
+22:11:57	Starting Size of Mozilla Common Voice: 125337
+22:11:59	Size after filtering by client_id: 4032
+22:40:01	Starting Size of Mozilla Common Voice: 125337
+22:40:01	Size after filtering by client_id: 322
+22:40:17	Starting Size of Mozilla Common Voice: 125337
+22:40:17	Size after filtering by client_id: 70
+22:40:18	Starting Size of Mozilla Common Voice: 125337
+22:40:18	Size after filtering by client_id: 193
+22:40:21	Starting Size of Mozilla Common Voice: 125337
+22:40:22	Size after filtering by client_id: 417
+22:40:48	Starting Size of Mozilla Common Voice: 125337
+22:40:48	Size after filtering by client_id: 18
+22:40:48	Starting Size of Mozilla Common Voice: 125337
+22:40:48	Size after filtering by client_id: 262
+22:40:55	Starting Size of Mozilla Common Voice: 125337
+22:40:55	Size after filtering by client_id: 946
+22:42:21	Starting Size of Mozilla Common Voice: 125337
+22:42:21	Size after filtering by client_id: 42
+22:42:21	Starting Size of Mozilla Common Voice: 125337
+22:42:21	Size after filtering by client_id: 569
+22:43:03	Starting Size of Mozilla Common Voice: 125337
+22:43:03	Size after filtering by client_id: 40
+22:43:03	Starting Size of Mozilla Common Voice: 125337
+22:43:03	Size after filtering by client_id: 100
+22:43:05	Starting Size of Mozilla Common Voice: 125337
+22:43:06	Size after filtering by client_id: 4890
+23:30:02	Starting Size of Mozilla Common Voice: 125337
+23:30:02	Size after filtering by client_id: 114
+23:30:03	Starting Size of Mozilla Common Voice: 125337
+23:30:03	Size after filtering by client_id: 33
+23:30:03	Starting Size of Mozilla Common Voice: 125337
+23:30:03	Size after filtering by client_id: 118
+23:30:05	Starting Size of Mozilla Common Voice: 125337
+23:30:05	Size after filtering by client_id: 50
+23:30:05	Starting Size of Mozilla Common Voice: 125337
+23:30:06	Size after filtering by client_id: 2516
+23:38:44	Starting Size of Mozilla Common Voice: 125337
+23:38:44	Size after filtering by client_id: 156
+12:17:59	Start Setting Sampling Rate to 16 kHz...
+12:17:59	Setting Sampling Rate Successfully
+12:17:59	Starting Size of Mozilla Common Voice: 125337
+12:17:59	Size after filtering by client_id: 97
+12:18:01	Starting Size of Mozilla Common Voice: 125337
+12:18:01	Size after filtering by client_id: 30
+12:18:01	Starting Size of Mozilla Common Voice: 125337
+12:18:01	Size after filtering by client_id: 3
+12:18:01	Starting Size of Mozilla Common Voice: 125337
+12:18:01	Size after filtering by client_id: 107
+12:18:02	Starting Size of Mozilla Common Voice: 125337
+12:18:02	Size after filtering by client_id: 247
+12:18:04	Starting Size of Mozilla Common Voice: 125337
+12:18:04	Size after filtering by client_id: 5
+12:18:04	Starting Size of Mozilla Common Voice: 125337
+12:18:04	Size after filtering by client_id: 348
+12:18:11	Starting Size of Mozilla Common Voice: 125337
+12:18:11	Size after filtering by client_id: 41
+12:18:11	Starting Size of Mozilla Common Voice: 125337
+12:18:11	Size after filtering by client_id: 20
+12:18:11	Starting Size of Mozilla Common Voice: 125337
+12:18:11	Size after filtering by client_id: 21
+12:18:11	Starting Size of Mozilla Common Voice: 125337
+12:18:13	Size after filtering by client_id: 4032
+12:27:55	Starting Size of Mozilla Common Voice: 125337
+12:27:55	Size after filtering by client_id: 322
+12:28:02	Starting Size of Mozilla Common Voice: 125337
+12:28:02	Size after filtering by client_id: 70
+12:28:02	Starting Size of Mozilla Common Voice: 125337
+12:28:02	Size after filtering by client_id: 193
+12:28:04	Starting Size of Mozilla Common Voice: 125337
+12:28:04	Size after filtering by client_id: 417
+12:28:14	Starting Size of Mozilla Common Voice: 125337
+12:28:15	Size after filtering by client_id: 18
+12:28:15	Starting Size of Mozilla Common Voice: 125337
+12:28:15	Size after filtering by client_id: 262
+12:28:17	Starting Size of Mozilla Common Voice: 125337
+12:28:18	Size after filtering by client_id: 946
+12:28:49	Starting Size of Mozilla Common Voice: 125337
+12:28:50	Size after filtering by client_id: 42
+12:28:50	Starting Size of Mozilla Common Voice: 125337
+12:28:50	Size after filtering by client_id: 569
+12:29:06	Starting Size of Mozilla Common Voice: 125337
+12:29:06	Size after filtering by client_id: 40
+12:29:06	Starting Size of Mozilla Common Voice: 125337
+12:29:06	Size after filtering by client_id: 100
+12:29:07	Starting Size of Mozilla Common Voice: 125337
+12:29:09	Size after filtering by client_id: 4890
+12:45:24	Starting Size of Mozilla Common Voice: 125337
+12:45:24	Size after filtering by client_id: 114
+12:45:25	Starting Size of Mozilla Common Voice: 125337
+12:45:25	Size after filtering by client_id: 33
+12:45:25	Starting Size of Mozilla Common Voice: 125337
+12:45:25	Size after filtering by client_id: 118
+12:45:26	Starting Size of Mozilla Common Voice: 125337
+12:45:26	Size after filtering by client_id: 50
+12:45:26	Starting Size of Mozilla Common Voice: 125337
+12:45:27	Size after filtering by client_id: 2516
+12:48:28	Starting Size of Mozilla Common Voice: 125337
+12:48:28	Size after filtering by client_id: 156
