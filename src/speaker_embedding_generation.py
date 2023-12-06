@@ -132,7 +132,8 @@ if __name__ == '__main__':
     # dataset.save_to_disk(constants.unprocessed_data_path)
 
     dataset = load_from_disk(constants.unprocessed_data_path)
-    # dataset = clean_mozilla_dataset(dataset)
+    dataset = set_sampling_rate(dataset)
+
     print(dataset)
 
     waveform_collection = dict()
@@ -153,6 +154,8 @@ if __name__ == '__main__':
         # first, save the numpy array
         numpy.save('./speaker_embeddings/numpy/' + k, v)
         print("creating speaker embeddings...")
+
+    for k, v in waveform_collection.items():
         speaker_embeddings = create_speaker_embedding(v)
 
         pt_file_name = './speaker_embeddings/client_id/' + k + '.pt'

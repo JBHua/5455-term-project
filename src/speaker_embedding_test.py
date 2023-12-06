@@ -10,7 +10,7 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 use_client_id_version = True
 # gender = 'male'
 gender = 'female'
-accent = 'hongkong'
+accent = 'us'
 
 t5_vanilla_model = SpeechT5ForTextToSpeech.from_pretrained("microsoft/speecht5_tts").to(device)
 processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_tts")
