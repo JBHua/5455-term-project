@@ -1,6 +1,5 @@
 import torch
 import os
-import time
 import sys
 import constants
 from speechbrain.pretrained import EncoderClassifier
@@ -91,7 +90,6 @@ def filter_by_client_id(_dataset, c_id):
 
     filtered_dataset = datasets.Dataset(filtered_table, _dataset.info, _dataset.split)
 
-
     log_msg(f"Size after filtering by client_id: {len(filtered_dataset)}")
 
     return filtered_dataset
@@ -137,8 +135,8 @@ if __name__ == '__main__':
     print(dataset)
 
     waveform_collection = dict()
-    client_id_file_name = './src/dataset_analysis/top_client_id.txt'
-    with (open(client_id_file_name) as client_id_file):
+
+    with (open(constants.DATASET_ANALYSIS_PATH) as client_id_file):
         for accent, gender, client_id, count in itertools.zip_longest(*[client_id_file] * 4):
             print("Processing audio file for: " + accent.strip() + ", " + gender.strip() + ". Total count: ", count)
             filtered_dataset = filter_by_client_id(dataset, client_id.strip())

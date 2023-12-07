@@ -36734,3 +36734,299 @@ Start -- Nov 29 12:58:30 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
 12:45:27	Size after filtering by client_id: 2516
 12:48:28	Starting Size of Mozilla Common Voice: 125337
 12:48:28	Size after filtering by client_id: 156
+
+Start -- Dec  6 18:57:24 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+18:57:24	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+18:57:26	Using Locally Processed Dataset. Skip Processing...
+18:57:26	Failed to load local dataset. Please double check file exists and path is correct. Directory ./data/ not found
+
+Start -- Dec  6 18:59:15 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+18:59:15	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+18:59:17	Using Locally Processed Dataset. Skip Processing...
+18:59:17	Failed to load local dataset. Please double check file exists and path is correct. Directory ./data/ not found
+
+Start -- Dec  6 18:59:34 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+18:59:34	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+18:59:37	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+19:11:40	Finish Loading Remote Dataset. Length of dataset: 125337
+19:11:40	Using Mozilla Common Voice. Additional Cleaning Needed
+19:11:40	Starting Size of Mozilla Common Voice: 125337
+19:11:57	Exception: Traceback (most recent call last):
+  File "/home/yifanhua/5455-term-project/src/main.py", line 502, in <module>
+    # Step 1: Download & Split datasets
+  File "/home/yifanhua/5455-term-project/src/main.py", line 302, in load_remote_dataset
+  File "/home/yifanhua/5455-term-project/src/main.py", line 274, in clean_mozilla_dataset
+    log_msg(f"Using Mozilla Common Voice. Additional Cleaning Needed")
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 556, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/fingerprint.py", line 511, in wrapper
+    out = func(dataset, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3619, in filter
+    indices = self.map(
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 591, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 556, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3089, in map
+    for rank, done, content in Dataset._map_single(**dataset_kwargs):
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3466, in _map_single
+    batch = apply_function_on_filtered_inputs(
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3345, in apply_function_on_filtered_inputs
+    processed_inputs = function(*fn_args, *additional_args, **fn_kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 6191, in get_indices_from_mask_function
+    example = {key: batch[key][i] for key in batch}
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 6191, in <dictcomp>
+    example = {key: batch[key][i] for key in batch}
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 272, in __getitem__
+    value = self.format(key)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 375, in format
+    return self.formatter.format_column(self.pa_table.select([key]))
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 442, in format_column
+    column = self.python_features_decoder.decode_column(column, pa_table.column_names[0])
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 218, in decode_column
+    return self.features.decode_column(column, column_name) if self.features else column
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/features/features.py", line 1939, in decode_column
+    [decode_nested_example(self[column_name], value) if value is not None else None for value in column]
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/features/features.py", line 1939, in <listcomp>
+    [decode_nested_example(self[column_name], value) if value is not None else None for value in column]
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/features/features.py", line 1339, in decode_nested_example
+    return schema.decode_example(obj, token_per_repo_id=token_per_repo_id)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/features/audio.py", line 184, in decode_example
+    array, sampling_rate = sf.read(f)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/soundfile.py", line 285, in read
+    with SoundFile(file, 'r', samplerate, channels,
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/soundfile.py", line 658, in __init__
+    self._file = self._open(file, mode_int, closefd)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/soundfile.py", line 1216, in _open
+    raise LibsndfileError(err, prefix="Error opening {0!r}: ".format(self.name))
+soundfile.LibsndfileError: Error opening <_io.BufferedReader name='/home/yifanhua/.cache/huggingface/datasets/downloads/extracted/a62e68ef77daee3e83f95f22b1da75e786c3ec6a96e2f0e5c5288ea4b46ce202/clips/0aabe8f47424402573517a31178b062dcbd1757e50279145aaf92a80a1d5393cd1b76f3117e1e1ef0fb5abb61343569444a2aadbcd0d2183f740fc0840632ba3.mp3'>: Format not recognised.
+
+
+Start -- Dec  6 21:20:05 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+21:20:05	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+21:20:08	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+21:31:47	Finish Loading Remote Dataset. Length of dataset: 125337
+21:31:47	Start Setting Sampling Rate to 16 kHz...
+21:31:47	Setting Sampling Rate Successfully
+21:31:47	Start Filtering Short Data
+21:31:47	Exception: Traceback (most recent call last):
+  File "/home/yifanhua/5455-term-project/src/main.py", line 511, in <module>
+    dataset = filter_and_prepare_dataset(dataset)
+  File "/home/yifanhua/5455-term-project/src/main.py", line 406, in filter_and_prepare_dataset
+    _dataset = _dataset.filter(is_not_too_short, input_columns=["normalized_text"])
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 556, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/fingerprint.py", line 511, in wrapper
+    out = func(dataset, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3619, in filter
+    indices = self.map(
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 591, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 556, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3000, in map
+    raise ValueError(
+ValueError: Input column normalized_text not in the dataset. Current columns in the dataset: ['client_id', 'path', 'audio', 'sentence', 'up_votes', 'down_votes', 'age', 'gender', 'accent', 'locale', 'segment']
+
+
+Start -- Dec  6 22:18:06 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+22:18:06	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+22:18:08	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+22:29:42	Finish Loading Remote Dataset. Length of dataset: 125337
+22:29:42	Start Setting Sampling Rate to 16 kHz...
+22:29:42	Setting Sampling Rate Successfully
+22:29:42	Start Filtering Short Data
+22:29:42	125234 data entries left after filtering
+22:29:42	Start Preparing Dataset
+22:31:23	Exception: Traceback (most recent call last):
+  File "/home/yifanhua/5455-term-project/src/main.py", line 511, in <module>
+    dataset = filter_and_prepare_dataset(dataset)
+  File "/home/yifanhua/5455-term-project/src/main.py", line 410, in filter_and_prepare_dataset
+    _dataset = _dataset.map(prepare_dataset, remove_columns=_dataset.column_names)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 591, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 556, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3089, in map
+    for rank, done, content in Dataset._map_single(**dataset_kwargs):
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3442, in _map_single
+    example = apply_function_on_filtered_inputs(example, i, offset=offset)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3345, in apply_function_on_filtered_inputs
+    processed_inputs = function(*fn_args, *additional_args, **fn_kwargs)
+  File "/home/yifanhua/5455-term-project/src/main.py", line 139, in prepare_dataset
+    audio = entry["audio"]
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 272, in __getitem__
+    value = self.format(key)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 370, in format
+    return self.formatter.format_column(self.pa_table.select([key]))[0]
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 442, in format_column
+    column = self.python_features_decoder.decode_column(column, pa_table.column_names[0])
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 218, in decode_column
+    return self.features.decode_column(column, column_name) if self.features else column
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/features/features.py", line 1939, in decode_column
+    [decode_nested_example(self[column_name], value) if value is not None else None for value in column]
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/features/features.py", line 1939, in <listcomp>
+    [decode_nested_example(self[column_name], value) if value is not None else None for value in column]
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/features/features.py", line 1339, in decode_nested_example
+    return schema.decode_example(obj, token_per_repo_id=token_per_repo_id)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/features/audio.py", line 184, in decode_example
+    array, sampling_rate = sf.read(f)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/soundfile.py", line 285, in read
+    with SoundFile(file, 'r', samplerate, channels,
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/soundfile.py", line 658, in __init__
+    self._file = self._open(file, mode_int, closefd)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/soundfile.py", line 1216, in _open
+    raise LibsndfileError(err, prefix="Error opening {0!r}: ".format(self.name))
+soundfile.LibsndfileError: Error opening <_io.BufferedReader name='/home/yifanhua/.cache/huggingface/datasets/downloads/extracted/a62e68ef77daee3e83f95f22b1da75e786c3ec6a96e2f0e5c5288ea4b46ce202/clips/0aabe8f47424402573517a31178b062dcbd1757e50279145aaf92a80a1d5393cd1b76f3117e1e1ef0fb5abb61343569444a2aadbcd0d2183f740fc0840632ba3.mp3'>: Format not recognised.
+
+
+Start -- Dec  7 11:55:34 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+11:55:34	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+11:55:36	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+12:07:17	Finish Loading Remote Dataset. Length of dataset: 125337
+12:07:17	Start Setting Sampling Rate to 16 kHz...
+12:07:17	Setting Sampling Rate Successfully
+12:07:17	Start Filtering Short Data
+12:07:17	125234 data entries left after filtering
+12:07:17	Start Filtering Long Data
+12:07:17	Exception: Traceback (most recent call last):
+  File "/home/yifanhua/5455-term-project/src/main.py", line 540, in <module>
+    dataset = filter_and_prepare_dataset(dataset)
+  File "/home/yifanhua/5455-term-project/src/main.py", line 439, in filter_and_prepare_dataset
+    _dataset = _dataset.filter(is_not_too_long, input_columns=["input_ids"])
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 556, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/fingerprint.py", line 511, in wrapper
+    out = func(dataset, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3619, in filter
+    indices = self.map(
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 591, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 556, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3000, in map
+    raise ValueError(
+ValueError: Input column input_ids not in the dataset. Current columns in the dataset: ['client_id', 'path', 'audio', 'sentence', 'up_votes', 'down_votes', 'age', 'gender', 'accent', 'locale', 'segment']
+
+
+Start -- Dec  7 12:08:29 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+12:08:29	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+12:08:31	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+12:20:09	Finish Loading Remote Dataset. Length of dataset: 125337
+12:20:09	Start Setting Sampling Rate to 16 kHz...
+12:20:09	Setting Sampling Rate Successfully
+12:20:09	Start Filtering Short Data
+12:20:09	125234 data entries left after filtering
+12:20:09	Start Preparing Dataset
+12:20:10	Preparing dataset finished successfully
+12:20:10	Start Filtering Long Data
+12:20:10	0 data entries left after filtering
+12:20:10	save_processed_dataset is True. Saving processed dataset to dir: ./data/
+12:20:10	Exception: Traceback (most recent call last):
+  File "/home/yifanhua/5455-term-project/src/main.py", line 545, in <module>
+    dataset.save_to_disk(constants.data_path)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 1448, in save_to_disk
+    dataset_nbytes = self._estimate_nbytes()
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 5003, in _estimate_nbytes
+    extra_nbytes = extra_nbytes * len(self.data) / len(table)
+ZeroDivisionError: division by zero
+
+
+Start -- Dec  7 12:24:57 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+12:24:57	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+12:24:59	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+12:36:43	Finish Loading Remote Dataset. Length of dataset: 125337
+12:36:43	Start Setting Sampling Rate to 16 kHz...
+12:36:43	Setting Sampling Rate Successfully
+12:36:43	Start Filtering Short Data
+12:36:43	125234 data entries left after filtering short data
+12:36:43	Start Preparing Dataset
+12:36:44	0 data entries left after preparing dataset in batches
+12:36:44	Start Filtering Long Data
+12:36:44	0 data entries left after filtering
+12:36:44	save_processed_dataset is True. Saving processed dataset to dir: ./data/
+12:36:44	Exception: Traceback (most recent call last):
+  File "/home/yifanhua/5455-term-project/src/main.py", line 546, in <module>
+    dataset.save_to_disk(constants.data_path)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 1448, in save_to_disk
+    dataset_nbytes = self._estimate_nbytes()
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 5003, in _estimate_nbytes
+    extra_nbytes = extra_nbytes * len(self.data) / len(table)
+ZeroDivisionError: division by zero
+
+
+Start -- Dec  7 13:09:25 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+13:09:25	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+13:09:28	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+13:21:07	Finish Loading Remote Dataset. Length of dataset: 125337
+13:21:07	Start Setting Sampling Rate to 16 kHz...
+13:21:07	Setting Sampling Rate Successfully
+13:21:07	Start Filtering Short Data
+13:21:08	125234 data entries left after filtering short data
+13:21:08	Start Preparing Dataset
+13:21:09	0 data entries left after preparing dataset in batches
+13:21:09	Start Filtering Long Data
+13:21:09	0 data entries left after filtering
+13:21:09	save_processed_dataset is True. Saving processed dataset to dir: ./data/
+13:21:09	Exception: Traceback (most recent call last):
+  File "/home/yifanhua/5455-term-project/src/main.py", line 547, in <module>
+    dataset.save_to_disk(constants.data_path)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 1448, in save_to_disk
+    dataset_nbytes = self._estimate_nbytes()
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 5003, in _estimate_nbytes
+    extra_nbytes = extra_nbytes * len(self.data) / len(table)
+ZeroDivisionError: division by zero
+
+
+Start -- Dec  7 13:22:31 -- pytorch=2.1.0+cu121, device=cuda, cpu_count=48
+13:22:31	Initializing pretrained model, processor, tokenizer, speaker_model, data_collator, and vocoder
+13:22:34	Loading Remote Dataset: mozilla-foundation/common_voice_1_0. Sub-collection: en
+13:34:17	Finish Loading Remote Dataset. Length of dataset: 125337
+13:34:17	Start Setting Sampling Rate to 16 kHz...
+13:34:17	Setting Sampling Rate Successfully
+13:34:17	Start Filtering Short Data
+13:34:17	125234 data entries left after filtering short data
+13:34:17	Start Preparing Dataset
+13:34:36	Exception: Traceback (most recent call last):
+  File "/home/yifanhua/5455-term-project/src/main.py", line 542, in <module>
+    dataset = filter_and_prepare_dataset(dataset)
+  File "/home/yifanhua/5455-term-project/src/main.py", line 440, in filter_and_prepare_dataset
+    _dataset = _dataset.map(prepare_dataset_batched, batched=True, remove_columns=_dataset.column_names)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 591, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 556, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3089, in map
+    for rank, done, content in Dataset._map_single(**dataset_kwargs):
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3466, in _map_single
+    batch = apply_function_on_filtered_inputs(
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/arrow_dataset.py", line 3345, in apply_function_on_filtered_inputs
+    processed_inputs = function(*fn_args, *additional_args, **fn_kwargs)
+  File "/home/yifanhua/5455-term-project/src/main.py", line 164, in prepare_dataset_batched
+    print(entry)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 294, in __repr__
+    self._format_all()
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 364, in _format_all
+    self.data[key] = self.format(key)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 375, in format
+    return self.formatter.format_column(self.pa_table.select([key]))
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 442, in format_column
+    column = self.python_features_decoder.decode_column(column, pa_table.column_names[0])
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/formatting/formatting.py", line 218, in decode_column
+    return self.features.decode_column(column, column_name) if self.features else column
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/features/features.py", line 1939, in decode_column
+    [decode_nested_example(self[column_name], value) if value is not None else None for value in column]
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/features/features.py", line 1939, in <listcomp>
+    [decode_nested_example(self[column_name], value) if value is not None else None for value in column]
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/features/features.py", line 1339, in decode_nested_example
+    return schema.decode_example(obj, token_per_repo_id=token_per_repo_id)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/datasets/features/audio.py", line 184, in decode_example
+    array, sampling_rate = sf.read(f)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/soundfile.py", line 285, in read
+    with SoundFile(file, 'r', samplerate, channels,
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/soundfile.py", line 658, in __init__
+    self._file = self._open(file, mode_int, closefd)
+  File "/home/yifanhua/.local/lib/python3.10/site-packages/soundfile.py", line 1216, in _open
+    raise LibsndfileError(err, prefix="Error opening {0!r}: ".format(self.name))
+soundfile.LibsndfileError: Error opening <_io.BufferedReader name='/home/yifanhua/.cache/huggingface/datasets/downloads/extracted/a62e68ef77daee3e83f95f22b1da75e786c3ec6a96e2f0e5c5288ea4b46ce202/clips/0aabe8f47424402573517a31178b062dcbd1757e50279145aaf92a80a1d5393cd1b76f3117e1e1ef0fb5abb61343569444a2aadbcd0d2183f740fc0840632ba3.mp3'>: Format not recognised.
+

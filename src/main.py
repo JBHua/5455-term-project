@@ -16,6 +16,10 @@ from datasets import load_dataset, load_from_disk
 from collections import defaultdict
 import argparse
 import json
+import itertools
+import pyarrow as pa
+import pyarrow.compute as compute
+import datasets
 
 from constants import log_msg
 
@@ -38,12 +42,27 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description='Example script to take command line parameters.')
 
     # Add arguments
-    parser.add_argument('-g', type=str, default=constants.default_gender, help='Speaker Gender: male | female | other')
+    parser.add_argument('-g', type=str, default=constants.default_gender, help='Speaker Gender: male | female')
     parser.add_argument('-a', type=str, default=constants.default_accent,
                         help=f'Speaker Accent: see {constants.EMBEDDINGS_BASE_PATH}')
+    parser.add_argument('-s', type=bool, default=False,
+                        help=f'If True, train model using data from specific speaker: see {constants.DATASET_ANALYSIS_PATH}')
 
     # Parse and return the arguments
-    return parser.parse_args()
+    _args = parser.parse_args()
+
+    _accent = _args.a
+    _gender = _args.g
+    _client_id = ""
+
+    if _args.s:
+        # retrieve corresponding metadata
+        with (open(constants.DATASET_ANALYSIS_PATH) as client_id_file):
+            for _acc, _gen, _client, count in itertools.zip_longest(*[client_id_file] * 4):
+                if _acc.strip() == _accent and _gen.strip() == _gender:
+                    _client_id = _client.strip()
+
+    return _accent, _gender, _client_id
 
 
 @dataclass
@@ -119,9 +138,12 @@ def prepare_dataset(entry):
     # load the entry data; if necessary, this resamples the audio to 16kHz
     audio = entry["audio"]
 
+    # preserve `client_id` field
+    entry["client_id"] = entry["client_id"]
+
     # feature extraction and tokenization
     entry = processor(
-        text=entry["normalized_text"],
+        text=entry["sentence"],
         audio_target=audio["array"],
         sampling_rate=audio["sampling_rate"],
         return_attention_mask=False,
@@ -279,8 +301,8 @@ def load_remote_dataset(name=constants.remote_dataset_name,
     )
 
     log_msg("Finish Loading Remote Dataset. Length of dataset: " + str(len(_dataset)))
-    if constants.remote_dataset_name.startswith("mozilla-foundation"):
-        _dataset = clean_mozilla_dataset(_dataset)
+    # if constants.remote_dataset_name.startswith("mozilla-foundation"):
+    #     _dataset = clean_mozilla_dataset(_dataset)
 
     return set_sampling_rate(_dataset)
 
@@ -300,15 +322,12 @@ def load_local_dataset() -> DatasetDict | Dataset | IterableDatasetDict | Iterab
 ###############################################################################
 # Speaker Embeddings
 ###############################################################################
-def load_local_speaker_embeddings(_args, _device='cpu'):
-    accent = args.a
-    gender = args.g
-
-    embedding_file_path = constants.EMBEDDINGS_BASE_PATH + accent + '_' + gender + '.pt'
+def load_local_speaker_embeddings(_accent, _gender, _device='cpu'):
+    embedding_file_path = constants.EMBEDDINGS_BASE_PATH + _accent + '_' + _gender + '.pt'
     try:
         pre_trained_embeddings = torch.load(embedding_file_path)
     except Exception as e:
-        log_msg(f"Failed to load local speaker embedding for gender: {gender} and accent: {accent}."
+        log_msg(f"Failed to load local speaker embedding for gender: {_gender} and accent: {_accent}."
                 f" Please double check file exists and path is correct. {e}")
         sys.exit()
 
@@ -382,29 +401,46 @@ def sort_speaker(_dataset):
     plt.show()
 
 
-def generate_speaker_embeddings():
-    pass
-
-
 def filter_and_prepare_dataset(_dataset) -> DatasetDict | Dataset | IterableDatasetDict | IterableDataset:
     log_msg("Start Filtering Short Data")
-    _dataset = _dataset.filter(is_not_too_short, input_columns=["normalized_text"])
-    log_msg(f"{len(_dataset)} data entries left after filtering")
+    _dataset = _dataset.filter(is_not_too_short, input_columns=["sentence"])
+    log_msg(f"{len(_dataset)} data entries left after filtering short data")
 
     log_msg("Start Preparing Dataset")
-    _dataset = _dataset.map(prepare_dataset, remove_columns=_dataset.column_names)
-    # _dataset = _dataset.map(DatasetPrepper(processor), remove_columns=_dataset.column_names, num_proc=cpu_count)
-    log_msg("Preparing dataset finished successfully")
+    _dataset = _dataset.map(prepare_dataset, batched=True, remove_columns=_dataset.column_names)
+    log_msg(f"{len(_dataset)} data entries left after preparing dataset in batches")
+    log_msg(_dataset)
 
-    log_msg("Start Filtering Long Data")  # TODO: why can't we do it beforehand?
+    log_msg("Start Filtering Long Data")
     _dataset = _dataset.filter(is_not_too_long, input_columns=["input_ids"])
     log_msg(f"{len(_dataset)} data entries left after filtering")
 
     return _dataset
 
 
-def split_dataset(_dataset, test_size=constants.dataset_test_size, train_size=constants.dataset_train_size):
-    _dataset = _dataset.train_test_split(test_size=test_size, train_size=train_size)
+def filter_dataset_by_client_id(_dataset, _client_id) -> DatasetDict | Dataset | IterableDatasetDict | IterableDataset:
+    log_msg(f'Start Filtering all data with client_id of: {_client_id}')
+    log_msg(f'Starting Size of Dataset: {len(_dataset)}')
+
+    table = _dataset.data
+    flags = compute.is_in(table['client_id'], value_set=pa.array([_client_id], pa.string()))
+
+    filtered_table = table.filter(flags)
+    filtered_dataset = datasets.Dataset(filtered_table, _dataset.info, _dataset.split)
+
+    log_msg(f"Size after filtering by client_id: {len(filtered_dataset)}")
+
+    return filtered_dataset
+
+
+def split_dataset(_dataset, _client_id, test_size=constants.dataset_test_size, train_size=constants.dataset_train_size):
+    if _client_id != "":
+        log_msg(f'client_id provided; train on speaker with id: {_client_id}')
+        _dataset = filter_dataset_by_client_id(_dataset, _client_id)
+        _dataset = _dataset.train_test_split()
+    else:
+        log_msg(f'no client_id provided; train on dataset size of: {train_size}')
+        _dataset = _dataset.train_test_split(test_size=test_size, train_size=train_size)
     return _dataset
 
 
@@ -444,7 +480,7 @@ def generate_trainer(_training_args: Seq2SeqTrainingArguments, _model: PreTraine
     )
 
 
-def generate_audio(_spectrogram) -> str:
+def generate_audio(_spectrogram, _accent, _gender) -> str:
     log_msg(f'Generating output audio file...')
     with torch.no_grad():
         speech = vocoder(_spectrogram)
@@ -454,7 +490,7 @@ def generate_audio(_spectrogram) -> str:
     Audio(speech.numpy(), rate=16000)
 
     import soundfile as sf
-    audio_file_name = f"{constants.AUDIO_OUTPUT_PATH + used_model_name + '_' + args.a + '_' + args.g}.wav"
+    audio_file_name = f"{constants.AUDIO_OUTPUT_PATH + 'fine_tuned/' + used_model_name + '_' + _accent + '_' + _gender}.wav"
     sf.write(audio_file_name, speech.numpy(), samplerate=16000)
 
     return audio_file_name
@@ -462,7 +498,7 @@ def generate_audio(_spectrogram) -> str:
 
 if __name__ == "__main__":
     # Step 0: Parse Commandline Argument
-    args = parse_arguments()
+    accent, gender, client_id = parse_arguments()
 
     # Step 1: Download & Split datasets
     dataset = None
@@ -483,7 +519,7 @@ if __name__ == "__main__":
         dataset = load_local_dataset()
 
     # Step 2: Split Dataset. Yes, we load first and then split, this method is more flexible
-    divided_dataset = split_dataset(dataset)
+    divided_dataset = split_dataset(dataset, client_id)
 
     # Step 3: Train or Load the local model
     used_model_name = None
@@ -520,12 +556,12 @@ if __name__ == "__main__":
     inputs = processor(text=text, return_tensors="pt").to(device)
 
     # Step 5: Select speaker embeddings (we might generate speaker embeddings on the fly, but there is really no need)
-    log_msg(f'Loading Speaker Embedding for {args.a} {args.g}')
-    speaker_embeddings = load_local_speaker_embeddings(args, device)
+    log_msg(f'Loading Speaker Embedding for {accent} {gender}')
+    speaker_embeddings = load_local_speaker_embeddings(accent, gender, device)
     spectrogram = pretrained_model.generate_speech(inputs["input_ids"], speaker_embeddings).to(device)
 
     # Step 6: Generate Audio
-    audio_file_path = generate_audio(spectrogram)
+    audio_file_path = generate_audio(spectrogram, accent, gender)
 
     # Step 7: Add Evaluation Result
     eval_pipeline = pipeline(model=constants.eval_model_name)

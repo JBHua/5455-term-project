@@ -6,11 +6,11 @@ import time
 ###############################################################################
 # By default we use the mozilla one, since it contains necessary metadata on speaker gender & accent
 # remote_dataset_name = "facebook/voxpopuli"
-remote_dataset_name = "mozilla-foundation/common_voice_13_0"
+remote_dataset_name = "mozilla-foundation/common_voice_1_0"
 remote_dataset_subset = "en"
-remote_dataset_split = "train"
+remote_dataset_split = "other"  # "train"
 common_voice_dataset_split = "validation"
-download_remote_dataset = False  # if False, load local dataset
+download_remote_dataset = True  # if False, load local dataset
 save_processed_dataset = True  # if True, save the processed (prepare_dataset) dataset to disk.
 
 train_model = True  # if False, load saved model/checkpoints
@@ -30,6 +30,7 @@ max_steps = 10000  # Default -1. When set to a positive number, overrides num_tr
 save_steps = 20000
 eval_steps = 250
 logging_steps = 500
+
 ###############################################################################
 # Files & Directories
 ###############################################################################
@@ -37,8 +38,9 @@ logging_steps = 500
 MODEL_BASE_PATH = './model/'
 CHECKPOINT_BASE_PATH = "./speecht5_tts/"
 DATA_BASE_PATH = "./data/"
-EMBEDDINGS_BASE_PATH = './speaker_embeddings/'
+EMBEDDINGS_BASE_PATH = './speaker_embeddings/client_id'
 AUDIO_OUTPUT_PATH = './audio_outputs/'
+DATASET_ANALYSIS_PATH = './src/dataset_analysis/top_client_id.txt'
 
 model_name = 'trained_' + socket.gethostname() + '_' + time.strftime("%b%e_%H:%M", time.localtime())
 model_path = MODEL_BASE_PATH + model_name
@@ -68,7 +70,7 @@ push_to_hub = True
 ###############################################################################
 # Commandline Arguments
 ###############################################################################
-default_gender = 'male'
+default_gender = 'female'
 default_accent = 'england'
 
 ###############################################################################
@@ -77,8 +79,8 @@ default_accent = 'england'
 spk_model_name = "speechbrain/spkrec-xvect-voxceleb"
 eval_model_name = 'dima806/english_accents_classification'
 all_genders = ['male', 'female']
-all_accents = ['us', 'england', 'canada', 'malaysia', 'australia', 'indian', 'hongkong', 'singapore',
-               'newzealand', 'philippines', 'bermuda', 'ireland', 'scotland']
+all_accents = ['african', 'bermuda', 'southatlandtic', 'us', 'england', 'canada', 'malaysia', 'australia', 'indian',
+               'hongkong', 'singapore', 'newzealand', 'philippines', 'wales', 'ireland', 'scotland']
 
 
 def log_msg(message, outf=log_file, include_time=True, print_out=True):
