@@ -14,7 +14,7 @@ common_voice_dataset_split = "validation"
 download_remote_dataset = False  # if False, load local dataset
 save_processed_dataset = True  # if True, save the processed (prepare_dataset) dataset to disk.
 
-train_model = True  # if False, load saved model/checkpoints
+train_model = False  # if False, load saved model/checkpoints
 save_fine_tuned_model = True
 # dataset_train_size = 80000  # can be `int` or `float`. `int` means absolute count; while `float` means percentage
 # dataset_test_size = 500
@@ -46,7 +46,7 @@ EMBEDDINGS_BASE_PATH = './speaker_embeddings/client_id/'
 AUDIO_OUTPUT_PATH = './audio_outputs/'
 DATASET_ANALYSIS_PATH = './src/dataset_analysis/top_client_id.txt'
 
-model_name = 'trained_' + socket.gethostname() + '_' + time.strftime("%b%e_%H:%M", time.localtime())
+model_name = 'trained_' + socket.gethostname() + '_' + time.strftime("%b_%d_%H_%M", time.localtime())
 model_path = MODEL_BASE_PATH + model_name
 data_path = DATA_BASE_PATH
 log_file_path = './log/' + socket.gethostname() + '.log'
