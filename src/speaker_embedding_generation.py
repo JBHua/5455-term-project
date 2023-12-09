@@ -85,8 +85,11 @@ def filter_by_client_id(_dataset, c_id):
     post_id_test_list = [c_id]
     table = _dataset.data
 
+
     flags = compute.is_in(table['client_id'], value_set=pa.array(post_id_test_list, pa.string()))
     filtered_table = table.filter(flags)
+    print("finishing size of table: " + str(len(filtered_table)))
+
 
     filtered_dataset = datasets.Dataset(filtered_table, _dataset.info, _dataset.split)
 
@@ -126,10 +129,10 @@ def load_local_dataset() -> DatasetDict | Dataset | IterableDatasetDict | Iterab
 
 
 if __name__ == '__main__':
-    # dataset = load_remote_dataset()
+    dataset = load_remote_dataset()
     # dataset.save_to_disk(constants.unprocessed_data_path)
 
-    dataset = load_from_disk(constants.unprocessed_data_path)
+    # dataset = load_from_disk(constants.unprocessed_data_path)
     dataset = set_sampling_rate(dataset)
 
     print(dataset)

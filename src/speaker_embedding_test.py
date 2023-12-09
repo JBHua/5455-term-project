@@ -7,7 +7,10 @@ import soundfile as sf
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
-use_client_id_version = True
+sub_collection = "cmu"
+# sub_collection = "client_id"
+# sub_collection = "collective"
+
 # gender = 'male'
 gender = 'female'
 accent = 'us'
@@ -20,10 +23,7 @@ text = "The freedom to be a kid without being influenced by the internet"
 
 inputs = processor(text=text, return_tensors="pt").to(device)
 
-if use_client_id_version:
-    embedding_file_path = constants.EMBEDDINGS_BASE_PATH + 'client_id/' + accent + '_' + gender + '.pt'
-else:
-    embedding_file_path = constants.EMBEDDINGS_BASE_PATH + 'collective/' + accent + '_' + gender + '.pt'
+embedding_file_path = constants.EMBEDDINGS_BASE_PATH + sub_collection + '/' + accent + '_' + gender + '.pt'
 
 pre_trained_embeddings = torch.load(embedding_file_path)
 pre_trained_embeddings_tensor = torch.tensor(pre_trained_embeddings).unsqueeze(0).to(device)
@@ -36,11 +36,7 @@ speech = speech.cpu()  # move back to CPU
 
 Audio(speech.numpy(), rate=16000)
 
-if use_client_id_version:
-    audio_file_name = f"{constants.AUDIO_OUTPUT_PATH + 't5_vanilla/' + 'client_id_' + accent + '_' + gender}.wav"
-else:
-    audio_file_name = f"{constants.AUDIO_OUTPUT_PATH + 't5_vanilla/' + accent + '_' + gender}.wav"
-
+audio_file_name = f"{constants.AUDIO_OUTPUT_PATH + 't5_vanilla/' + sub_collection + '/' + accent + '_' + gender}.wav"
 
 sf.write(audio_file_name, speech.numpy(), samplerate=16000)
 

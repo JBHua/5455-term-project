@@ -135,11 +135,11 @@ def create_speaker_embedding(waveform):
 def prepare_dataset(entry):
     """prepare_dataset takes a single entry; tokenize input text; load audio into a log-mel spectrogram; and add
     speaker embeddings"""
+    # preserve `client_id` field
+    _client_id = entry["client_id"]
+    
     # load the entry data; if necessary, this resamples the audio to 16kHz
     audio = entry["audio"]
-
-    # preserve `client_id` field
-    entry["client_id"] = entry["client_id"]
 
     # feature extraction and tokenization
     entry = processor(
@@ -152,11 +152,51 @@ def prepare_dataset(entry):
     # strip off the batch dimension
     entry["labels"] = entry["labels"][0]
 
+    entry["client_id"] = _client_id
+
     # use SpeechBrain to obtain x-vector
-    entry["speaker_embeddings"] = create_speaker_embedding(audio["array"])
+    # entry["speaker_embeddings"] = create_speaker_embedding(entry["audio"]["array"])
 
     return entry
 
+
+def prepare_dataset_batched(entries):
+    """prepare_dataset takes a single entry; tokenize input text; load audio into a log-mel spectrogram; and add
+    speaker embeddings"""
+    # preserve `client_id` field
+    chunks = []
+    # for _client_id, _, _audio, _sentence in entries:
+    for i, _ in enumerate(entries):
+        try:
+            _audio = entries['audio'][i]
+            _client_id = entries['client_id'][i]
+
+            # feature extraction and tokenization
+            entry = processor(
+                text=entries['sentence'][i],
+                audio_target=_audio["array"],
+                sampling_rate=_audio["sampling_rate"],
+                return_attention_mask=False,
+            )
+            # print("feature extraction")
+
+            # strip off the batch dimension
+            entry["labels"] = entry["labels"][0]
+            # print("strip off the batch dimension")
+
+            entry["client_id"] = _client_id
+            # print("restore client_id")
+
+            chunks += entry
+            # print("Add entry to result")
+            # use SpeechBrain to obtain x-vector
+            # entry["speaker_embeddings"] = create_speaker_embedding(entry["audio"]["array"])
+        except Exception as e:
+            print(e.__str__())
+            continue
+
+    print(f'return chunk size: {len(chunks)}')
+    return {'chunks': chunks}
 
 def is_not_too_short(raw_text, cutoff: int = 10):
     """filters out entry with short text (to prevent T5 from complaining). default cutoff is 10 characters"""
@@ -166,6 +206,11 @@ def is_not_too_short(raw_text, cutoff: int = 10):
 def is_not_too_long(input_ids):
     input_length = len(input_ids)
     return input_length < 200
+
+
+def has_audio_data(input):
+    print(input)
+    return input["array"] is not None
 
 
 def list_directories(path):
@@ -259,37 +304,106 @@ def set_sampling_rate(_dataset):
     from datasets import Audio
 
     log_msg("Start Setting Sampling Rate to 16 kHz...")
+    print("Before Casting:")
+    print(_dataset[0]["audio"])
+
     # SpeechT5 requires the sampling rate to be 16 kHz.
     _dataset = _dataset.cast_column("audio", Audio(sampling_rate=16000))
+    print("After Casting:")
+    print(_dataset[0]["audio"])
+
+    print("Size before filtering audio: " + str(len(_dataset)))
+    
+    # table = _dataset.data
+    # audio_flags = compute.not_equal(compute.binary_length(a), pa.scalar(0))
+    # table = table.filter(audio_flags)
+
+    # _dataset = _dataset.filter(lambda entry: entry['audio']['array'] is not None)
+    # log_msg(f"Size after filtering entry without audio data: {len(_dataset)}")
+    # print("Size after filtering audio: " + str(len(_dataset)))
+
+    # _dataset = datasets.Dataset(table, _dataset.info, _dataset.split)
+
     log_msg("Setting Sampling Rate Successfully")
 
     return _dataset
 
 
+# def clean_mozilla_dataset(_dataset):
+#     def normalize_text(entry):
+#         entry['sentence'] = entry['sentence'].lower()
+#         return entry
+
+#     log_msg(f"Using Mozilla Common Voice. Additional Cleaning Needed")
+#     log_msg(f"Starting Size of Mozilla Common Voice: {len(_dataset)}")
+
+#     _dataset = _dataset.filter(lambda entry: len(entry["accent"]) > 0)
+#     log_msg(f"Size after filtering accent: {len(_dataset)}")
+
+#     _dataset = _dataset.filter(lambda entry: entry["gender"] in ['female', 'male'])
+#     log_msg(f"Size after filtering gender: {len(_dataset)}")
+
+#     _dataset = _dataset.filter(lambda entry: int(entry['down_votes']) <= int(entry['up_votes']))
+#     log_msg(f"Size after filtering voting: {len(_dataset)}")
+
+#     _dataset = _dataset.filter(lambda entry: entry['audio'] is not None)
+#     log_msg(f"Size after filtering entry without audio data: {len(_dataset)}")
+
+#     _dataset = _dataset.map(normalize_text)
+#     _dataset = _dataset.rename_column("sentence", "normalized_text")
+#     log_msg(f"Finish normalizing input text")
+
+#     log_msg("Finish Cleaning Dataset. Length of dataset: " + str(len(_dataset)))
+
+#     return _dataset
+
+# def clean_mozilla_dataset(_dataset):
+
 def clean_mozilla_dataset(_dataset):
-    def normalize_text(entry):
-        entry['sentence'] = entry['sentence'].lower()
-        return entry
+    # def normalize_text(entry):
+    #     entry['sentence'] = entry['sentence'].lower()
+    #     return entry
 
     log_msg(f"Using Mozilla Common Voice. Additional Cleaning Needed")
     log_msg(f"Starting Size of Mozilla Common Voice: {len(_dataset)}")
+    table = _dataset.data
 
-    _dataset = _dataset.filter(lambda entry: len(entry["accent"]) > 0)
-    log_msg(f"Size after filtering accent: {len(_dataset)}")
+    accent_flags = compute.is_in(table['accent'], value_set=pa.array(constants.all_accents, pa.string()))
+    table = table.filter(accent_flags)
+    print("Size after filtering accent: " + str(len(table)))
 
-    _dataset = _dataset.filter(lambda entry: entry["gender"] in ['female', 'male'])
-    log_msg(f"Size after filtering gender: {len(_dataset)}")
+    gender_flags = compute.is_in(table['gender'], value_set=pa.array(constants.all_genders, pa.string()))
+    table = table.filter(gender_flags)
+    print("Size after filtering gender: " + str(len(table)))
 
-    _dataset = _dataset.filter(lambda entry: int(entry['down_votes']) <= int(entry['up_votes']))
-    log_msg(f"Size after filtering voting: {len(_dataset)}")
+    # audio_flags = compute.is_valid(table['audio'])
+    # table = table.filter(audio_flags)
+    # OR:
+    # a = compute.field("audio")
+    # type(a)
+    # a = table['audio']
+    # b = table['audio']['bytes']
 
-    _dataset = _dataset.map(normalize_text)
-    _dataset = _dataset.rename_column("sentence", "normalized_text")
-    log_msg(f"Finish normalizing input text")
+    # audio_flags = compute.not_equal(compute.binary_length(table['audio']), pa.scalar(0))
+    # audio_flags = compute.is_valid(table['audio'])
+    # table = table.filter(audio_flags)
+    # log_msg(f"Size after filtering entry without audio data: {len(table)}")
+
+    _dataset = datasets.Dataset(table, _dataset.info, _dataset.split)
+
+    # _dataset = _dataset.filter(lambda entry: entry['audio'] is not None)
+
+    # _dataset = _dataset.map(normalize_text)
+    # _dataset = _dataset.rename_column("sentence", "normalized_text")
+    # log_msg(f"Finish normalizing input text")
+
+    # _dataset = _dataset.filter(lambda e: len(e['normalized_text']) > 0)
+    # print("Size after filtering normalized_text: " + str(len(_dataset)))
 
     log_msg("Finish Cleaning Dataset. Length of dataset: " + str(len(_dataset)))
 
     return _dataset
+
 
 
 def load_remote_dataset(name=constants.remote_dataset_name,
@@ -406,11 +520,17 @@ def filter_and_prepare_dataset(_dataset) -> DatasetDict | Dataset | IterableData
     _dataset = _dataset.filter(is_not_too_short, input_columns=["sentence"])
     log_msg(f"{len(_dataset)} data entries left after filtering short data")
 
-    log_msg("Start Preparing Dataset")
-    _dataset = _dataset.map(prepare_dataset, batched=True, remove_columns=_dataset.column_names)
-    log_msg(f"{len(_dataset)} data entries left after preparing dataset in batches")
-    log_msg(_dataset)
+    # log_msg("Start Filtering Audio Data")
+    # table = _dataset.data
+    # print(str(table['audio'].null_count))
+    # _dataset = datasets.Dataset(table, _dataset.info, _dataset.split)
+    # # _dataset = _dataset.filter(has_audio_data, input_columns=["audio"])
+    # log_msg(f"{len(_dataset)} data entries left after filtering audio data")
 
+    log_msg("Start Preparing Dataset")
+    _dataset = _dataset.map(prepare_dataset_batched, batched=True, remove_columns=_dataset.column_names, num_proc=cpu_count)
+    log_msg(f"{len(_dataset)} data entries left after preparing dataset in batches")
+    print(_dataset)
     log_msg("Start Filtering Long Data")
     _dataset = _dataset.filter(is_not_too_long, input_columns=["input_ids"])
     log_msg(f"{len(_dataset)} data entries left after filtering")
@@ -507,16 +627,22 @@ if __name__ == "__main__":
 
         # # Debugging Step: Visualize Speaker info
         # sort_speaker(dataset)
-
-        # Step 1A: Process & Preparing Dataset
-        dataset = filter_and_prepare_dataset(dataset)
-
         if constants.save_processed_dataset:
             log_msg(f"save_processed_dataset is True. Saving processed dataset to dir: {constants.data_path}")
             dataset.save_to_disk(constants.data_path)
+
+        # Step 1A: Process & Preparing Dataset
+        # dataset = filter_and_prepare_dataset(dataset)
+
+        # if constants.save_processed_dataset:
+        #     log_msg(f"save_processed_dataset is True. Saving processed dataset to dir: {constants.data_path}")
+        #     dataset.save_to_disk(constants.data_path)
     else:
         # data in local file is guaranteed to be processed. So we don't need to process it again
         dataset = load_local_dataset()
+
+    dataset = clean_mozilla_dataset(dataset)
+    dataset = filter_and_prepare_dataset(dataset)
 
     # Step 2: Split Dataset. Yes, we load first and then split, this method is more flexible
     divided_dataset = split_dataset(dataset, client_id)
