@@ -27,10 +27,10 @@ dataset_test_size = 0.2
 ###############################################################################
 batch_size = 4  # dependent on how much VRAM you have, on my 8G RTX 2070, it should be able to handle a size of 16
 gradient_accumulation_steps = 1
-learning_rate = 1e-5  # 0.00001
+learning_rate = 1e-4  # 0.00001
 # https://datascience.stackexchange.com/questions/55991/in-the-context-of-deep-learning-what-is-training-warmup-steps
 warm_up_step = 500
-max_steps = 15000  # Default -1. When set to a positive number, overrides num_train_epochs
+max_steps = 30000  # Default -1. When set to a positive number, overrides num_train_epochs
 save_steps = 20000
 eval_steps = 250
 logging_steps = 500

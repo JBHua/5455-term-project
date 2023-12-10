@@ -101,7 +101,6 @@ class TTSDataCollatorWithPadding:
             max_length = max(target_lengths)
             batch["labels"] = batch["labels"][:, :max_length]
 
-        # TODO: this should be replaced by the corresponding pre-trained embedding
         batch["speaker_embeddings"] = torch.tensor(speaker_features)
 
         return batch
