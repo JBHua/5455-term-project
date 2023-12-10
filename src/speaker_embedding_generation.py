@@ -58,15 +58,17 @@ def clean_mozilla_dataset(_dataset):
 
     log_msg(f"Using Mozilla Common Voice. Additional Cleaning Needed")
     log_msg(f"Starting Size of Mozilla Common Voice: {len(_dataset)}")
+    table = _dataset.data
 
-    _dataset = _dataset.filter(lambda entry: len(entry["accent"]) > 0)
-    log_msg(f"Size after filtering accent: {len(_dataset)}")
+    accent_flags = compute.is_in(table['accent'], value_set=pa.array(constants.all_accents, pa.string()))
+    table = table.filter(accent_flags)
+    print("Size after filtering accent: " + str(len(table)))
 
-    _dataset = _dataset.filter(lambda entry: entry["gender"] in ['female', 'male'])
-    log_msg(f"Size after filtering gender: {len(_dataset)}")
+    gender_flags = compute.is_in(table['gender'], value_set=pa.array(constants.all_genders, pa.string()))
+    table = table.filter(gender_flags)
+    print("Size after filtering gender: " + str(len(table)))
 
-    _dataset = _dataset.filter(lambda entry: int(entry['down_votes']) <= int(entry['up_votes']))
-    log_msg(f"Size after filtering voting: {len(_dataset)}")
+    _dataset = datasets.Dataset(table, _dataset.info, _dataset.split)
 
     _dataset = _dataset.map(normalize_text)
     _dataset = _dataset.rename_column("sentence", "normalized_text")
@@ -109,11 +111,10 @@ def load_remote_dataset(name="mozilla-foundation/common_voice_1_0",
     )
 
     log_msg("Finish Loading Remote Dataset. Length of dataset: " + str(len(_dataset)))
-    # if constants.remote_dataset_name.startswith("mozilla-foundation"):
-    #     _dataset = clean_mozilla_dataset(_dataset)
+    if constants.remote_dataset_name.startswith("mozilla-foundation"):
+        _dataset = clean_mozilla_dataset(_dataset)
 
-    # return set_sampling_rate(_dataset)
-    return _dataset
+    return set_sampling_rate(_dataset)
 
 
 def load_local_dataset() -> DatasetDict | Dataset | IterableDatasetDict | IterableDataset:
@@ -130,11 +131,6 @@ def load_local_dataset() -> DatasetDict | Dataset | IterableDatasetDict | Iterab
 
 if __name__ == '__main__':
     dataset = load_remote_dataset()
-    # dataset.save_to_disk(constants.unprocessed_data_path)
-
-    # dataset = load_from_disk(constants.unprocessed_data_path)
-    dataset = set_sampling_rate(dataset)
-
     print(dataset)
 
     waveform_collection = dict()

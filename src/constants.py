@@ -42,6 +42,7 @@ logging_steps = 500
 MODEL_BASE_PATH = './model/'
 CHECKPOINT_BASE_PATH = "./speecht5_tts/"
 DATA_BASE_PATH = "./data/"
+EMBEDDINGS_DIR_BASE_PATH = './speaker_embeddings/'
 EMBEDDINGS_BASE_PATH = './speaker_embeddings/client_id/'
 AUDIO_OUTPUT_PATH = './audio_outputs/'
 DATASET_ANALYSIS_PATH = './src/dataset_analysis/top_client_id.txt'
