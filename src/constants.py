@@ -30,7 +30,7 @@ gradient_accumulation_steps = 1
 learning_rate = 1e-5  # 0.00001
 # https://datascience.stackexchange.com/questions/55991/in-the-context-of-deep-learning-what-is-training-warmup-steps
 warm_up_step = 500
-max_steps = 10000  # Default -1. When set to a positive number, overrides num_train_epochs
+max_steps = 15000  # Default -1. When set to a positive number, overrides num_train_epochs
 save_steps = 20000
 eval_steps = 250
 logging_steps = 500
