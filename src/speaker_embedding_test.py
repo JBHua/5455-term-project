@@ -7,13 +7,18 @@ import soundfile as sf
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
+# text = "the brown fox jumps over the lazy dog"
+# text = "For the twentieth time that evening the two men shook hands"
+# text = "A lemon tea could be great to drink this summer" # US male evaluation
+text = "Are you still using your computer for the research" # Indian female evaluation
+
 # sub_collection = "cmu"
 sub_collection = "client_id"
 # sub_collection = "collective"
 
-gender = 'male'
-# gender = 'female'
-accent = 'us'
+# gender = 'male'
+gender = 'female'
+accent = 'indian'
 
 model_name = ""
 
@@ -27,9 +32,6 @@ def load_model():
 
 processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_tts")
 vocoder = SpeechT5HifiGan.from_pretrained("microsoft/speecht5_hifigan").to(device)
-
-# text = "the brown fox jumps over the lazy dog"
-text = "For the twentieth time that evening the two men shook hands"
 
 inputs = processor(text=text, return_tensors="pt").to(device)
 

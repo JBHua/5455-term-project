@@ -613,7 +613,10 @@ if __name__ == "__main__":
     # pretrained_model = SpeechT5ForTextToSpeech.from_pretrained("microsoft/speecht5_tts").to(device)
 
     # Step 4: Generate Audio according to Text and Speaker embeddings
-    text = "the quick brown fox jumps over the lazy dog"
+    # text = "the quick brown fox jumps over the lazy dog"
+    # text = "a lemon tea could be great to drink this summer"
+    text = "are you still using your computer for the research"
+
     log_msg(f'Input text: {text}')
     inputs = processor(text=text, return_tensors="pt").to(device)
 
