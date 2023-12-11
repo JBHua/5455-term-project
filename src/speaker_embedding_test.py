@@ -10,17 +10,23 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 # text = "the brown fox jumps over the lazy dog"
 # text = "For the twentieth time that evening the two men shook hands"
 # text = "A lemon tea could be great to drink this summer" # US male evaluation
-text = "Are you still using your computer for the research" # Indian female evaluation
+# text = "Are you still using your computer for the research" # Indian female evaluation
+# text = "When the judge spoke the death sentence, the defendant showed no emotion" # England Male
+# text = "Thousands of years ago, this town was the center of an ancient civilisation" # England Female
+# text = "The boy was cuddling with his fluffy teddy bear" #Hongkong male
+text = "It seems that the elderly are having difficulties in using the Internet"
+
 
 # sub_collection = "cmu"
 sub_collection = "client_id"
 # sub_collection = "collective"
 
-# gender = 'male'
-gender = 'female'
-accent = 'indian'
+gender = 'male'
+# gender = 'female'
+accent = 'philippines'
 
-model_name = ""
+model_name = "Philippines_Male_Dec_9"
+# model_name = ""
 
 def load_model():
     if model_name == "":
@@ -48,7 +54,10 @@ speech = speech.cpu()  # move back to CPU
 
 Audio(speech.numpy(), rate=16000)
 
-audio_file_name = f"{constants.AUDIO_OUTPUT_PATH + 'test/' + sub_collection + '_' + accent + '_' + gender}.wav"
+if model_name != "":
+    audio_file_name = f"{constants.AUDIO_OUTPUT_PATH + 'test/fine_tuned'}.wav"
+else:
+    audio_file_name = f"{constants.AUDIO_OUTPUT_PATH + 'test/t5'}.wav"
 
 sf.write(audio_file_name, speech.numpy(), samplerate=16000)
 
