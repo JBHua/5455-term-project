@@ -11,10 +11,10 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 # text = "For the twentieth time that evening the two men shook hands"
 # text = "A lemon tea could be great to drink this summer" # US male evaluation
 # text = "Are you still using your computer for the research" # Indian female evaluation
-# text = "When the judge spoke the death sentence, the defendant showed no emotion" # England Male
+text = "When the judge spoke the death sentence, the defendant showed no emotion" # England Male
 # text = "Thousands of years ago, this town was the center of an ancient civilisation" # England Female
 # text = "The boy was cuddling with his fluffy teddy bear" #Hongkong male
-text = "It seems that the elderly are having difficulties in using the Internet"
+# text = "It seems that the elderly are having difficulties in using the Internet"
 
 
 # sub_collection = "cmu"
@@ -23,9 +23,9 @@ sub_collection = "client_id"
 
 gender = 'male'
 # gender = 'female'
-accent = 'philippines'
+accent = 'england'
 
-model_name = "Philippines_Male_Dec_9"
+model_name = "England_Male_Dec_14"
 # model_name = ""
 
 def load_model():
