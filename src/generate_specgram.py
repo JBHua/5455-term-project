@@ -3,11 +3,14 @@ from scipy.io import wavfile
 import constants
 import socket
 
-# file_name = "fine_tuned/Threadripper_Dec_9_18_17_england_female.wav"
-file_name = "fine_tuned/trained_Threadripper_Dec_09_22_41_philippines_male.wav"
-audio_file_name = constants.AUDIO_OUTPUT_PATH + file_name
+file_name = "/Users/yifanhua/PycharmProjects/5455-term-project/audio_eval/us_male/fine_tuned.wav"
+# audio_file_name = constants.AUDIO_OUTPUT_PATH + file_name
+
+audio_file_name = file_name
 
 samplingFrequency, signalData = wavfile.read(audio_file_name)
+signalData = [i for i in signalData if i != 0]
+
 plt.specgram(signalData,Fs=samplingFrequency)
 plt.xlabel('Time')
 plt.ylabel('Frequency')
