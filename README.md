@@ -31,7 +31,9 @@ See:
 2. Run `python3 src/main.py` with commandline parameters under the project root
 
 # Project Structure
+- `audio_eval`: audio data used for presentation and evaluation
 - `audio_outputs`: all generated audio will be in this dir
+- `example`: audio data used for Check-in 1 & 2
 - `data`: processed and cached dataset will live here. Not included in Git
 - `log`: all logs from program
 - `model`: cached model from previous training. Not included in Git
@@ -157,7 +159,9 @@ To filter and sort using `client_id` on Common Voice 01, we have the following d
   - 156
 
 # Evaluation
-We use https://huggingface.co/dima806/english_accents_classification for evaluation
+1. Mel Cepstral Distortion Score (MCD)
+  We use `pymcd` to calculate MCD score.
+
 
 # Troubleshoot
 1. Manully download dataset using voxpopuli repo
